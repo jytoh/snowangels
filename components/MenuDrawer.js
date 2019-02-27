@@ -21,7 +21,7 @@ export default class MenuDrawer extends React.Component {
                             <Image style = {styles.img} source={require('../assets/sarah.jpeg')} /> 
                         </View>
                         <View style = {styles.profileText}>
-                            <Text style = {styles.name}> Bitchass </Text>
+                            <Text style = {styles.name}> User </Text>
                         </View>
                     </View>
                 </View>
