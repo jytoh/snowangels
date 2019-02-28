@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/backend" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/run.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/server.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/server_functions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/models/User.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/testdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/testdb.py" afterDir="false" />
-    </list>
+    <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +56,11 @@
               <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
               <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
+              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
+              <item name="backend" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -79,7 +72,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -103,24 +96,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551294751047</updated>
-      <workItem from="1551294755243" duration="4034000" />
+      <workItem from="1551294755243" duration="4224000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4034000" />
+    <option name="totallyTimeSpent" value="4224000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="721" extended-state="0" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
-      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.3290938" />
+      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.3290938" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
