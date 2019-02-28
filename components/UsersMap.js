@@ -8,7 +8,7 @@ const usersMap = props => {
         userLocationMarker = <MapView.Marker coordinate={props.userLocation}/>
     }
     return (
-        <View style={styles.mapContainer}> 
+        <View style={styles.mapContainer}>
             <MapView
                 initialRegion={{
                 latitude: 37.78825,
