@@ -28,26 +28,18 @@ db.session.commit()
 migrate = Migrate(app, db)
 
 
-class User(db.Model):
-
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-
-    def __init__(self, name=None):
-        self.name = name
-
-
 
 
 
 @app.route('/')
 def index():
+    from models import User
     print(User.query.all())
     return 'works'
 
 @app.route('/register', methods=['POST'])
 def register_user():
+    from models import User
     name = request.form.get('name')
     usr = User(name)
     db.session.add(usr)
