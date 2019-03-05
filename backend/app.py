@@ -65,6 +65,7 @@ class User(db.Model):
     def __init__(self, name=None):
         self.name = name
         self.subscription = []
+        self.request = []
 
 class Point(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -107,6 +108,7 @@ class Corner(db.Model):
         self.lat = lat
         self.lon=lon
         self.subscription = []
+        self.request = []
 
 class Shoveling(db.Model):
 
@@ -129,8 +131,8 @@ class Shoveling(db.Model):
 
 
 # COMMENT THIS OUT WHEN DEPLOYING
-# db.reflect()
-# db.drop_all()
+db.reflect()
+db.drop_all()
 
 
 # db.init_app(app)
@@ -164,7 +166,7 @@ def register_user(name):
     return "%s has been added to the database" % name
 
 
-@app.route("/create_corner", methods=["POST"])
+@app.route("/create_corner", methods=['POST'])
 def create_corner():
     lat = request.form["lat"]
     long = request.form["long"]
@@ -175,10 +177,10 @@ def create_corner():
     db.session.commit()
     return "Added new corner at %s1 and %s2" % (st1, st2)
 
-@app.route("/new_subscription", methods=["POST"])
+@app.route("/new_subscription", methods=['POST'])
 def new_subscription():
-    uid = request.form["user"]
-    cid = request.form["corner"]
+    uid = request.form["uid"]
+    cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     subscr = Subscription()
@@ -187,6 +189,20 @@ def new_subscription():
     db.session.add(subscr)
     db.session.commit()
     return "User %s has subscribed to Corner %s" % (uid, cid)
+
+@app.route("/new_request", methods=['POST'])
+def new_request():
+    uid = request.form["uid"]
+    cid = request.form["cid"]
+    user = User.query.get(uid)
+    corner = Corner.query.get(cid)
+    req = Request()
+    user.request.append(req)
+    corner.request.append(req)
+    db.session.add(req)
+    db.session.commit()
+    return "User %s has made a request for Corner %s" % (uid, cid)
+
 
 if __name__ == "__main__":
     app.run()
