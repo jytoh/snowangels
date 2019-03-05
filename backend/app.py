@@ -64,6 +64,7 @@ class User(db.Model):
 
     def __init__(self, name=None):
         self.name = name
+        self.subscription = []
 
 class Point(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -105,6 +106,7 @@ class Corner(db.Model):
         self.street2 = street2
         self.lat = lat
         self.lon=lon
+        self.subscription = []
 
 class Shoveling(db.Model):
 
@@ -176,17 +178,15 @@ def create_corner():
 @app.route("/new_subscription", methods=["POST"])
 def new_subscription():
     uid = request.form["user"]
-    print(uid)
     cid = request.form["corner"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     subscr = Subscription()
-    user.subscription = subscr
-    corner.subscription = subscr
+    user.subscription.append(subscr)
+    corner.subscription.append(subscr)
     db.session.add(subscr)
     db.session.commit()
-    return "User %d has subscribed to Corner %d" % (uid, cid)
-
+    return "User %s has subscribed to Corner %s" % (uid, cid)
 
 if __name__ == "__main__":
     app.run()
