@@ -39,6 +39,7 @@ class Request(db.Model):
 
     def __init__(self):
         self.time = datetime.datetime.now()
+        self.state = 0
 
 class User(db.Model):
 
@@ -71,6 +72,12 @@ class Point(db.Model):
     week_pts = db.Column(db.Integer)
     szn_pts = db.Column(db.Integer)
     after_pics = db.Column(db.PickleType)
+
+    def __init__(self):
+        self.day_pts = 0
+        self.week_pts = 0
+        self.szn_pts = 0
+        self.after_pics = []
 
 
 class Corner(db.Model):
@@ -141,14 +148,18 @@ def index():
     print(Subscription.query.all())
     print(Request.query.all())
     print(Shoveling.query.all())
+    print(User.query.all())
     return 'works'
 
-@app.route('/register', methods=['POST'])
-def register_user():
-    name = request.form.get('name')
+@app.route("/register/<name>")
+def register_user(name):
     usr = User(name)
+    pts = Point()
+    usr.point = pts
     db.session.add(usr)
+    db.session.add(pts)
     db.session.commit()
+    return "%s has been added to the database" % name
 
 
 if __name__ == "__main__":
