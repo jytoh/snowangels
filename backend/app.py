@@ -127,8 +127,8 @@ class Shoveling(db.Model):
 
 
 # COMMENT THIS OUT WHEN DEPLOYING
-db.reflect()
-db.drop_all()
+# db.reflect()
+# db.drop_all()
 
 
 # db.init_app(app)
@@ -160,6 +160,32 @@ def register_user(name):
     db.session.add(pts)
     db.session.commit()
     return "%s has been added to the database" % name
+
+
+@app.route("/create_corner", methods=["POST"])
+def create_corner():
+    lat = request.form["lat"]
+    long = request.form["long"]
+    st1 = request.form["street1"]
+    st2 = request.form["street2"]
+    crnr = Corner(st1,st2,lat,long)
+    db.session.add(crnr)
+    db.session.commit()
+    return "Added new corner at %s1 and %s2" % (st1, st2)
+
+@app.route("/new_subscription", methods=["POST"])
+def new_subscription():
+    uid = request.form["user"]
+    print(uid)
+    cid = request.form["corner"]
+    user = User.query.get(uid)
+    corner = Corner.query.get(cid)
+    subscr = Subscription()
+    user.subscription = subscr
+    corner.subscription = subscr
+    db.session.add(subscr)
+    db.session.commit()
+    return "User %d has subscribed to Corner %d" % (uid, cid)
 
 
 if __name__ == "__main__":
