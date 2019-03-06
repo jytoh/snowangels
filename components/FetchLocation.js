@@ -12,9 +12,9 @@ export default class FetchLocation extends React.Component {
             size = {32}
             style = {styles.button}
             onPress={() => this.props.onGetLocation()} /> */
-        <Button title="Get Location"
-        style = {styles.button}
-        onPress={() => this.props.onGetLocation()} />
+            <Button title="Get Location"
+            style = {styles.button}
+            onPress={() => this.props.onGetLocation()} />
         )
     }
 };
