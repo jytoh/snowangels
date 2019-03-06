@@ -10,12 +10,15 @@ app = Flask(__name__)
 POSTGRES = {
     'user': 'postgres',
     'pw': 'password',
-    'db': 'snowangels_db',
+    'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': '5432',
+    'port': '5433',
 }
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
+#added this to not keep restarting 
+app.config['DEBUG'] = True
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -37,9 +40,11 @@ class Request(db.Model):
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
 
-    def __init__(self):
+    def __init__(self, user_id=None, corner_id=None):
         self.time = datetime.datetime.now()
-        self.state = 0
+        self.state = 0 
+        self.user_id=user_id
+        self.corner_id=corner_id
 
 class User(db.Model):
 
@@ -143,8 +148,6 @@ migrate = Migrate(app, db)
 
 
 
-
-
 @app.route('/')
 def index():
     print(Corner.query.all())
@@ -164,7 +167,6 @@ def register_user(name):
     db.session.add(pts)
     db.session.commit()
     return "%s has been added to the database" % name
-
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
@@ -196,12 +198,51 @@ def new_request():
     cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    req = Request()
+    req = Request(uid, cid)
     user.request.append(req)
     corner.request.append(req)
     db.session.add(req)
     db.session.commit()
     return "User %s has made a request for Corner %s" % (uid, cid)
+
+#get corners that user is subscribed to
+@app.route("/subscribed_corners", methods=['GET'])
+def get_subscribed_corners():
+    uid = request.form["uid"]
+    corners = map(str,[s.corner_id for s in Subscription.query.filter_by(user_id=uid)])
+    return ' '.join(corners)
+
+#unsubscribe a user from a corner
+@app.route("/unsubscribe_corner", methods=['DELETE'])
+def unsubscribe_corner():
+    uid = request.form["uid"]
+    cid = request.form["cid"]
+    subscription = Subscription.query.filter_by(user_id=uid, corner_id=cid).one()
+    db.session.delete(subscription)
+    db.session.commit()
+    return "User %s has unsubscribed from corner %s" % (uid, cid)
+
+#get state of a corner request
+@app.route("/state", methods=['GET'])
+def get_state():
+    cid = request.form["cid"]
+    state = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().state
+    return "Corner %s has  %s" % (cid, state)
+
+#get user id who last requested a corner
+@app.route("/latest_requester_id", methods=['GET'])
+def get_latest_requester_id():
+    cid = request.form["cid"]
+    uid = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().user_id
+    return "%s was the last person to make a request on corner %s" % (uid, cid)
+
+#get name of who last requested a corner
+@app.route("/latest_requester_name", methods=['GET'])
+def get_latest_requester_name():
+    cid = request.form["cid"]
+    uid = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().user_id
+    name = User.query.filter_by(id=uid).first().name
+    return "%s was the last person to make a request on corner %s" % (name, cid)
 
 
 if __name__ == "__main__":
