@@ -1,8 +1,9 @@
-import os, datetime
+import os, datetime, filereading, pandas
 
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
@@ -17,7 +18,7 @@ POSTGRES = {
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-#added this to not keep restarting 
+#added this to not keep restarting
 app.config['DEBUG'] = True
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -42,7 +43,7 @@ class Request(db.Model):
 
     def __init__(self, user_id=None, corner_id=None):
         self.time = datetime.datetime.now()
-        self.state = 0 
+        self.state = 0
         self.user_id=user_id
         self.corner_id=corner_id
 
@@ -179,6 +180,20 @@ def create_corner():
     db.session.commit()
     return "Added new corner at %s1 and %s2" % (st1, st2)
 
+@app.route("/create_corners_from_filename", methods=['POST'])
+def create_corners_from_file():
+    file= request.form["filename"]
+    dframe = filereading.fetchGISdata(file)
+    for index, row in dframe.iterrows():
+        lat = row['InterX']
+        long = row['InterY']
+        st1 = row['STREET1']
+        st2 = row['STREET2']
+        crnr = Corner(st1, st2, lat, long)
+        db.session.add(crnr)
+    db.session.commit()
+    return "data from file %s has been added to the corner database" % (file)
+
 @app.route("/new_subscription", methods=['POST'])
 def new_subscription():
     uid = request.form["uid"]
@@ -247,4 +262,3 @@ def get_latest_requester_name():
 
 if __name__ == "__main__":
     app.run()
-
