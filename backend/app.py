@@ -74,6 +74,7 @@ class User(db.Model):
         self.request = []
 
 class Point(db.Model):
+    __tablename__ = 'points'
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     day_pts = db.Column(db.Integer)
@@ -258,6 +259,61 @@ def get_latest_requester_name():
     uid = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
     return "%s was the last person to make a request on corner %s" % (name, cid)
+
+#get corner info: street names
+@app.route("/corner_street_names", methods=['GET'])
+def get_corner_street_names():
+    cid = request.form["cid"]
+    str1 = Corner.query.filter_by(id=cid).street1
+    str2 = Corner.query.filter_by(id=cid).street2
+    return "Corner %s is at streets %s and %s" % (cid, str1, str2)
+
+#get corner info: latitude and longtitude
+@app.route("/corner_coordinates", methods=['GET'])
+def get_corner_coordinates():
+    cid = request.form["cid"]
+    lat = Corner.query.filter_by(id=cid).lat
+    lon = Corner.query.filter_by(id=cid).lon
+    return "Corner %s is at coordinates (%s, %s)" % (cid, lat, lon)
+
+#get ID of leader of the day
+@app.route("/day_leader_id", methods=['GET'])
+def get_day_leader_id():
+    uid = Point.query.order_by(Point.day_pts.desc()).first().user_id
+    return "User id %s is the leader of the day" % (uid)
+
+#get name of leader of the day
+@app.route("/day_leader_name", methods=['GET'])
+def get_day_leader_name():
+    uid = Point.query.order_by(Point.day_pts.desc()).first().user_id
+    name = User.query.filter_by(id=uid).first().name
+    return "User %s is the leader of the day" % (name)
+
+#get ID of leader of the week
+@app.route("/week_leader_id", methods=['GET'])
+def get_week_leader_id():
+    uid = Point.query.order_by(Point.week_pts.desc()).first().user_id
+    return "User id %s is the leader of the week" % (uid)
+
+#get name of leader of the day
+@app.route("/week_leader_name", methods=['GET'])
+def get_week_leader_name():
+    uid = Point.query.order_by(Point.week_pts.desc()).first().user_id
+    name = User.query.filter_by(id=uid).first().name
+    return "User %s is the leader of the week" % (name)
+
+#get ID of leader of the season
+@app.route("/szn_leader_id", methods=['GET'])
+def get_szn_leader_id():
+    uid = Point.query.order_by(Point.szn_pts.desc()).first().user_id
+    return "User id %s is the leader of the season" % (uid)
+
+#get name of leader of the season
+@app.route("/szn_leader_name", methods=['GET'])
+def get_szn_leader_name():
+    uid = Point.query.order_by(Point.szn_pts.desc()).first().user_id
+    name = User.query.filter_by(id=uid).first().name
+    return "User %s is the leader of the season" % (name)
 
 
 if __name__ == "__main__":
