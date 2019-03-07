@@ -129,12 +129,16 @@ class Shoveling(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
 
 
-    def __init__(self, state=None, before_pic=None, after_pic=None, start=None, end=None):
-        self.state = state
+#took out state + added user_id and corner_id
+    def __init__(self, user_id=None, corner_id=None, before_pic=None, after_pic=None, start=None, end=None):
+        #self.state = state
+        self.user_id = user_id
+        self.corner_id = corner_id
         self.before_pic = before_pic
         self.after_pic = after_pic
         self.start = start
         self.end = end
+
 
 
 # COMMENT THIS OUT WHEN DEPLOYING
@@ -220,6 +224,38 @@ def new_request():
     db.session.add(req)
     db.session.commit()
     return "User %s has made a request for Corner %s" % (uid, cid)
+
+@app.route("/new_shovel", methods=['POST'])
+def new_shovel():
+    uid = request.form["uid"]
+    cid = request.form["cid"]
+    user = User.query.get(uid)
+    corner = Corner.query.get(cid)
+    before_pic = request.form["before_pic"]
+    after_pic = request.form["after_pic"]
+    start = datetime.datetime.now() #TODO
+    end = datetime.datetime.now() #TODO
+    shovel = Shoveling(uid, cid, before_pic, after_pic, start, end)
+    db.session.add(shovel)
+    db.session.commit()
+    #wasnt sure if we need these next two lines
+    # user.request.append(shovel)
+    # corner.request.append(shovel)
+
+    #change state to 1 in requests table
+    req = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first()
+    req.state = 1
+    db.session.commit()
+
+    #add to point table
+    points_entry = Point.query.filter_by(user_id=uid).first()
+    points_entry.day_pts += 5 #TODO: figure out good # of points/ weights later
+    points_entry.week_pts += 5
+    points_entry.szn_pts += 5
+    points_entry.after_pics.append(after_pic)
+    db.session.commit()
+    return "User %s has claimed to shovel Corner %s" % (uid, cid)
+
 
 #get corners that user is subscribed to
 @app.route("/subscribed_corners", methods=['GET'])
@@ -315,6 +351,26 @@ def get_szn_leader_name():
     name = User.query.filter_by(id=uid).first().name
     return "User %s is the leader of the season" % (name)
 
+#get top x user ids for the day 
+@app.route("/top_day_leader_ids", methods=['GET'])
+def get_top_day_leader_ids():
+    x = request.form["num_users"]
+    top_users = map(str,[u.user_id for u in Point.query.order_by(Point.day_pts.desc())][:int(x)])
+    return ' '.join(top_users)
+
+#get top x user ids for the week
+@app.route("/top_week_leader_ids", methods=['GET'])
+def get_top_week_leader_ids():
+    x = request.form["num_users"]
+    top_users = map(str,[u.user_id for u in Point.query.order_by(Point.week_pts.desc())][:int(x)])
+    return ' '.join(top_users)
+
+#get top x user ids for the season 
+@app.route("/top_szn_leader_ids", methods=['GET'])
+def get_top_szn_leader_ids():
+    x = request.form["num_users"]
+    top_users = map(str,[u.user_id for u in Point.query.order_by(Point.szn_pts.desc())][:int(x)])
+    return ' '.join(top_users)
 
 if __name__ == "__main__":
     app.run()
