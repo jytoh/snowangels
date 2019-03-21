@@ -129,12 +129,16 @@ class Shoveling(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
 
 
-    def __init__(self, state=None, before_pic=None, after_pic=None, start=None, end=None):
-        self.state = state
+#took out state + added user_id and corner_id
+    def __init__(self, user_id=None, corner_id=None, before_pic=None, after_pic=None, start=None, end=None):
+        #self.state = state
+        self.user_id = user_id
+        self.corner_id = corner_id
         self.before_pic = before_pic
         self.after_pic = after_pic
         self.start = start
         self.end = end
+
 
 
 # COMMENT THIS OUT WHEN DEPLOYING
@@ -221,12 +225,77 @@ def new_request():
     db.session.commit()
     return "User %s has made a request for Corner %s" % (uid, cid)
 
+@app.route("/new_shovel", methods=['POST'])
+def new_shovel():
+    uid = request.form["uid"]
+    cid = request.form["cid"]
+    user = User.query.get(uid)
+    corner = Corner.query.get(cid)
+    before_pic = request.form["before_pic"]
+    after_pic = request.form["after_pic"]
+    start = datetime.datetime.now() #TODO
+    end = datetime.datetime.now() #TODO
+    shovel = Shoveling(uid, cid, before_pic, after_pic, start, end)
+    db.session.add(shovel)
+    db.session.commit()
+    #wasnt sure if we need these next two lines
+    # user.request.append(shovel)
+    # corner.request.append(shovel)
+
+    #change state to 1 in requests table
+    req = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first()
+    req.state = 1
+    db.session.commit()
+
+    #add to point table
+    points_entry = Point.query.filter_by(user_id=uid).first()
+    points_entry.day_pts += 5 #TODO: figure out good # of points/ weights later
+    points_entry.week_pts += 5
+    points_entry.szn_pts += 5
+    points_entry.after_pics.append(after_pic)
+    db.session.commit()
+    return "User %s has claimed to shovel Corner %s" % (uid, cid)
+
+#validate shoveling
+@app.route("/validate_shovel", methods=['POST'])
+def validate_shovel():
+    uid_requester = request.form["uid_requester"]
+    uid_shoveler = request.form["uid_shoveler"]
+    cid = request.form["cid"]
+    validate_bit = request.form["validate_bit"]
+    shoveler = User.query.get(uid_shoveler)
+    corner = Corner.query.get(cid)
+    #if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
+    if validate_bit=='0':
+        points_entry = Point.query.filter_by(user_id=uid_shoveler).first()
+        points_entry.day_pts -= 5 #TODO: figure out good # of points/ weights later
+        points_entry.week_pts -= 5
+        points_entry.szn_pts -= 5
+        db.session.commit()
+        req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
+        req.state = 0 #TODO: need to re-notify ppl that this corner needs to be cleared
+        db.session.commit()
+        return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
+    #if requester says shoveling claim is valid, set state of request to steady state, 2
+    elif validate_bit=='1':
+        req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
+        req.state = 2 
+        db.session.commit()
+        return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
+
+#get all people subscribed to a corner
+@app.route("/ppl_subscribed", methods=['GET'])
+def get_ppl_subscribed():
+    cid = request.form["cid"]
+    users_subscribed = map(str,[s.user_id for s in Subscription.query.filter_by(corner_id=cid)])
+    return "Users %s are subscribed to corner %s" % (' '.join(users_subscribed), cid)
+
 #get corners that user is subscribed to
 @app.route("/subscribed_corners", methods=['GET'])
 def get_subscribed_corners():
     uid = request.form["uid"]
     corners = map(str,[s.corner_id for s in Subscription.query.filter_by(user_id=uid)])
-    return ' '.join(corners)
+    return "User %s is subscribed to corners %s" % (uid, ' '.join(corners)) 
 
 #unsubscribe a user from a corner
 @app.route("/unsubscribe_corner", methods=['DELETE'])
@@ -315,6 +384,26 @@ def get_szn_leader_name():
     name = User.query.filter_by(id=uid).first().name
     return "User %s is the leader of the season" % (name)
 
+#get top x user ids for the day 
+@app.route("/top_day_leader_ids", methods=['GET'])
+def get_top_day_leader_ids():
+    x = request.form["num_users"]
+    top_users = map(str,[u.user_id for u in Point.query.order_by(Point.day_pts.desc())][:int(x)])
+    return ' '.join(top_users)
+
+#get top x user ids for the week
+@app.route("/top_week_leader_ids", methods=['GET'])
+def get_top_week_leader_ids():
+    x = request.form["num_users"]
+    top_users = map(str,[u.user_id for u in Point.query.order_by(Point.week_pts.desc())][:int(x)])
+    return ' '.join(top_users)
+
+#get top x user ids for the season 
+@app.route("/top_szn_leader_ids", methods=['GET'])
+def get_top_szn_leader_ids():
+    x = request.form["num_users"]
+    top_users = map(str,[u.user_id for u in Point.query.order_by(Point.szn_pts.desc())][:int(x)])
+    return ' '.join(top_users)
 
 if __name__ == "__main__":
     app.run()
