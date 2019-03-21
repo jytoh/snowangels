@@ -1,58 +1,67 @@
 import React from 'react';
-import { View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet, Button, Modal } from 'react-native';
 import MapView from 'react-native-maps';
+import MarkerOverlay from '../components/MarkerOverlay';
 
 let state = {
     markers: [
       {
         coordinate: {
-          latitude: 42.4427,
-          longitude: -76.4959,
+          latitude: 42.44272,
+          longitude: -76.49587,
         },
-        title: "Best Place",
-        description: "This is the best place in Portland",
+        title: "N Aurora St & E Court Street",
+        description: "NW Corner",
       },
       {
         coordinate: {
-          latitude: 42.4427,
-          longitude: -76.4957,
+          latitude: 42.44272,
+          longitude: -76.49575,
         },
-        title: "Second Best Place",
-        description: "This is the second best place in Portland",
+        title: "N Aurora St & E Court Street",
+        description: "NE Corner",
       },
       {
         coordinate: {
-          latitude: 42.4426,
-          longitude: -76.4959,
+          latitude: 42.44264,
+          longitude: -76.49587,
         },
-        title: "Third Best Place",
-        description: "This is the third best place in Portland",
+        title: "N Aurora St & E Court Street",
+        description: "SW Corner",
       },
       {
         coordinate: {
-          latitude: 42.4426,
-          longitude: -76.4957,
+          latitude: 42.44264,
+          longitude: -76.49575,
         },
-        title: "Fourth Best Place",
-        description: "This is the fourth best place in Portland",
+        title: "N Aurora St & E Court Street",
+        description: "SE Corner",
       },
-    ],
-    region: {
-      latitude: 45.52220671242907,
-      longitude: -122.6653281029795,
-      latitudeDelta: 0.04864195044303443,
-      longitudeDelta: 0.040142817690068,
-    },
+    ]
   };
 
+
 const usersMap = props => {
+    const {userLocation, setModalVisible, setUserLocation} = props;
+    let usersMapState = {
+      region: userLocation
+    }
     let userLocationMarker = null;
-    if (props.userLocation) {
-        userLocationMarker = <MapView.Marker coordinate={ props.userLocation }/>
+    if (userLocation) {
+        userLocationMarker = <MapView.Marker coordinate={ userLocation } pinColor="blue" title="My Location"/>
+        usersMapState = {region: userLocation}
+    }
+    /**
+     * changes the region for this components state and the state of HomeScreen
+     * @param  {region} region (object with latitude, longitude, latitudeDelta, and longitudeDelta)
+     */
+    function onRegionChange(region) {
+      usersMapState = {region: region}
+      setUserLocation();
     }
 
     return (
-        <View style={styles.mapContainer}> 
+        <View style={styles.mapContainer}>
             <MapView
                 initialRegion={{
                 latitude: 37.78825,
@@ -60,21 +69,32 @@ const usersMap = props => {
                 latitudeDelta: 0.0622,
                 longitudeDelta: 0.0421,
               }}
-              region={props.userLocation}
+              region={usersMapState.region}
+              onRegionChange={onRegionChange}
               style={styles.map}>
                 {
                 /*userLocationMarker*/
                     state.markers.map((marker, index) => {
                         return (
-                            <MapView.Marker key={index} coordinate={marker.coordinate} />
+                            <MapView.Marker
+                              key={index}
+                              coordinate={marker.coordinate}
+                              title={marker.title}
+                              description={marker.description}
+                              onPress = {setModalVisible}
+                              />
                         );
                     })
                 }
-
+                { userLocationMarker }
             </MapView>
         </View>
     );
 };
+
+function shouldComponentUpdate(nextProps, nextState) {
+  return false;
+}
 
 const styles = StyleSheet.create({
     mapContainer: {
