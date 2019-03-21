@@ -3,7 +3,7 @@ import os, datetime, filereading, pandas
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
