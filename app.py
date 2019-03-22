@@ -17,7 +17,7 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': '5432',
+    'port': '5433',
 }
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
@@ -208,10 +208,10 @@ def create_corners_from_file():
     file= request.form["filename"]
     dframe = filereading.fetchGISdata(file)
     for index, row in dframe.iterrows():
-        lat = row[2]
-        long = row[3]
-        st1 = row[4]
-        st2 = row[5]
+        lat = row['InterX']
+        long = row['InterY']
+        st1 = row['STREET1']
+        st2 = row['STREET2']
         crnr = Corner(st1, st2, lat, long)
         db.session.add(crnr)
     db.session.commit()
