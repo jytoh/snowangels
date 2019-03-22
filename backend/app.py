@@ -3,7 +3,7 @@ import os, datetime, filereading, pandas
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
@@ -332,9 +332,11 @@ def get_latest_requester_name():
 #get corner info: street names
 @app.route("/corner_street_names", methods=['GET'])
 def get_corner_street_names():
-    cid = request.form["cid"]
-    str1 = Corner.query.filter_by(id=cid).street1
-    str2 = Corner.query.filter_by(id=cid).street2
+    #cid = request.form["cid"]
+    cid = request.args.get('cid')
+    #martin's edit
+    str1 = Corner.query.filter_by(id=cid).first().street1
+    str2 = Corner.query.filter_by(id=cid).first().street2
     return "Corner %s is at streets %s and %s" % (cid, str1, str2)
 
 #get corner info: latitude and longtitude
