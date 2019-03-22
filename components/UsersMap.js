@@ -1,14 +1,67 @@
 import React from 'react';
-import { View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet, Button, Modal } from 'react-native';
 import MapView from 'react-native-maps';
+import MarkerOverlay from '../components/MarkerOverlay';
+
+let state = {
+    markers: [
+      {
+        coordinate: {
+          latitude: 42.44272,
+          longitude: -76.49587,
+        },
+        title: "N Aurora St & E Court Street",
+        description: "NW Corner",
+      },
+      {
+        coordinate: {
+          latitude: 42.44272,
+          longitude: -76.49575,
+        },
+        title: "N Aurora St & E Court Street",
+        description: "NE Corner",
+      },
+      {
+        coordinate: {
+          latitude: 42.44264,
+          longitude: -76.49587,
+        },
+        title: "N Aurora St & E Court Street",
+        description: "SW Corner",
+      },
+      {
+        coordinate: {
+          latitude: 42.44264,
+          longitude: -76.49575,
+        },
+        title: "N Aurora St & E Court Street",
+        description: "SE Corner",
+      },
+    ]
+  };
+
 
 const usersMap = props => {
-    let userLocationMarker = null;
-    if (props.userLocation) {
-        userLocationMarker = <MapView.Marker coordinate={props.userLocation}/>
+    const {userLocation, setModalVisible, setUserLocation} = props;
+    let usersMapState = {
+      region: userLocation
     }
+    let userLocationMarker = null;
+    if (userLocation) {
+        userLocationMarker = <MapView.Marker coordinate={ userLocation } pinColor="blue" title="My Location"/>
+        usersMapState = {region: userLocation}
+    }
+    /**
+     * changes the region for this components state and the state of HomeScreen
+     * @param  {region} region (object with latitude, longitude, latitudeDelta, and longitudeDelta)
+     */
+    function onRegionChange(region) {
+      usersMapState = {region: region}
+      setUserLocation();
+    }
+
     return (
-        <View style={styles.mapContainer}> 
+        <View style={styles.mapContainer}>
             <MapView
                 initialRegion={{
                 latitude: 37.78825,
@@ -16,13 +69,32 @@ const usersMap = props => {
                 latitudeDelta: 0.0622,
                 longitudeDelta: 0.0421,
               }}
-              region={props.userLocation}
+              region={usersMapState.region}
+              onRegionChange={onRegionChange}
               style={styles.map}>
-                {userLocationMarker}
+                {
+                /*userLocationMarker*/
+                    state.markers.map((marker, index) => {
+                        return (
+                            <MapView.Marker
+                              key={index}
+                              coordinate={marker.coordinate}
+                              title={marker.title}
+                              description={marker.description}
+                              onPress = {setModalVisible}
+                              />
+                        );
+                    })
+                }
+                { userLocationMarker }
             </MapView>
         </View>
     );
 };
+
+function shouldComponentUpdate(nextProps, nextState) {
+  return false;
+}
 
 const styles = StyleSheet.create({
     mapContainer: {
