@@ -353,16 +353,16 @@ def get_latest_requester_name():
 @app.route("/corner_street_names", methods=['GET'])
 def get_corner_street_names():
     cid = request.form["cid"]
-    str1 = Corner.query.filter_by(id=cid).street1
-    str2 = Corner.query.filter_by(id=cid).street2
+    str1 = Corner.query.filter_by(id=cid).first().street1
+    str2 = Corner.query.filter_by(id=cid).first().street2
     return "Corner %s is at streets %s and %s" % (cid, str1, str2)
 
 #get corner info: latitude and longtitude
 @app.route("/corner_coordinates", methods=['GET'])
 def get_corner_coordinates():
     cid = request.form["cid"]
-    lat = Corner.query.filter_by(id=cid).lat
-    lon = Corner.query.filter_by(id=cid).lon
+    lat = Corner.query.filter_by(id=cid).first().lat
+    lon = Corner.query.filter_by(id=cid).first().lon
     return "Corner %s is at coordinates (%s, %s)" % (cid, lat, lon)
 
 #get ID of leader of the day
