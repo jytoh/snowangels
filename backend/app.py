@@ -13,7 +13,7 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': '5433',
+    'port': '5432',
 }
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
@@ -190,10 +190,10 @@ def create_corners_from_file():
     file= request.form["filename"]
     dframe = filereading.fetchGISdata(file)
     for index, row in dframe.iterrows():
-        lat = row['InterX']
-        long = row['InterY']
-        st1 = row['STREET1']
-        st2 = row['STREET2']
+        lat = row[2]
+        long = row[3]
+        st1 = row[4]
+        st2 = row[5]
         crnr = Corner(st1, st2, lat, long)
         db.session.add(crnr)
     db.session.commit()
@@ -279,7 +279,7 @@ def validate_shovel():
     #if requester says shoveling claim is valid, set state of request to steady state, 2
     elif validate_bit=='1':
         req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
-        req.state = 2 
+        req.state = 2
         db.session.commit()
         return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
 
@@ -295,7 +295,7 @@ def get_ppl_subscribed():
 def get_subscribed_corners():
     uid = request.form["uid"]
     corners = map(str,[s.corner_id for s in Subscription.query.filter_by(user_id=uid)])
-    return "User %s is subscribed to corners %s" % (uid, ' '.join(corners)) 
+    return "User %s is subscribed to corners %s" % (uid, ' '.join(corners))
 
 #unsubscribe a user from a corner
 @app.route("/unsubscribe_corner", methods=['DELETE'])
@@ -384,7 +384,7 @@ def get_szn_leader_name():
     name = User.query.filter_by(id=uid).first().name
     return "User %s is the leader of the season" % (name)
 
-#get top x user ids for the day 
+#get top x user ids for the day
 @app.route("/top_day_leader_ids", methods=['GET'])
 def get_top_day_leader_ids():
     x = request.form["num_users"]
@@ -398,7 +398,7 @@ def get_top_week_leader_ids():
     top_users = map(str,[u.user_id for u in Point.query.order_by(Point.week_pts.desc())][:int(x)])
     return ' '.join(top_users)
 
-#get top x user ids for the season 
+#get top x user ids for the season
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
     x = request.form["num_users"]
