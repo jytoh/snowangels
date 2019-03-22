@@ -6,15 +6,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 export default class FetchLocation extends React.Component {
     render(){
         return (
-            /*<MaterialIcons 
+            /*<MaterialIcons
             name = "my-location"
             color = "#000000"
             size = {32}
             style = {styles.button}
             onPress={() => this.props.onGetLocation()} /> */
-        <Button title="Get Location" 
-        style = {styles.button} 
-        onPress={() => this.props.onGetLocation()} />
+            <Button title="Get Location"
+            style = {styles.button}
+            onPress={() => this.props.onGetLocation()} />
         )
     }
 };
