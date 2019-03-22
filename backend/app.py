@@ -178,7 +178,7 @@ def register_user(name):
     return "%s has been added to the database" % name
 
 @app.route("/get_all_corners", methods=['GET'])
-def get_all_corner():
+def get_all_corners():
     connection = psycopg2.connect('dbname=template1')
     cur = connection.cursor(cursor_factory=RealDictCursor)
     cur.execute("""
