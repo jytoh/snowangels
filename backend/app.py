@@ -3,6 +3,10 @@ import os, datetime, filereading, pandas
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+
+import json
+import psycopg2
+from psycopg2.extras import RealDictCursor
 #from werkzeug.utils import secure_filename
 
 
@@ -153,7 +157,6 @@ db.session.commit()
 migrate = Migrate(app, db)
 
 
-
 @app.route('/')
 def index():
     print(Corner.query.all())
@@ -173,6 +176,21 @@ def register_user(name):
     db.session.add(pts)
     db.session.commit()
     return "%s has been added to the database" % name
+
+@app.route("/get_all_corners", methods=['GET'])
+def get_all_corner():
+    connection = psycopg2.connect('dbname=template1')
+    cur = connection.cursor(cursor_factory=RealDictCursor)
+    cur.execute("""
+          SELECT
+            lat, lon, street1, street2
+          FROM Corner
+        """)
+
+    corners = []
+    for row in cur.fetchall():
+        corners.append(dict(zip(columns, row)))
+    return json.dumps(results, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
@@ -279,7 +297,7 @@ def validate_shovel():
     #if requester says shoveling claim is valid, set state of request to steady state, 2
     elif validate_bit=='1':
         req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
-        req.state = 2 
+        req.state = 2
         db.session.commit()
         return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
 
@@ -295,7 +313,7 @@ def get_ppl_subscribed():
 def get_subscribed_corners():
     uid = request.form["uid"]
     corners = map(str,[s.corner_id for s in Subscription.query.filter_by(user_id=uid)])
-    return "User %s is subscribed to corners %s" % (uid, ' '.join(corners)) 
+    return "User %s is subscribed to corners %s" % (uid, ' '.join(corners))
 
 #unsubscribe a user from a corner
 @app.route("/unsubscribe_corner", methods=['DELETE'])
@@ -384,7 +402,7 @@ def get_szn_leader_name():
     name = User.query.filter_by(id=uid).first().name
     return "User %s is the leader of the season" % (name)
 
-#get top x user ids for the day 
+#get top x user ids for the day
 @app.route("/top_day_leader_ids", methods=['GET'])
 def get_top_day_leader_ids():
     x = request.form["num_users"]
@@ -398,7 +416,7 @@ def get_top_week_leader_ids():
     top_users = map(str,[u.user_id for u in Point.query.order_by(Point.week_pts.desc())][:int(x)])
     return ' '.join(top_users)
 
-#get top x user ids for the season 
+#get top x user ids for the season
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
     x = request.form["num_users"]
