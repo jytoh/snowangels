@@ -189,10 +189,9 @@ def get_all_corners():
 
     columns = ['lat', 'lon', 'street1', 'street2']
 
-    corners = []
-    for row in cur.fetchall():
-        corners.append(dict(zip(columns, row)))
-    return json.dumps(corners, indent=2)
+    c = cur.fetchall()
+    print(c)
+    return json.dumps(c, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
