@@ -352,7 +352,7 @@ def get_latest_requester_name():
 #get corner info: street names
 @app.route("/corner_street_names", methods=['GET'])
 def get_corner_street_names():
-    cid = request.form["cid"]
+    cid = request.args.get('cid')
     str1 = Corner.query.filter_by(id=cid).first().street1
     str2 = Corner.query.filter_by(id=cid).first().street2
     return "Corner %s is at streets %s and %s" % (cid, str1, str2)
