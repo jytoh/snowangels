@@ -179,18 +179,18 @@ def register_user(name):
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    connection = psycopg2.connect('dbname=template1')
+    connection = psycopg2.connect('dbname=template1 user=postgres password=password')
     cur = connection.cursor(cursor_factory=RealDictCursor)
     cur.execute("""
           SELECT
             lat, lon, street1, street2
-          FROM Corner
+          FROM corners
         """)
 
     corners = []
     for row in cur.fetchall():
         corners.append(dict(zip(columns, row)))
-    return json.dumps(results, indent=2)
+    return json.dumps(corners, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
