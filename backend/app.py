@@ -187,6 +187,8 @@ def get_all_corners():
           FROM corners
         """)
 
+    columns = ['lat', 'lon', 'street1', 'street2']
+
     corners = []
     for row in cur.fetchall():
         corners.append(dict(zip(columns, row)))
