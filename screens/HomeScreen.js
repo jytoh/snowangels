@@ -2,13 +2,40 @@ import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import MenuButton from '../components/MenuButton';
+import MarkerOverlay from '../components/MarkerOverlay';
 // import FetchLocation from '../components/FetchLocation';
 import UsersMap from '../components/UsersMap';
 
 export default class HomeScreen extends React.Component {
-  state = {
-    userLocation: null
+  constructor(props) {
+    super(props)
+    this.setModalVisible = this.setModalVisible.bind(this);
+    this.setUserLocation = this.setUserLocation.bind(this);
+    this.state = {
+      userLocation: null,
+      markerOverlayIsVisible: false
+    }
   }
+
+  /**
+   * sets the user's current location in the HomeScreen's state
+   * @param {userLocation} userLocation (object with latitude, longitude, latitudeDelta, and longitudeDelta)
+   */
+  setUserLocation(userLocation) {
+    this.setState({
+      userLocation: userLocation
+    });
+  }
+
+  /**
+   * toggles the visibility of modal visible
+   */
+  setModalVisible() {
+    this.setState({
+      markerOverlayIsVisible: !this.state.markerOverlayIsVisible
+    });
+  }
+
   getUserLocationHandler = () => {
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
@@ -19,18 +46,19 @@ export default class HomeScreen extends React.Component {
           longitudeDelta: 0.0421,
         }
       })
-      console.log(position)
     }, err => console.log(err));
   }
+
   render() {
     return (
       <View style={styles.container}>
         <MenuButton navigation={this.props.navigation} />
-        {/* <Text style={styles.text}>Current Location</Text> */}
-        {/* <FetchLocation () ={this.getUserLocationHandler} /> */}
-        <UsersMap userLocation={this.state.userLocation} />
+        <View style={styles.mapContainer}>
+        <MarkerOverlay title="College Ave & Bool St" visible={this.state.markerOverlayIsVisible}/>
+        <UsersMap userLocation={this.state.userLocation} setModalVisible={this.setModalVisible} setUserLocation={this.setUserLocation}/>
+        </View>
         <View style={styles.container2}>
-          <Button title="Get Location" 
+          <Button title="Get Location"
           onPress={() => this.getUserLocationHandler()} />
         </View>
       </View>
@@ -62,4 +90,10 @@ const styles = StyleSheet.create({
     top: 80,
     alignItems: 'center'
   },
+  mapContainer: {
+        width: '100%',
+        height: 800,
+        marginTop: 0,
+        zIndex: -1
+    }
 });
