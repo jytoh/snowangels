@@ -46,23 +46,28 @@ let state = {
 	 * test get all corners
 	 * @return {[type]} [description]
 	 */
-let response = {}
+
 async function getAllCorners() {
 	try {
 		let response = await fetch(
-			'http://127.0.0.1:5000/get_all_corners'
+			'http://127.0.0.1:5000/get_all_corners', {
+				  method: 'GET'
+				}
 		);
-		let responseJson = await response;
+		let data = await response;
 		console.log(responseJson);
 	} catch (error) {
 		console.error(error);
 	}
+	return data
 }
 
-/** form: lat, lon, street1, street2
+const all_markers = getAllCorners()
+
+/** form: id, lat, lon, street1, street2
 */
 let state = {
-  markers: response
+  markers: Array.from(all_markers)
 }
 
 
