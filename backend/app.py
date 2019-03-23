@@ -182,12 +182,10 @@ def get_all_corners():
     connection = psycopg2.connect('dbname=template1 user=postgres password=password')
     cur = connection.cursor(cursor_factory=RealDictCursor)
     cur.execute("""
-          SELECT
-            lat, lon, street1, street2
-          FROM corners
+          SELECT * FROM corners
         """)
 
-    columns = ['lat', 'lon', 'street1', 'street2']
+    columns = ['id', 'lat', 'lon', 'street1', 'street2']
 
     c = cur.fetchall()
     print(c)
