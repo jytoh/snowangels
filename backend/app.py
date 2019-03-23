@@ -5,6 +5,8 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 #from werkzeug.utils import secure_filename
 
+from flask import jsonify 
+import sys
 
 app = Flask(__name__)
 
@@ -172,7 +174,8 @@ def register_user(name):
     db.session.add(usr)
     db.session.add(pts)
     db.session.commit()
-    return "%s has been added to the database" % name
+    return jsonify(user = name)
+    # return "%s has been added to the database" % name
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
@@ -183,7 +186,8 @@ def create_corner():
     crnr = Corner(st1,st2,lat,long)
     db.session.add(crnr)
     db.session.commit()
-    return "Added new corner at %s1 and %s2" % (st1, st2)
+    return jsonify(street1 = st1, street2=st2)
+    #return "Added new corner at %s1 and %s2" % (st1, st2)
 
 @app.route("/create_corners_from_filename", methods=['POST'])
 def create_corners_from_file():
@@ -201,8 +205,8 @@ def create_corners_from_file():
 
 @app.route("/new_subscription", methods=['POST'])
 def new_subscription():
-    uid = request.form["uid"]
-    cid = request.form["cid"]
+    uid = request.form['uid']
+    cid = request.form['cid']
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     subscr = Subscription()
@@ -210,12 +214,14 @@ def new_subscription():
     corner.subscription.append(subscr)
     db.session.add(subscr)
     db.session.commit()
-    return "User %s has subscribed to Corner %s" % (uid, cid)
+    return jsonify(user = uid, corner=cid, username=user.name)
+    #return "User %s has subscribed to Corner %s" % (uid, cid)
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
     uid = request.form["uid"]
     cid = request.form["cid"]
+    before_pic = request.args.get('before_pic') 
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     req = Request(uid, cid)
@@ -223,7 +229,8 @@ def new_request():
     corner.request.append(req)
     db.session.add(req)
     db.session.commit()
-    return "User %s has made a request for Corner %s" % (uid, cid)
+    return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
+    #return "User %s has made a request for Corner %s" % (uid, cid)
 
 @app.route("/new_shovel", methods=['POST'])
 def new_shovel():
@@ -231,8 +238,8 @@ def new_shovel():
     cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    before_pic = request.form["before_pic"]
-    after_pic = request.form["after_pic"]
+    before_pic = request.args.get('before_pic') 
+    after_pic = request.args.get('after_pic') 
     start = datetime.datetime.now() #TODO
     end = datetime.datetime.now() #TODO
     shovel = Shoveling(uid, cid, before_pic, after_pic, start, end)
@@ -254,15 +261,17 @@ def new_shovel():
     points_entry.szn_pts += 5
     points_entry.after_pics.append(after_pic)
     db.session.commit()
-    return "User %s has claimed to shovel Corner %s" % (uid, cid)
+    #TODO: figure out total time
+    return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic, after_pic=after_pic, start_time=start, end_time=end, total_time=0)
+    #return "User %s has claimed to shovel Corner %s" % (uid, cid)
 
 #validate shoveling
 @app.route("/validate_shovel", methods=['POST'])
 def validate_shovel():
     uid_requester = request.form["uid_requester"]
     uid_shoveler = request.form["uid_shoveler"]
-    cid = request.form["cid"]
-    validate_bit = request.form["validate_bit"]
+    cid = request.args.get('cid')
+    validate_bit = request.args.get('validate_bit')
     shoveler = User.query.get(uid_shoveler)
     corner = Corner.query.get(cid)
     #if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
@@ -275,59 +284,67 @@ def validate_shovel():
         req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
         req.state = 0 #TODO: need to re-notify ppl that this corner needs to be cleared
         db.session.commit()
-        return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
+        return jsonify(requester = uid_requester, shoveler=uid_shoveler, corner=cid, validate_bit=validate_bit)
+        #return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
     #if requester says shoveling claim is valid, set state of request to steady state, 2
     elif validate_bit=='1':
         req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
         req.state = 2 
         db.session.commit()
-        return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
+        return jsonify(requester = uid_requester, shoveler=uid_shoveler, corner=cid, validate_bit=validate_bit)
+        #return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
 
 #get all people subscribed to a corner
 @app.route("/ppl_subscribed", methods=['GET'])
 def get_ppl_subscribed():
-    cid = request.form["cid"]
+    cid = request.args.get('cid')
     users_subscribed = map(str,[s.user_id for s in Subscription.query.filter_by(corner_id=cid)])
-    return "Users %s are subscribed to corner %s" % (' '.join(users_subscribed), cid)
+    return jsonify(corner = cid, users_subscribed=users_subscribed)
+    #return "Users %s are subscribed to corner %s" % (' '.join(users_subscribed), cid)
 
 #get corners that user is subscribed to
 @app.route("/subscribed_corners", methods=['GET'])
 def get_subscribed_corners():
-    uid = request.form["uid"]
+    uid = request.args.get('uid')
     corners = map(str,[s.corner_id for s in Subscription.query.filter_by(user_id=uid)])
-    return "User %s is subscribed to corners %s" % (uid, ' '.join(corners)) 
+    return jsonify(user = uid, corners = corners)
+    #return "User %s is subscribed to corners %s" % (uid, ' '.join(corners)) 
 
 #unsubscribe a user from a corner
 @app.route("/unsubscribe_corner", methods=['DELETE'])
 def unsubscribe_corner():
-    uid = request.form["uid"]
-    cid = request.form["cid"]
+    uid = request.args.get('uid')
+    cid = request.args.get('cid')
     subscription = Subscription.query.filter_by(user_id=uid, corner_id=cid).one()
     db.session.delete(subscription)
     db.session.commit()
-    return "User %s has unsubscribed from corner %s" % (uid, cid)
+    return jsonify(user = uid, corner = cid)
+    #return "User %s has unsubscribed from corner %s" % (uid, cid)
 
 #get state of a corner request
 @app.route("/state", methods=['GET'])
 def get_state():
-    cid = request.form["cid"]
+    cid = request.args.get('cid')
     state = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().state
-    return "Corner %s has  %s" % (cid, state)
+    return jsonify(corner = cid, state = state)
+    # return "Corner %s has  %s" % (cid, state)
 
 #get user id who last requested a corner
 @app.route("/latest_requester_id", methods=['GET'])
 def get_latest_requester_id():
-    cid = request.form["cid"]
+    cid = request.args.get('cid')
     uid = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().user_id
-    return "%s was the last person to make a request on corner %s" % (uid, cid)
+    return jsonify(corner = cid, user = uid)
+    # return "%s was the last person to make a request on corner %s" % (uid, cid)
 
 #get name of who last requested a corner
 @app.route("/latest_requester_name", methods=['GET'])
 def get_latest_requester_name():
-    cid = request.form["cid"]
+    cid = request.args.get('cid')
     uid = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
-    return "%s was the last person to make a request on corner %s" % (name, cid)
+    return jsonify(corner = cid, user=uid, name = name)
+    #return "%s was the last person to make a request on corner %s" % (name, cid)
 
 #get corner info: street names
 @app.route("/corner_street_names", methods=['GET'])
@@ -337,75 +354,87 @@ def get_corner_street_names():
     #martin's edit
     str1 = Corner.query.filter_by(id=cid).first().street1
     str2 = Corner.query.filter_by(id=cid).first().street2
-    return "Corner %s is at streets %s and %s" % (cid, str1, str2)
+    return jsonify(street1 = str1, street2=str2)
+    #return "Corner %s is at streets %s and %s" % (cid, str1, str2)
 
 #get corner info: latitude and longtitude
 @app.route("/corner_coordinates", methods=['GET'])
 def get_corner_coordinates():
-    cid = request.form["cid"]
+    cid = request.args.get('cid')
     lat = Corner.query.filter_by(id=cid).lat
     lon = Corner.query.filter_by(id=cid).lon
-    return "Corner %s is at coordinates (%s, %s)" % (cid, lat, lon)
+    return jsonify(corner = cid, lat = lat, lon=lon)
+    #return "Corner %s is at coordinates (%s, %s)" % (cid, lat, lon)
 
 #get ID of leader of the day
 @app.route("/day_leader_id", methods=['GET'])
 def get_day_leader_id():
     uid = Point.query.order_by(Point.day_pts.desc()).first().user_id
-    return "User id %s is the leader of the day" % (uid)
+    return jsonify(user = uid)
+    # return "User id %s is the leader of the day" % (uid)
 
 #get name of leader of the day
 @app.route("/day_leader_name", methods=['GET'])
 def get_day_leader_name():
     uid = Point.query.order_by(Point.day_pts.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
-    return "User %s is the leader of the day" % (name)
+    return jsonify(name = name)
+    # return "User %s is the leader of the day" % (name)
 
 #get ID of leader of the week
 @app.route("/week_leader_id", methods=['GET'])
 def get_week_leader_id():
     uid = Point.query.order_by(Point.week_pts.desc()).first().user_id
-    return "User id %s is the leader of the week" % (uid)
+    return jsonify(user = uid)
+    # return "User id %s is the leader of the week" % (uid)
 
 #get name of leader of the day
 @app.route("/week_leader_name", methods=['GET'])
 def get_week_leader_name():
     uid = Point.query.order_by(Point.week_pts.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
-    return "User %s is the leader of the week" % (name)
+    return jsonify(name = name)
+    # return "User %s is the leader of the week" % (name)
 
 #get ID of leader of the season
 @app.route("/szn_leader_id", methods=['GET'])
 def get_szn_leader_id():
     uid = Point.query.order_by(Point.szn_pts.desc()).first().user_id
-    return "User id %s is the leader of the season" % (uid)
+    return jsonify(user = uid)
+    # return "User id %s is the leader of the season" % (uid)
+
 
 #get name of leader of the season
 @app.route("/szn_leader_name", methods=['GET'])
 def get_szn_leader_name():
     uid = Point.query.order_by(Point.szn_pts.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
-    return "User %s is the leader of the season" % (name)
+    return jsonify(name = name)
+    # return "User %s is the leader of the season" % (name)
 
 #get top x user ids for the day 
 @app.route("/top_day_leader_ids", methods=['GET'])
 def get_top_day_leader_ids():
-    x = request.form["num_users"]
+    x = request.args.get('num_users')
     top_users = map(str,[u.user_id for u in Point.query.order_by(Point.day_pts.desc())][:int(x)])
-    return ' '.join(top_users)
+    return jsonify(top_users = ' '.join(top_users))
+    # return ' '.join(top_users)
 
 #get top x user ids for the week
 @app.route("/top_week_leader_ids", methods=['GET'])
 def get_top_week_leader_ids():
-    x = request.form["num_users"]
+    x = request.args.get('num_users')
     top_users = map(str,[u.user_id for u in Point.query.order_by(Point.week_pts.desc())][:int(x)])
-    return ' '.join(top_users)
+    return jsonify(top_users = ' '.join(top_users))
+    # return ' '.join(top_users)
 
 #get top x user ids for the season 
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
-    x = request.form["num_users"]
+    x = request.args.get('num_users')
     top_users = map(str,[u.user_id for u in Point.query.order_by(Point.szn_pts.desc())][:int(x)])
-    return ' '.join(top_users)
+    return jsonify(top_users = ' '.join(top_users))
+    # return ' '.join(top_users)
 
 if __name__ == "__main__":
     app.run()
