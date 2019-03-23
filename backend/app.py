@@ -221,7 +221,7 @@ def new_subscription():
 def new_request():
     uid = request.form["uid"]
     cid = request.form["cid"]
-    before_pic = request.args.get('before_pic') 
+    before_pic = request.form["before_pic"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     req = Request(uid, cid)
@@ -238,8 +238,8 @@ def new_shovel():
     cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    before_pic = request.args.get('before_pic') 
-    after_pic = request.args.get('after_pic') 
+    before_pic = request.form["before_pic"]
+    after_pic = request.form["after_pic"]
     start = datetime.datetime.now() #TODO
     end = datetime.datetime.now() #TODO
     shovel = Shoveling(uid, cid, before_pic, after_pic, start, end)
@@ -262,7 +262,7 @@ def new_shovel():
     points_entry.after_pics.append(after_pic)
     db.session.commit()
     #TODO: figure out total time
-    return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic, after_pic=after_pic, start_time=start, end_time=end, total_time=0)
+    return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic, after_pic=after_pic, total_time=0)
     #return "User %s has claimed to shovel Corner %s" % (uid, cid)
 
 #validate shoveling
