@@ -66,6 +66,7 @@ let state = {
 }
 
 
+
 const usersMap = props => {
     const {userLocation, setModalVisible, setUserLocation} = props;
     let usersMapState = {
@@ -112,6 +113,7 @@ const usersMap = props => {
                               longitude={marker.lon}
                               street1={marker.street1}
                               street2={marker.street2}
+                              onPress = {setModalVisible}
                               />
                         );
                     })
