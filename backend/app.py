@@ -3,9 +3,13 @@ import os, datetime, filereading, pandas
 from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+import psycopg2
+from psycopg2.extras import RealDictCursor
+
 #from werkzeug.utils import secure_filename
 
 from flask import jsonify
+import json
 import sys
 
 app = Flask(__name__)
@@ -207,11 +211,11 @@ def create_corner():
 def create_corners_from_file():
     file= request.form["filename"]
     dframe = filereading.fetchGISdata(file)
-    for index, row in dframe.iterrows():
-        lat = row['InterX']
-        long = row['InterY']
-        st1 = row['STREET1']
-        st2 = row['STREET2']
+    for index, row in dframe.iterrows():#don't change these
+        lat = row[2]
+        long = row[3]
+        st1 = row[4]
+        st2 = row[5]
         crnr = Corner(st1, st2, lat, long)
         db.session.add(crnr)
     db.session.commit()
