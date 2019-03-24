@@ -46,12 +46,14 @@ class Request(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
+    before_pic = db.Column(db.PickleType)
 
-    def __init__(self, user_id=None, corner_id=None):
+    def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
         self.state = 0
         self.user_id=user_id
         self.corner_id=corner_id
+        self.before_pic=before_pic
 
 class User(db.Model):
 
@@ -242,11 +244,12 @@ def new_request():
     before_pic = request.form["before_pic"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    req = Request(uid, cid)
+    req = Request(uid, cid, before_pic)
     user.request.append(req)
     corner.request.append(req)
     db.session.add(req)
     db.session.commit()
+    #you can't conv
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
     #return "User %s has made a request for Corner %s" % (uid, cid)
 
@@ -256,8 +259,8 @@ def new_shovel():
     cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    before_pic = request.args.get('before_pic')
-    after_pic = request.args.get('after_pic')
+    before_pic = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().before_pic
+    after_pic = request.form["after_pic"]
     start = datetime.datetime.now() #TODO
     end = datetime.datetime.now() #TODO
     shovel = Shoveling(uid, cid, before_pic, after_pic, start, end)
@@ -288,8 +291,8 @@ def new_shovel():
 def validate_shovel():
     uid_requester = request.form["uid_requester"]
     uid_shoveler = request.form["uid_shoveler"]
-    cid = request.args.get('cid')
-    validate_bit = request.args.get('validate_bit')
+    cid = request.form["cid"]
+    validate_bit = request.form["cid"]
     shoveler = User.query.get(uid_shoveler)
     corner = Corner.query.get(cid)
     #if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
