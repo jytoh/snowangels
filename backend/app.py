@@ -21,8 +21,9 @@ POSTGRES = {
     'host': 'localhost',
     'port': '5432',
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
-%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
+# 'postgresql://%(user)s:\
+# %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #added this to not keep restarting
 app.config['DEBUG'] = True
