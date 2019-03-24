@@ -1,8 +1,8 @@
 import React from 'react';
 import{ View, Text, Image, ScrollView, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 
-const WIDTH = Dimensions.get('window').width 
-const HEIGHT = Dimensions.get('window').height 
+const WIDTH = Dimensions.get('window').width
+const HEIGHT = Dimensions.get('window').height
 
 export default class MenuDrawer extends React.Component {
     navLink(nav, text) {
@@ -18,10 +18,10 @@ export default class MenuDrawer extends React.Component {
                 <View style = {styles.topLinks}>
                     <View style={styles.profile}>
                         <View style ={styles.imgView}>
-                            <Image style = {styles.img} source={require('../assets/sarah.jpeg')} /> 
+                            <Image style = {styles.img} source={require('../assets/sarah.jpeg')} />
                         </View>
                         <View style = {styles.profileText}>
-                            <Text style = {styles.name}> Bitchass </Text>
+                            <Text style = {styles.name}> User </Text>
                         </View>
                     </View>
                 </View>

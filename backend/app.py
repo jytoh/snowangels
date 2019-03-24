@@ -235,7 +235,7 @@ def new_subscription():
 def new_request():
     uid = request.form["uid"]
     cid = request.form["cid"]
-    before_pic = request.args.get('before_pic')
+    before_pic = request.form["before_pic"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     req = Request(uid, cid)
