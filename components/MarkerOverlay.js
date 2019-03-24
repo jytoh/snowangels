@@ -28,7 +28,7 @@ const MarkerOverlay = (props) => {
                 <Text style={styles.intersectionText}>{title}</Text>
                 <Button title="Report Shovel"
                  onPress= {async () => {
-                                    
+
                                     try {
                                         var details = {
                                         'uid': 1,
@@ -41,12 +41,12 @@ const MarkerOverlay = (props) => {
                                         var encodedKey = encodeURIComponent(property);
                                         var encodedValue = encodeURIComponent(details[property]);
                                         formBody.push(encodedKey + "=" + encodedValue);
-                                    }         
+                                    }
                                     formBody = formBody.join("&");
                                     let response2 = await fetch('http://127.0.0.1:5000/new_request', {
                                           method: 'POST',
                                           headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded', 
+                                            'Content-Type': 'application/x-www-form-urlencoded',
                                           },
                                           body: formBody,
                                         });
@@ -66,7 +66,7 @@ const MarkerOverlay = (props) => {
                                 }
                                     }
                 />
-                <Button 
+                <Button
                     title="Start Shovel"
                     onPress= {async () => {
                     //{async () => {
@@ -83,12 +83,12 @@ const MarkerOverlay = (props) => {
                         var encodedKey = encodeURIComponent(property);
                         var encodedValue = encodeURIComponent(details[property]);
                         formBody.push(encodedKey + "=" + encodedValue);
-                    }         
+                    }
                     formBody = formBody.join("&");
                     let response2 = await fetch('http://127.0.0.1:5000/new_shovel', {
                           method: 'POST',
                           headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded', 
+                            'Content-Type': 'application/x-www-form-urlencoded',
                           },
                           body: formBody,
                         });
@@ -111,15 +111,15 @@ const MarkerOverlay = (props) => {
                             }
                         }
                     }
-                        
-      
+
+
                 />
                 <Button title="Hide"/>
             </View>
         </View>
         )
 }
-    
+
 
 
 const styles = StyleSheet.create({

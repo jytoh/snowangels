@@ -3,6 +3,7 @@ import { View, StyleSheet, Button, Modal } from 'react-native';
 import MapView from 'react-native-maps';
 import MarkerOverlay from '../components/MarkerOverlay';
 
+/**
 let state = {
     markers: [
       {
@@ -39,6 +40,36 @@ let state = {
       },
     ]
   };
+  */
+
+/**
+	 * test get all corners
+	 * @return {[type]} [description]
+	 */
+
+async function getAllCorners() {
+	try {
+		let response = await fetch(
+			'http://127.0.0.1:5000/get_all_corners', {
+				  method: 'GET'
+				}
+		);
+		let data = await response;
+		console.log(responseJson);
+	} catch (error) {
+		console.error(error);
+	}
+	return data
+}
+
+const all_markers = getAllCorners()
+
+/** form: id, lat, lon, street1, street2
+*/
+let state = {
+  markers: Array.from(all_markers)
+}
+
 
 
 const usersMap = props => {
@@ -78,9 +109,15 @@ const usersMap = props => {
                         return (
                             <MapView.Marker
                               key={index}
-                              coordinate={marker.coordinate}
+                              //commented out for testing
+                              /** coordinate={marker.coordinate}
                               title={marker.title}
                               description={marker.description}
+                              onPress = {setModalVisible} */
+                              latitude={marker.lat}
+                              longitude={marker.lon}
+                              street1={marker.street1}
+                              street2={marker.street2}
                               onPress = {setModalVisible}
                               />
                         );
