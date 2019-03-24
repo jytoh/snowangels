@@ -1,9 +1,10 @@
 import React from 'react';
 import { Platform, Dimensions } from 'react-native';
-import { createDrawerNavigator, createAppContainer} from 'react-navigation';
+import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
 import LinkScreen from '../screens/LinkScreen';
+import HistoryScreen from '../screens/HistoryScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 import MenuDrawer from '../components/MenuDrawer'
@@ -11,9 +12,9 @@ import MenuDrawer from '../components/MenuDrawer'
 const WIDTH = Dimensions.get('window').width;
 
 const DrawerConfig = {
-    drawerWidth: WIDTH*0.83,
+    drawerWidth: WIDTH * 0.83,
     contentComponent: ({ navigation }) => {
-        return(<MenuDrawer navigation={navigation}/>)
+        return (<MenuDrawer navigation={navigation} />)
     }
 }
 
@@ -25,7 +26,10 @@ const DrawerNavigator = createDrawerNavigator(
         Links: {
             screen: LinkScreen
         },
-        Settings:  {
+        History: {
+            screen: HistoryScreen
+        },
+        Settings: {
             screen: SettingsScreen
         }
     },
