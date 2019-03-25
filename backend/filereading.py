@@ -5,9 +5,9 @@ from pandas import ExcelFile
 from pyproj import Proj, transform
 
 
-def fetchGISdata(filename, dir='GIS data', sheet='Ints2019'):
+def fetchGISdata(filename, dir='GIS_data', sheet='Ints2019'):
     #expects excel file; default arguments should cover ver 1
-    p= os.path.abspath(os.pardir)
+    p= "app/" + os.path.abspath(os.pardir)
     p+=dir
     file=p+"/"+filename
     df = pd.read_excel(file, sheet_name=sheet,engine='xlrd')
