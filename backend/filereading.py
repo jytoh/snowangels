@@ -5,7 +5,7 @@ from pandas import ExcelFile
 from pyproj import Proj, transform
 
 
-def fetchGISdata(filename, dir='/GIS data', sheet='Ints2019'):
+def fetchGISdata(filename, dir='GIS data', sheet='Ints2019'):
     #expects excel file; default arguments should cover ver 1
     p= os.path.abspath(os.pardir)
     p+=dir
