@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Button, Modal } from 'react-native';
 import MapView from 'react-native-maps';
 import MarkerOverlay from '../components/MarkerOverlay';
+var RNFS = require('react-native-fs');
 
 /**
 let state = {
@@ -49,18 +50,30 @@ let state = {
 
 async function getAllCorners() {
 	try {
-		let response = await fetch(
-			'http://127.0.0.1:5000/get_all_corners', {
-				  method: 'GET'
-				}
-		);
-		let data = await response;
-		console.log(responseJson);
+		console.log("made it to get all corners")
+		let response = await fetch('http://127.0.0.1:5000/get_all_corners')
+			.then((response) => response.json())
+			.then((responseJSON) => {
+				console.log(responseJSON)
+			});
 	} catch (error) {
-		console.error(error);
+		console.error("error", error);
 	}
-	return data
 }
+
+function checkIfPointsFileExists() {
+	RNFS.exists('/index.html').then((response) => {
+		console.log("response", response);
+	}).catch((err) => {
+		console.error(err);
+	});
+}
+
+function testConsoleLogOnStartup() {
+	console.log("I'm testing this function on startup")
+}
+
+const startUpTest = testConsoleLogOnStartup()
 
 const all_markers = getAllCorners()
 
@@ -114,6 +127,7 @@ const usersMap = props => {
                               title={marker.title}
                               description={marker.description}
                               onPress = {setModalVisible} */
+															id={marker.id}
                               latitude={marker.lat}
                               longitude={marker.lon}
                               street1={marker.street1}
