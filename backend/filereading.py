@@ -1,15 +1,15 @@
 import pandas as pd
-import os.path
 from pandas import ExcelWriter
 from pandas import ExcelFile
 from pyproj import Proj, transform
+from pathlib import Path
 
 
-def fetchGISdata(filename, dir='GIS_data', sheet='Ints2019'):
+def fetchGISdata(filename, dir='GIS data', sheet='Ints2019'):
     #expects excel file; default arguments should cover ver 1
-    p= "app" + os.path.abspath(os.pardir)
-    p+=dir
-    file=p+"/"+filename
+    p= Path(__file__).resolve().parent
+    p= p / dir
+    file=p / filename
     df = pd.read_excel(file, sheet_name=sheet,engine='xlrd')
     cols=df.columns.values
     latlongdf=pd.DataFrame()
