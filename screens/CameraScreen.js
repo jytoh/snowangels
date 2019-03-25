@@ -4,28 +4,60 @@ import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
 import {Camera, Permissions, ImagePicker} from 'expo';
 import {Feather} from '@expo/vector-icons';
+import base64js from 'base64-js'
 
 export default class CameraScreen extends React.Component {
+
     state = {
         hasPermission: null,
         imageUri: null,
         type: Camera.Constants.Type.back,
+        b64: null,
     };
+
     async componentDidMount() {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
       this.setState({ hasPermission: status === 'granted' });
     };
+
+    
     async capturePicture() {
       console.log('made it to capture!')
       if (this.camera){
         let pic = await this.camera.takePictureAsync({base64 : true})
-        .then(pic => this.setState({imageUri : pic.uri}))
+        .then(pic => this.setState({imageUri : pic.uri, b64: pic.base64}))
         .catch(err => {throw err;});
-        console.log('took a picture!')
-
+        console.log(['took a picture!']);
+        //let bytea = base64js.toByteArray(this.state.b64);
+        console.log('helooooo');
+        //console.log(bytea);
       }
       else {console.log('doesnt enter')}
-    }
+    };
+
+    // uploadPicture() {
+    //   // var details = {
+    //   //   'uid' : 1
+    //   //   'cid' : 1
+    //   //   'before_pic' : 
+    //   // }
+		// 	// var formBody = [];
+		// 	// for (var property in details) {
+		// 	// 	var encodedKey = encodeURIComponent(property);
+		// 	// 	var encodedValue = encodeURIComponent(details[property]);
+		// 	// 	formBody.push(encodedKey + "=" + encodedValue);
+		// 	// }	
+		// 	// formBody = formBody.join("&");
+
+		// 	// let response = await fetch('http://127.0.0.1:5000/new_request', {
+		// 	// 	  method: 'POST',
+		// 	// 	  headers: {
+		// 	// 	    'Content-Type': 'application/x-www-form-urlencoded', 
+		// 	// 	  },
+		// 	// 	  body: formBody,
+		// 	// 	});
+    // };
+
     render() {
         const { hasPermission } = this.state;
         const { imageUri }  = this.state;
@@ -37,6 +69,7 @@ export default class CameraScreen extends React.Component {
             if (this.state.imageUri) {
               console.log('ah yes!!');
               console.log(this.state.imageUri);
+              //console.log(this.state.b64);
               return (
               <View style={styles.container}>
                 <Image style={styles.image} 
