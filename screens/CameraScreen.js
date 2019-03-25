@@ -37,12 +37,13 @@ export default class CameraScreen extends React.Component {
             if (this.state.imageUri) {
               console.log('ah yes!!');
               console.log(this.state.imageUri);
-              return <Image style={styles.image} 
-              source={{uri: this.state.imageUri}}/>;
-              <View style={styles.camerabutton}>
-                <Button style={styles.camerabutton} title="Back to Camera"
-                onPress={() => {this.state.imageUri = null}} />
-              </View>}
+              return (
+              <View style={styles.container}>
+                <Image style={styles.image} 
+                source={{uri: this.state.imageUri}}/>
+                <Button title="Back to Camera" style={styles.camerabutton}
+                onPress={() => {this.setState({imageUri : null})}} />
+              </View> )}
             else {
             return (
         <View style={styles.container}>
