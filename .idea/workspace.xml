@@ -92,6 +92,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>pandas</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -115,6 +120,7 @@
         <option value="$PROJECT_DIR$/backend/run.py" />
         <option value="$PROJECT_DIR$/backend/models.py" />
         <option value="$PROJECT_DIR$/backend/app.py" />
+        <option value="$PROJECT_DIR$/Requirements.txt" />
       </list>
     </option>
   </component>
@@ -137,26 +143,6 @@
             <path>
               <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
               <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="GIS data" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -279,12 +265,12 @@
       <workItem from="1551505832931" duration="9200000" />
       <workItem from="1551760889613" duration="691000" />
       <workItem from="1551769270201" duration="1002000" />
-      <workItem from="1553543191654" duration="1765000" />
+      <workItem from="1553543191654" duration="2144000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26900000" />
+    <option name="totallyTimeSpent" value="27279000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="721" extended-state="0" />
@@ -316,7 +302,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/requirements.txt" />
     <entry file="file://$PROJECT_DIR$/server_functions.py" />
     <entry file="file://$PROJECT_DIR$/server.py" />
     <entry file="file://$PROJECT_DIR$/testdb.py" />
@@ -391,6 +376,13 @@
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="110" column="6" selection-start-line="110" selection-end-line="110" selection-end-column="6" />
         </state>
       </provider>
     </entry>
