@@ -42,10 +42,5 @@ const list = [
       )
     }
   }
-  const styles = StyleSheet.create({
-    menuIcon: {
-
-    }
-})
 
 
