@@ -6,3 +6,4 @@ pyproj
 requests
 numpy
 pandas
+xlrd
