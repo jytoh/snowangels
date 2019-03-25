@@ -30,6 +30,7 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Home', 'Home')}
                         {this.navLink('Links', 'Links')}
                         {this.navLink('Settings', 'Settings')}
+                        {this.navLink('Camera','Camera')}
                     </View>
                 </ScrollView>
              <View style = {styles.footer}>
