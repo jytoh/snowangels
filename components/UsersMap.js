@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Button, Modal } from 'react-native';
 import MapView from 'react-native-maps';
 import MarkerOverlay from '../components/MarkerOverlay';
-var RNFS = require('react-native-fs');
+//var RNFS = require('react-native-fs');
 
 
 let state = {
