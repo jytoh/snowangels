@@ -1,41 +1,42 @@
 import React from 'react';
-import{ View, Text, Image, ScrollView, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, ScrollView, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
 
 export default class MenuDrawer extends React.Component {
     navLink(nav, text) {
-        return(
-            <TouchableOpacity style = {{height: 50}} onPress = {() => this.props.navigation.navigate(nav)}>
+        return (
+            <TouchableOpacity style={{ height: 50 }} onPress={() => this.props.navigation.navigate(nav)}>
                 <Text style={styles.link}>{text}</Text>
             </TouchableOpacity>
         )
     }
     render() {
-        return(
-            <View style = {styles.container}>
-                <View style = {styles.topLinks}>
+        return (
+            <View style={styles.container}>
+                <View style={styles.topLinks}>
                     <View style={styles.profile}>
-                        <View style ={styles.imgView}>
-                            <Image style = {styles.img} source={require('../assets/sarah.jpeg')} />
+                        <View style={styles.imgView}>
+                            <Image style={styles.img} source={require('../assets/sarah.jpeg')} />
                         </View>
-                        <View style = {styles.profileText}>
-                            <Text style = {styles.name}> User </Text>
+                        <View style={styles.profileText}>
+                            <Text style={styles.name}> User </Text>
                         </View>
                     </View>
                 </View>
                 <ScrollView style={styles.scroller}>
-                    <View style = {styles.bottomLinks}>
+                    <View style={styles.bottomLinks}>
                         {this.navLink('Home', 'Home')}
                         {this.navLink('Links', 'Links')}
+                        {this.navLink('History', 'History')}
                         {this.navLink('Settings', 'Settings')}
                     </View>
                 </ScrollView>
-             <View style = {styles.footer}>
-                     <Text style={styles.description}>Menu Practice</Text>
-                     <Text style={styles.version}>v1.0</Text>
-             </View>
+                <View style={styles.footer}>
+                    <Text style={styles.description}>Menu Practice</Text>
+                    <Text style={styles.version}>v1.0</Text>
+                </View>
             </View>
         )
     }
@@ -62,27 +63,27 @@ const styles = StyleSheet.create({
         width: 90,
         borderRadius: 40,
     },
-    imgView:{
+    imgView: {
         flex: 3,
         paddingLeft: 20,
         paddingRight: 20,
     },
-    profileText:{
+    profileText: {
         flex: 3,
         flexDirection: 'column',
         justifyContent: 'center',
     },
-    name:{
+    name: {
         fontSize: 20,
         paddingBottom: 5,
         color: 'white',
         textAlign: 'left',
     },
-    topLinks:{
+    topLinks: {
         height: 160,
         backgroundColor: 'black',
     },
-    bottomLinks:{
+    bottomLinks: {
         flex: 1,
         backgroundColor: 'white',
         paddingTop: 10,
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
         margin: 5,
         textAlign: 'left',
     },
-    footer:{
+    footer: {
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
