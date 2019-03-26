@@ -38,7 +38,7 @@ export default class HomeScreen extends React.Component {
 				formBody.push(encodedKey + "=" + encodedValue);
 			}		  
 			formBody = formBody.join("&");
-			let response2 = await fetch('http://127.0.0.1:5000/create_corner', {
+			let response2 = await fetch('https://snowangels-api.herokuapp.com/create_corner', {
 				  method: 'POST',
 				  headers: {
 				    'Content-Type': 'application/x-www-form-urlencoded', 
@@ -53,10 +53,9 @@ export default class HomeScreen extends React.Component {
 
 // moved this down so get follows a post to avoid nonetype error 
 			let response = await fetch(
-				'http://127.0.0.1:5000/corner_street_names?cid=1'
+				'https://snowangels-api.herokuapp.com/corner_street_names?cid=1'
 			);
 			let responseJson = await response.json();
-			console.log("here");
 			console.log(responseJson.street1);
 			console.log(responseJson.street2);
 		} catch (error) {

@@ -19,7 +19,7 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': '5432',
+    'port': os.environ.get("PORT", 5000),
 }
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
 # 'postgresql://%(user)s:\
@@ -214,6 +214,7 @@ def create_corner():
 def create_corners_from_file():
     file= request.form["filename"]
     dframe = filereading.fetchGISdata(file)
+    print("success")
     for index, row in dframe.iterrows():#don't change these
         lat = row[2]
         long = row[3]
@@ -459,4 +460,4 @@ def get_top_szn_leader_ids():
     # return ' '.join(top_users)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
