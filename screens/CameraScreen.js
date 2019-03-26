@@ -137,32 +137,36 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   fliptouchable: {
-    zIndex: 12,
-    position: 'absolute',
-    right: 10,
-    bottom: 10
+    //zIndex: 12,
+    position: 'relative',
+    paddingLeft: 10,
+    marginBottom: 20,
+    //left: 10,
+    width:100
   },
   flip: {
-    zIndex: 10,
+    //zIndex: 10,
     fontSize: 24,
-    marginBottom: 20,
+    paddingLeft: 20,
+    marginBottom: 10,
     color: 'white',
-    position: 'absolute',
-    right: 10,
-    bottom: 10
+    position: 'relative',
+    //left: 10,
+    width:200
   },
   camera: {
-    zIndex: -1,
+    //zIndex: -1,
     width: '100%',
     height: '100%',
     alignItems:'flex-end',
     justifyContent: 'flex-end',
   },
   camerabutton: {
-    zIndex: 1000,
-    position: 'absolute',
-    right: 120,
-    bottom: 10
+    //zIndex: 1000,
+    position: 'relative',
+    //paddingRight: 80,
+    //left: 100,
+    width:230
   },
   buttontext: {    
     fontSize: 24,
