@@ -179,10 +179,12 @@ def get_all_corners():
     dictlist = []
     for row in c:
         #when we add support for 4 corners we need to change description
-            d = {"coordinate": {"lattitude":row[3], "longitude": row[4]}, "title": ""+row[1]+" & "+row[2], description:"SINGLE CORNER"}
+            print(row)
+            d = {"coordinate": {"lattitude":row['lat'], "longitude": row['lon']}, "title": ""+row['street1']+" & "+row['street2'], "description" :"SINGLE CORNER"}
             dictlist.append(d)
-    print(d)
-    return json.dumps(d, indent=2)
+    print(dictlist)
+    #return dictlist
+    return json.dumps(dictlist, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
