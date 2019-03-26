@@ -3,7 +3,6 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 
 import MenuButton from '../components/MenuButton';
 import MarkerOverlay from '../components/MarkerOverlay';
-// import FetchLocation from '../components/FetchLocation';
 import UsersMap from '../components/UsersMap';
 
 export default class HomeScreen extends React.Component {
@@ -107,6 +106,8 @@ export default class HomeScreen extends React.Component {
 				<View style={styles.container2}>
 					<Button title="Get Location"
 					onPress={() => this.getOlinLibrary()} />
+					<Button title="Go to Camera"
+					onPress={() => this.props.navigation.navigate('Camera')} />
 				</View>
 			</View>
 		);
