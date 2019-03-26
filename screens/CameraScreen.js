@@ -27,36 +27,44 @@ export default class CameraScreen extends React.Component {
         let pic = await this.camera.takePictureAsync({base64 : true})
         .then(pic => this.setState({imageUri : pic.uri, b64: pic.base64}))
         .catch(err => {throw err;});
-        console.log(['took a picture!']);
+        console.log('took a picture!');
         //let bytea = base64js.toByteArray(this.state.b64);
-        console.log('helooooo');
         //console.log(bytea);
       }
       else {console.log('doesnt enter')}
     };
 
-    // uploadPicture() {
-    //   // var details = {
-    //   //   'uid' : 1
-    //   //   'cid' : 1
-    //   //   'before_pic' : 
-    //   // }
-		// 	// var formBody = [];
-		// 	// for (var property in details) {
-		// 	// 	var encodedKey = encodeURIComponent(property);
-		// 	// 	var encodedValue = encodeURIComponent(details[property]);
-		// 	// 	formBody.push(encodedKey + "=" + encodedValue);
-		// 	// }	
-		// 	// formBody = formBody.join("&");
-
-		// 	// let response = await fetch('http://127.0.0.1:5000/new_request', {
-		// 	// 	  method: 'POST',
-		// 	// 	  headers: {
-		// 	// 	    'Content-Type': 'application/x-www-form-urlencoded', 
-		// 	// 	  },
-		// 	// 	  body: formBody,
-		// 	// 	});
-    // };
+    async uploadPicture() {
+      // let filename = this.state.imageUri.split('/').pop();
+      // let match = /\.(\w+)$/.exec(filename);
+      // let type = match ? `image/${match[1]}` : `image`;
+      try {
+        console.log('clicked upload picture');
+        var details = {
+          'uid' : 1,
+          'cid' : 1,
+          'before_pic' : this.state.imageUri
+        }
+        var formBody = [];
+        for (var property in details) {
+          var encodedKey = encodeURIComponent(property);
+          var encodedValue = encodeURIComponent(details[property]);
+          formBody.push(encodedKey + "=" + encodedValue);
+        }	
+        formBody = formBody.join("&");
+        
+        let response = await fetch('https://snowangels-api.herokuapp.com/new_request', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded', 
+            },
+            body: formBody,
+          });
+        console.log('made it to line 62');
+      } catch(error) {
+        console.log('error!');
+      }
+    }
 
     render() {
         const { hasPermission } = this.state;
@@ -67,7 +75,6 @@ export default class CameraScreen extends React.Component {
             return (<SafeAreaVew><Text>No access to camera</Text></SafeAreaVew>);
         } else {
             if (this.state.imageUri) {
-              console.log('ah yes!!');
               console.log(this.state.imageUri);
               //console.log(this.state.b64);
               return (
@@ -76,6 +83,7 @@ export default class CameraScreen extends React.Component {
                 source={{uri: this.state.imageUri}}/>
                 <Button title="Back to Camera" style={styles.camerabutton}
                 onPress={() => {this.setState({imageUri : null})}} />
+                <Button title="Upload" onPress={() => this.uploadPicture()}/>
               </View> )}
             else {
             return (
