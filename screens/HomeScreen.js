@@ -11,9 +11,11 @@ export default class HomeScreen extends React.Component {
 		super(props)
 		this.setModalVisible = this.setModalVisible.bind(this);
 		this.setUserLocation = this.setUserLocation.bind(this);
+		this.setModalTitle = this.setModalTitle.bind(this);
 		this.state = {
 			userLocation: null,
-			markerOverlayIsVisible: false
+			markerOverlayIsVisible: false,
+			title: "Test title"
 		}
 	}
 
@@ -36,12 +38,12 @@ export default class HomeScreen extends React.Component {
 				var encodedKey = encodeURIComponent(property);
 				var encodedValue = encodeURIComponent(details[property]);
 				formBody.push(encodedKey + "=" + encodedValue);
-			}		  
+			}
 			formBody = formBody.join("&");
 			let response2 = await fetch('http://127.0.0.1:5000/create_corner', {
 				  method: 'POST',
 				  headers: {
-				    'Content-Type': 'application/x-www-form-urlencoded', 
+				    'Content-Type': 'application/x-www-form-urlencoded',
 				  },
 				  body: formBody,
 				});
@@ -51,7 +53,7 @@ export default class HomeScreen extends React.Component {
 			console.log(responseJson2.street1);
 			console.log(responseJson2.street2);
 
-// moved this down so get follows a post to avoid nonetype error 
+// moved this down so get follows a post to avoid nonetype error
 			let response = await fetch(
 				'http://127.0.0.1:5000/corner_street_names?cid=1'
 			);
@@ -84,6 +86,12 @@ export default class HomeScreen extends React.Component {
 		});
 	}
 
+	setModalTitle(title) {
+		this.setState({
+			title: title
+		});
+	}
+
 	getUserLocationHandler = () => {
 		navigator.geolocation.getCurrentPosition(position => {
 			this.setState({
@@ -102,8 +110,12 @@ export default class HomeScreen extends React.Component {
 			<View style={styles.container}>
 				<MenuButton navigation={this.props.navigation} />
 				<View style={styles.mapContainer}>
-				<MarkerOverlay title="College Ave & Bool St" visible={this.state.markerOverlayIsVisible}/>
-				<UsersMap userLocation={this.state.userLocation} setModalVisible={this.setModalVisible} setUserLocation={this.setUserLocation}/>
+				<MarkerOverlay title={this.state.title} visible={this.state.markerOverlayIsVisible} setModalVisible={this.setModalVisible}/>
+				<UsersMap
+					userLocation={this.state.userLocation}
+					setModalVisible={this.setModalVisible}
+					setUserLocation={this.setUserLocation}
+					setModalTitle={this.setModalTitle}/>
 				</View>
 				<View style={styles.container2}>
 					<Button title="Get Location"
