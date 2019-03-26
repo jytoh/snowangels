@@ -192,11 +192,16 @@ def get_all_corners():
           SELECT * FROM corners
         """)
 
-    columns = ['id', 'lat', 'lon', 'street1', 'street2']
+    columns = ['lat', 'lon', 'street1', 'street2']
 
     c = cur.fetchall()
-    print(c)
-    return json.dumps(c, indent=2)
+    dictlist = []
+    for(row in c):
+        #when we add support for 4 corners we need to change description
+            d = {"coordinate": {"lattitude":row[2], "longitude": row[3]}, "title": ""+row[0]+" & "+row[1], description:"SINGLE CORNER"}
+            dictlist.append(d)
+    print(d)
+    return json.dumps(d, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
