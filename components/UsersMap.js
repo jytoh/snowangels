@@ -70,11 +70,6 @@ const usersMap = props => {
 
     return (
         <View style={styles.mapContainer}>
-          <Button
-            title="Get Corners"
-            onPress={getAllCorners}
-            style={styles.getCorners}
-          />
           <MapView
               initialRegion={{
               latitude: 42.4451,
@@ -99,6 +94,10 @@ const usersMap = props => {
               }
               { userLocationMarker }
           </MapView>
+          <Button
+            title="Get Corners"
+            onPress={getAllCorners}
+          />
         </View>
     );
 };
