@@ -136,11 +136,13 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     getCornersContainer: {
-      flex:1,
+      zIndex: 100,
       position: "absolute",
-      bottom: 10,
+      bottom: 40,
       alignItems: "center",
-      marginLeft: "29%"
+      justifyContent: 'center',
+      flex: 1,
+      marginLeft: '29%'
     }
 });
 

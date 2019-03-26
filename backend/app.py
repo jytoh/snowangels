@@ -177,7 +177,7 @@ def get_all_corners():
     columns = ['id', 'lat', 'lon', 'street1', 'street2']
     c = cur.fetchall()
     dictlist = []
-    for(row in c):
+    for row in c:
         #when we add support for 4 corners we need to change description
             d = {"coordinate": {"lattitude":row[3], "longitude": row[4]}, "title": ""+row[1]+" & "+row[2], description:"SINGLE CORNER"}
             dictlist.append(d)
