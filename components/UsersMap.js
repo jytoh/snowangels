@@ -31,7 +31,12 @@ function formatGetAllCorners(responseJson) {
   })
   return responseJson
 }
-
+/**
+ * Fetches the json for the corners in the database
+ * The database returns an array with elements of the format {id, lat, lon, street1, street2}
+ * Saves an array with elements of the format {key, coordinate, title, description}
+ * with help of formatGetAllCorners() to state.markers
+ */
 function getAllCorners() {
   return fetch('http://127.0.0.1:5000/get_all_corners')
     .then((response) => response.json())
@@ -63,6 +68,12 @@ const usersMap = props => {
       setUserLocation();
     }
 
+    /**
+     * sets up the environemnt for UsersMap when a corner is pressed
+     * @param {title} string (The title of the corner. ex... "College Ave & Bool St")
+     * setModalTitle(title) -> sets the modal title. The modal is the popup
+     * setModalVisible() -> toggles the visibility of the modal
+     */
     function cornerOnPress(title) {
       setModalTitle(title)
       setModalVisible()
@@ -70,6 +81,7 @@ const usersMap = props => {
 
     return (
         <View style={styles.mapContainer}>
+
           <MapView
               initialRegion={{
               latitude: 42.4451,
@@ -94,10 +106,12 @@ const usersMap = props => {
               }
               { userLocationMarker }
           </MapView>
-          <Button
-            title="Get Corners"
-            onPress={getAllCorners}
-          />
+          <View style={styles.getCornersContainer}>
+            <Button
+              title="Get Corners"
+              onPress={getAllCorners}
+            />
+          </View>
         </View>
     );
 };
@@ -120,9 +134,12 @@ const styles = StyleSheet.create({
         top: 40,
         alignItems: "center"
     },
-    getCorners: {
+    getCornersContainer: {
+      flex:1,
       position: "absolute",
-      top: 200
+      bottom: 10,
+      alignItems: "center",
+      marginLeft: "29%"
     }
 });
 
