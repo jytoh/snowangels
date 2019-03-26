@@ -83,19 +83,22 @@ export default class CameraScreen extends React.Component {
                 source={{uri: this.state.imageUri}}/>
                 <Button title="Back to Camera" style={styles.camerabutton}
                 onPress={() => {this.setState({imageUri : null})}} />
-                <Button title="Upload" onPress={() => this.uploadPicture()}/>
+                <Button title="Upload" onPress={() => this.props.navigation.navigate('Home')}/>
               </View> )}
             else {
             return (
         <View style={styles.container}>
           <MenuButton navigation={this.props.navigation} />
-          <Camera ref={ref => {
-            this.camera = ref;
-          }} 
-          style={styles.camera} type={this.state.type}>
+          <Camera
+            ref={ref => {
+              this.camera = ref;
+            }} 
+            style={styles.camera}
+            type={this.state.type}>
             <View
               style={styles.bottombar}>
-              <TouchableOpacity style={styles.fliptouchable}
+              <TouchableOpacity
+                style={styles.fliptouchable}
                 onPress={() => {this.setState({
                     type: this.state.type === Camera.Constants.Type.back
                       ? Camera.Constants.Type.front
@@ -108,15 +111,7 @@ export default class CameraScreen extends React.Component {
                 </Text>
               </TouchableOpacity>
 
-              {/* nicer-looking button for later!
-                <Feather 
-                name = "camera"
-                color = "#000000"
-                size = {40}
-                style = {styles.camerabutton}
-                onPress={() => this.capturePicture.bind(this)}/> */}
-
-              <TouchableOpacity style={styles.camerabutton}
+              <TouchableOpacity style={styles.cameratouchable}
                 onPress={() => this.capturePicture()}>
                 <Text style={styles.buttontext}> {' '}Take Picture{' '}
                 </Text>
@@ -128,50 +123,52 @@ export default class CameraScreen extends React.Component {
     }
   }
 }
+
+              {/* nicer-looking button for later!
+                <Feather 
+                name = "camera"
+                color = "#000000"
+                size = {40}
+                style = {styles.camerabutton}
+                onPress={() => this.capturePicture.bind(this)}/> */}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   bottombar: {
     backgroundColor: 'transparent',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 100
   },
   fliptouchable: {
-    //zIndex: 12,
-    position: 'relative',
-    paddingLeft: 10,
-    marginBottom: 20,
-    //left: 10,
-    width:100
+    backgroundColor: "transparent",
+    width: 200,
+    height: 60
   },
   flip: {
-    //zIndex: 10,
     fontSize: 24,
-    paddingLeft: 20,
-    marginBottom: 10,
     color: 'white',
-    position: 'relative',
-    //left: 10,
-    width:200
+    textAlign: 'center'
   },
   camera: {
-    //zIndex: -1,
     width: '100%',
     height: '100%',
     alignItems:'flex-end',
     justifyContent: 'flex-end',
   },
-  camerabutton: {
-    //zIndex: 1000,
-    position: 'relative',
-    //paddingRight: 80,
-    //left: 100,
-    width:230
+  cameratouchable: {
+    backgroundColor: 'transparent',
+    width: 200,
+    height: 60
   },
   buttontext: {    
     fontSize: 24,
     marginBottom: 20,
     color: 'white',
+    textAlign: 'center'
   },
   image: {
     zIndex: 100,

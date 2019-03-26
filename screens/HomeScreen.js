@@ -136,13 +136,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-		container2: {
-		flex: 1,
-		zIndex: 2,
-		top: 40,
-		alignItems: 'center',
-		justifyContent: 'center',
-		position: "absolute",
+	container2: {
+	flex: 1,
+	zIndex: 2,
+	top: 40,
+	alignItems: 'center',
+	justifyContent: 'center',
+	position: "absolute",
 
 	},
 	text: {
