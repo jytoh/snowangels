@@ -14,8 +14,6 @@ const MarkerOverlay = (props) => {
      */
     const { title, visible, setModalVisible } = props;
 
-    console.log("visible", visible);
-
     if (!visible) {
         return null;
     }

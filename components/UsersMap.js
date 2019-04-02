@@ -14,7 +14,6 @@ let state = {
  * @return {json}             in MapView.Marker formatting
  */
 function formatGetAllCorners(responseJson) {
-  console.log("response json from get all corners", responseJson);
   responseJson.map(x => {
     x.key = x.id
     delete x.id
