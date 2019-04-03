@@ -4,7 +4,9 @@ import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
 import {Camera, Permissions, ImagePicker} from 'expo';
 import {Feather} from '@expo/vector-icons';
-import base64js from 'base64-js'
+import {decode as atob, encode as btoa} from 'base-64';
+import shorthash from 'shorthash';
+import {FileSystem} from 'expo';
 
 export default class CameraScreen extends React.Component {
 
@@ -25,7 +27,12 @@ export default class CameraScreen extends React.Component {
       console.log('made it to capture!')
       if (this.camera){
         let pic = await this.camera.takePictureAsync({base64 : true})
-        .then(pic => this.setState({imageUri : pic.uri, b64: pic.base64}))
+        .then(pic => this.setState({imageUri : pic.uri, b64: pic.base64, bytea: pic.base64.toByteArray, hash: shorthash.unique(pic.base64)}),
+          console.log("hi1 " + this.state.imageUri),         
+          console.log("hi2 " + this.state.bytea),
+          console.log("hi3 " + this.state.b64),
+          console.log("hi4 " + this.state.hash),
+          )
         .catch(err => {throw err;});
         console.log('took a picture!');
         //let bytea = base64js.toByteArray(this.state.b64);
@@ -35,24 +42,40 @@ export default class CameraScreen extends React.Component {
     };
 
     async uploadPicture() {
+      console.log("hi1 " + this.state.imageUri);        
+      console.log("hi2 " + this.state.bytea);
+      console.log("hi3 " + this.state.b64);
+      console.log("hi4 " + this.state.hash);
+
+      const name = this.state.hash;
+      const path = FileSystem.documentDirectory + name;
+
+
+      FileSystem.downloadAsync(this.state.imageUri, path);
+
+
+      // console.log("hi3 " + decode(this.state.b64, 'escape' ));
+
       // let filename = this.state.imageUri.split('/').pop();
       // let match = /\.(\w+)$/.exec(filename);
       // let type = match ? `image/${match[1]}` : `image`;
       try {
         console.log('clicked upload picture');
+        console.log(this.state.hash);
+
         var details = {
           'uid' : 1,
           'cid' : 1,
-          'before_pic' : this.state.imageUri
-        }
+          'before_pic' : this.state.hash,
+        };
         var formBody = [];
         for (var property in details) {
           var encodedKey = encodeURIComponent(property);
           var encodedValue = encodeURIComponent(details[property]);
           formBody.push(encodedKey + "=" + encodedValue);
-        }	
+        } ;
         formBody = formBody.join("&");
-        
+        console.log('made it to line 70');
         let response = await fetch('https://snowangels-api.herokuapp.com/new_request', {
             method: 'POST',
             headers: {
@@ -83,22 +106,19 @@ export default class CameraScreen extends React.Component {
                 source={{uri: this.state.imageUri}}/>
                 <Button title="Back to Camera" style={styles.camerabutton}
                 onPress={() => {this.setState({imageUri : null})}} />
-                <Button title="Upload" onPress={() => this.props.navigation.navigate('Home')}/>
+                <Button title="Upload" onPress={() => this.uploadPicture()}/>
               </View> )}
             else {
             return (
         <View style={styles.container}>
           <MenuButton navigation={this.props.navigation} />
-          <Camera
-            ref={ref => {
-              this.camera = ref;
-            }} 
-            style={styles.camera}
-            type={this.state.type}>
+          <Camera ref={ref => {
+            this.camera = ref;
+          }} 
+          style={styles.camera} type={this.state.type}>
             <View
               style={styles.bottombar}>
-              <TouchableOpacity
-                style={styles.fliptouchable}
+              <TouchableOpacity style={styles.fliptouchable}
                 onPress={() => {this.setState({
                     type: this.state.type === Camera.Constants.Type.back
                       ? Camera.Constants.Type.front
@@ -111,7 +131,15 @@ export default class CameraScreen extends React.Component {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.cameratouchable}
+              {/* nicer-looking button for later!
+                <Feather 
+                name = "camera"
+                color = "#000000"
+                size = {40}
+                style = {styles.camerabutton}
+                onPress={() => this.capturePicture.bind(this)}/> */}
+
+              <TouchableOpacity style={styles.camerabutton}
                 onPress={() => this.capturePicture()}>
                 <Text style={styles.buttontext}> {' '}Take Picture{' '}
                 </Text>
@@ -123,52 +151,46 @@ export default class CameraScreen extends React.Component {
     }
   }
 }
-
-              {/* nicer-looking button for later!
-                <Feather 
-                name = "camera"
-                color = "#000000"
-                size = {40}
-                style = {styles.camerabutton}
-                onPress={() => this.capturePicture.bind(this)}/> */}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   bottombar: {
     backgroundColor: 'transparent',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 100
   },
   fliptouchable: {
-    backgroundColor: "transparent",
-    width: 200,
-    height: 60
+    zIndex: 12,
+    position: 'absolute',
+    right: 10,
+    bottom: 10
   },
   flip: {
+    zIndex: 10,
     fontSize: 24,
+    marginBottom: 20,
     color: 'white',
-    textAlign: 'center'
+    position: 'absolute',
+    right: 10,
+    bottom: 10
   },
   camera: {
+    zIndex: -1,
     width: '100%',
     height: '100%',
     alignItems:'flex-end',
     justifyContent: 'flex-end',
   },
-  cameratouchable: {
-    backgroundColor: 'transparent',
-    width: 200,
-    height: 60
+  camerabutton: {
+    zIndex: 1000,
+    position: 'absolute',
+    right: 120,
+    bottom: 10
   },
   buttontext: {    
     fontSize: 24,
     marginBottom: 20,
     color: 'white',
-    textAlign: 'center'
   },
   image: {
     zIndex: 100,

@@ -8,6 +8,7 @@ from psycopg2.extras import RealDictCursor
 from flask import jsonify
 import json
 import sys
+import base64
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': '5432',
+    'port': 5432,
 }
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
@@ -40,7 +41,7 @@ class Request(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
-    before_pic = db.Column(db.PickleType)
+    before_pic = db.Column(db.LargeBinary)
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
         self.state = 0
@@ -90,6 +91,7 @@ class Corner(db.Model):
     lon = db.Column(db.Float)
     street1 = db.Column(db.String(80))
     street2 = db.Column(db.String(80))
+
     subscription = db.relationship(
         "Subscription", backref="corner", lazy="select", uselist=True
     )
@@ -202,6 +204,7 @@ def create_corner():
 def create_corners_from_file():
     file= request.form["filename"]
     dframe = filereading.fetchGISdata(file)
+    print("success")
     for index, row in dframe.iterrows():#don't change these
         lat = row[2]
         long = row[3]
@@ -228,19 +231,54 @@ def new_subscription():
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
+    print("HI");
     uid = request.form["uid"]
     cid = request.form["cid"]
     before_pic = request.form["before_pic"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    req = Request(uid, cid, before_pic)
-    user.request.append(req)
-    corner.request.append(req)
-    db.session.add(req)
+    # req = Request(uid, cid, before_pic)
+    
+    connection=None
+    try:
+        print("HI");
+        user_id=uid;
+        corner_id=cid;
+        time = datetime.datetime.now();
+        state = 0; 
+        print("HI");
+
+        connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
+        cur = connection.cursor(cursor_factory=RealDictCursor);
+        print("HI");
+
+        cur.execute("INSERT INTO requests(user_id, corner_id, time, state, before_pic) " +
+        "VALUES(%s, %s, %s, %s,%s)",
+        (user_id, corner_id, time, state, before_pic));
+        print("HI");
+
+
+        connection.commit();
+
+        cur.close();
+
+
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if connection is not None:
+            connection.close()
+
+    # may have to convert back to this below
+    # user.request.append(req)
+    # corner.request.append(req)
+    # db.session.add(req)
     db.session.commit()
     #you can't conv
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
-    #return "User %s has made a request for Corner %s" % (uid, cid)
+    # #return "User %s has made a request for Corner %s" % (uid, cid)
+
 
 @app.route("/new_shovel", methods=['POST'])
 def new_shovel():
@@ -444,4 +482,4 @@ def get_top_szn_leader_ids():
     # return ' '.join(top_users)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
