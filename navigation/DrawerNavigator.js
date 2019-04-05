@@ -7,11 +7,8 @@ import LinkScreen from '../screens/LinkScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CameraScreen from '../screens/CameraScreen';
-<<<<<<< HEAD
 import ProfileScreen from '../screens/ProfileScreen';
 
-=======
->>>>>>> e47709d2f25d426682d3f9c690eeb9603673b501
 import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 
