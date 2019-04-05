@@ -7,7 +7,7 @@ import LinkScreen from '../screens/LinkScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CameraScreen from '../screens/CameraScreen';
-
+import ProfileScreen from '../screens/ProfileScreen';
 
 import MenuDrawer from '../components/MenuDrawer'
 
@@ -24,6 +24,9 @@ const DrawerNavigator = createDrawerNavigator(
     {
         Home: {
             screen: HomeScreen
+        },
+        Profile: {
+            screen: ProfileScreen
         },
         Links: {
             screen: LinkScreen
