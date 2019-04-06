@@ -8,7 +8,8 @@ export default class ProfileScreen extends React.Component {
 	state = {
 		signedIn: false,
         name: "",
-        photoUrl: ""
+        photoUrl: "",
+        id: 0
     };
 
    async signInWithGoogleAsync() {
@@ -23,7 +24,8 @@ export default class ProfileScreen extends React.Component {
 	    	this.setState({
 	    		signedIn: true,
 	    		name: result.user.name,
-	    		photoUrl: result.user.photoUrl
+	    		photoUrl: result.user.photoUrl,
+	    		id: result.user.id
 	    	})
 	    	console.log(this.state.name);
 	    	console.log(this.state.photoUrl);

@@ -53,6 +53,8 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
+    photourl = db.Column(db.String(80))
+
     point = db.relationship(
         "Point", backref="user", lazy="select", uselist=False
     )
@@ -238,14 +240,14 @@ def new_request():
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
-    
+
     connection=None
     try:
         print("HI");
         user_id=uid;
         corner_id=cid;
         time = datetime.datetime.now();
-        state = 0; 
+        state = 0;
         print("HI");
 
         connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
@@ -480,6 +482,23 @@ def get_top_szn_leader_ids():
     top_users = map(str,[u.user_id for u in Point.query.order_by(Point.szn_pts.desc())][:int(x)])
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
+
+
+def authenticate(id, name):
+    authenticated=False
+    connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
+
+    cur = connection.cursor(cursor_factory=RealDictCursor);
+    cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
+    c=cur.fetchall()
+    if(len(c) =/= 1):
+        return False
+    for var in c:
+        if var==name:
+            authenticated=True
+    return authenticated
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
