@@ -67,8 +67,10 @@ class User(db.Model):
     shoveling = db.relationship(
         "Shoveling", backref="user", lazy="select", uselist=True
     )
-    def __init__(self, name=None):
+    def __init__(self, name=None, id=None, url=None):#remove None for production
         self.name = name
+        self.id =id
+        self.photourl = url
         self.subscription = []
         self.request = []
 
@@ -80,11 +82,12 @@ class Point(db.Model):
     week_pts = db.Column(db.Integer)
     szn_pts = db.Column(db.Integer)
     after_pics = db.Column(db.PickleType)
-    def __init__(self):
+    def __init__(self,id):
         self.day_pts = 0
         self.week_pts = 0
         self.szn_pts = 0
         self.after_pics = []
+        self.user_id=id
 
 class Corner(db.Model):
     __tablename__ = 'corners'
@@ -160,10 +163,13 @@ def index():
     print(User.query.all())
     return 'works'
 
-@app.route("/register/<name>")
-def register_user(name):
-    usr = User(name)
-    pts = Point()
+@app.route("/register_user",methods=['POST'])
+def register_user():
+    name = request.form["name"]
+    id = request.form["id"]
+    url = request.form[photourl]
+    usr = User(name, id, url)
+    pts = Point(id)
     usr.point = pts
     db.session.add(usr)
     db.session.add(pts)
