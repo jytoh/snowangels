@@ -173,8 +173,8 @@ def register_user():
     tk = request.form["token"]
     initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
 
-    if initialAuth =/= "teststring":
-        return "Error: new users must be registered through the app", 401
+    #if initialAuth =/= "teststring":
+        #return "Error: new users must be registered through the app", 401
     usr = User(name, id, url, token)
     pts = Point(id)
     usr.point = pts

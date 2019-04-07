@@ -30,7 +30,7 @@ export default class ProfileScreen extends React.Component {
 	    		id: result.user.id
 
 	    	})
-	    	SecureStore.setItemAsync('token', result.token)
+	    	SecureStore.setItemAsync('token', result.accessToken)
 	    	console.log(this.state.name);
 	    	console.log(this.state.photoUrl);
 	      return result.accessToken;
