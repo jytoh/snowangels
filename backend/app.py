@@ -54,6 +54,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     photourl = db.Column(db.String(80))
+    token = db.Column(db.String(80))
 
     point = db.relationship(
         "Point", backref="user", lazy="select", uselist=False
@@ -67,10 +68,11 @@ class User(db.Model):
     shoveling = db.relationship(
         "Shoveling", backref="user", lazy="select", uselist=True
     )
-    def __init__(self, name=None, id=None, url=None):#remove None for production
+    def __init__(self, name=None, id=None, url=None, token=None):#remove None for production
         self.name = name
         self.id =id
         self.photourl = url
+        self.token = token
         self.subscription = []
         self.request = []
 
@@ -167,8 +169,13 @@ def index():
 def register_user():
     name = request.form["name"]
     id = request.form["id"]
-    url = request.form[photourl]
-    usr = User(name, id, url)
+    url = request.form["photourl"]
+    tk = request.form["token"]
+    initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
+
+    if initialAuth =/= "teststring":
+        return "Error: new users must be registered through the app", 401
+    usr = User(name, id, url, token)
     pts = Point(id)
     usr.point = pts
     db.session.add(usr)
@@ -489,21 +496,27 @@ def get_top_szn_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 
-
-def authenticate(id, name):
+@app.before_request
+def authenticate():
+    if request.path[0:15]=="/register_user":
+        pass #registering new users is special and should be treated as such
     authenticated=False
+    id = request.values['id']
+    token = request.values['token']
     connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
 
     cur = connection.cursor(cursor_factory=RealDictCursor);
     cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
     c=cur.fetchall()
-    if(len(c) =/= 1):
-        return False
-    for var in c:
-        if var==name:
+    if len(c) == 0: #if user doesn't exist
+        return "User doesn't exist", 404
+    for var in c: #i don't think order is guaranteed so we have to check the whole list
+        if var==token:
             authenticated=True
-    return authenticated
-
+    if authenticated:
+        return None
+    else:
+        return "User authentication token doesn't match id", 401
 
 
 if __name__ == "__main__":

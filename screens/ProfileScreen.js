@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, Button, StyleSheet, Text, View } from 'react-native';
+import { SecureStore } from 'expo';
 
 import MenuButton from '../components/MenuButton'
 
@@ -9,7 +10,8 @@ export default class ProfileScreen extends React.Component {
 		signedIn: false,
         name: "",
         photoUrl: "",
-        id: 0
+        id: "",
+        token = ""
     };
 
    async signInWithGoogleAsync() {
@@ -26,7 +28,9 @@ export default class ProfileScreen extends React.Component {
 	    		name: result.user.name,
 	    		photoUrl: result.user.photoUrl,
 	    		id: result.user.id
+
 	    	})
+	    	SecureStore.setItemAsync('token', result.token)
 	    	console.log(this.state.name);
 	    	console.log(this.state.photoUrl);
 	      return result.accessToken;
