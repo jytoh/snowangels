@@ -188,7 +188,7 @@ def register_user():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    connection = psycopg2.connect('dbname=template1 user=postgres password=password')
+    connection = psycopg2.connect(dbname='template1', user='postgres',password='password')
     cur = connection.cursor(cursor_factory=RealDictCursor)
     cur.execute("""
           SELECT * FROM corners
@@ -503,9 +503,10 @@ def authenticate():
     if request.path[0:15]=="/register_user":
         pass #registering new users is special and should be treated as such
     authenticated=False
-    id = request.values['uid']
+    print(request.values)
+    id = request.values['id']
     token = request.values['token']
-    connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
+    connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
 
     cur = connection.cursor(cursor_factory=RealDictCursor);
     cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
