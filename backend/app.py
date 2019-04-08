@@ -121,6 +121,7 @@ class Corner(db.Model):
     @property
     def serialize(self):
         return {
+            'key':self.id,
             'coordinate':{'latitude':self.lat, 'longtitude':self.lon},
             'title': self.street1 + " & " + self.street2,
             'description': "Single Corner"
