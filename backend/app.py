@@ -504,16 +504,16 @@ def authenticate():
     print(request.values)
     id = request.values.get('id')
     token = request.values.get('token')
-    connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
-
-    cur = connection.cursor(cursor_factory=RealDictCursor);
-    cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
-    c=cur.fetchall()
-    if len(c) == 0: #if user doesn't exist
+    # connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
+    #
+    # cur = connection.cursor(cursor_factory=RealDictCursor);
+    # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
+    # c=cur.fetchall()
+    usr = User.query.get(id)
+    if usr is None : #if user doesn't exist
         return "User doesn't exist", 404
-    for var in c: #i don't think order is guaranteed so we have to check the whole list
-        if var==token:
-            authenticated=True
+    if usr.token == token:
+        authenticated=True
     if authenticated:
         return None
     else:
