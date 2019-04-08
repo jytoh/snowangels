@@ -188,7 +188,7 @@ def register_user():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    connection = psycopg2.connect(dbname='template1', user='postgres',password='password')
+    connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost")
     cur = connection.cursor(cursor_factory=RealDictCursor)
     cur.execute("""
           SELECT * FROM corners
