@@ -498,28 +498,28 @@ def get_top_szn_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 
-@app.before_request
-def authenticate():
-    if request.path[0:15]=="/register_user":
-        pass #registering new users is special and should be treated as such
-    authenticated=False
-    print(request.values)
-    id = request.values['id']
-    token = request.values['token']
-    connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
-
-    cur = connection.cursor(cursor_factory=RealDictCursor);
-    cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
-    c=cur.fetchall()
-    if len(c) == 0: #if user doesn't exist
-        return "User doesn't exist", 404
-    for var in c: #i don't think order is guaranteed so we have to check the whole list
-        if var==token:
-            authenticated=True
-    if authenticated:
-        return None
-    else:
-        return "User authentication token doesn't match id", 401
+# @app.before_request
+# def authenticate():
+#     if request.path[0:15]=="/register_user":
+#         pass #registering new users is special and should be treated as such
+#     authenticated=False
+#     print(request.values)
+#     id = request.values['id']
+#     token = request.values['token']
+#     connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
+#
+#     cur = connection.cursor(cursor_factory=RealDictCursor);
+#     cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
+#     c=cur.fetchall()
+#     if len(c) == 0: #if user doesn't exist
+#         return "User doesn't exist", 404
+#     for var in c: #i don't think order is guaranteed so we have to check the whole list
+#         if var==token:
+#             authenticated=True
+#     if authenticated:
+#         return None
+#     else:
+#         return "User authentication token doesn't match id", 401
 
 
 if __name__ == "__main__":
