@@ -177,7 +177,7 @@ def register_user():
 
     #if initialAuth =/= "teststring":
         #return "Error: new users must be registered through the app", 401
-    usr = User(name, id, url, token)
+    usr = User(name, id, url, tk)
     pts = Point(id)
     usr.point = pts
     db.session.add(usr)
@@ -503,7 +503,7 @@ def authenticate():
     if request.path[0:15]=="/register_user":
         pass #registering new users is special and should be treated as such
     authenticated=False
-    id = request.values['id']
+    id = request.values['uid']
     token = request.values['token']
     connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
 
