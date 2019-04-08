@@ -39,9 +39,8 @@ function formatGetAllCorners(responseJson) {
  */
 function getAllCorners() {
   return fetch('https://snowangels-api.herokuapp.com/get_all_corners')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      markers = responseJson;
+    .then((response) => {
+      markers = response;
     })
     .catch((error) => {
       console.error(error);
