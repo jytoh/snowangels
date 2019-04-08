@@ -190,7 +190,7 @@ def register_user():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    return jsonify(Corner.query.all().data)
+    return jsonify(Corner.query.all())
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
