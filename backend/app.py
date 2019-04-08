@@ -17,11 +17,13 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': 5432,
+    'port': os.environ.get("PORT", 5000),
 }
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-# 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
+
 #added this to not keep restarting
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
