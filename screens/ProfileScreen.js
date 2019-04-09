@@ -11,7 +11,7 @@ export default class ProfileScreen extends React.Component {
         name: "",
         photoUrl: "",
         id: "",
-        token = ""
+        token: ""
     };
 
    async signInWithGoogleAsync() {

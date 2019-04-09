@@ -4,7 +4,7 @@ import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
 import {Camera, Permissions, ImagePicker} from 'expo';
 import {Feather} from '@expo/vector-icons';
-import {decode as atob, encode as btoa} from 'base-64';
+// import {decode as atob, encode as btoa} from 'base-64';
 import shorthash from 'shorthash';
 import {FileSystem} from 'expo';
 

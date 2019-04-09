@@ -17,11 +17,13 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': 5432,
+    'port': os.environ.get("PORT", 5000),
 }
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-# 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
+
 #added this to not keep restarting
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -116,6 +118,15 @@ class Corner(db.Model):
         self.subscription = []
         self.request = []
 
+    @property
+    def serialize(self):
+        return {
+            'key':self.id,
+            'coordinate':{'latitude':self.lat, 'longtitude':self.lon},
+            'title': self.street1 + " & " + self.street2,
+            'description': "Single Corner"
+        }
+
 class Shoveling(db.Model):
     __tablename__ = 'shovelings'
     id = db.Column(db.Integer, primary_key=True)
@@ -137,6 +148,8 @@ class Shoveling(db.Model):
 # COMMENT THIS OUT WHEN DEPLOYING
 db.reflect()
 db.drop_all()
+
+
 # db.init_app(app)
 db.create_all()
 db.session.commit()
@@ -175,7 +188,7 @@ def register_user():
 
     #if initialAuth =/= "teststring":
         #return "Error: new users must be registered through the app", 401
-    usr = User(name, id, url, token)
+    usr = User(name, id, url, tk)
     pts = Point(id)
     usr.point = pts
     db.session.add(usr)
@@ -186,20 +199,7 @@ def register_user():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    connection = psycopg2.connect('dbname=template1 user=postgres password=password')
-    cur = connection.cursor(cursor_factory=RealDictCursor)
-    cur.execute("""
-          SELECT * FROM corners
-        """)
-    columns = ['id', 'lat', 'lon', 'street1', 'street2']
-    c = cur.fetchall()
-    dictlist = []
-    for row in c:
-        #when we add support for 4 corners we need to change description
-            print(row)
-            d = {"coordinate": {"latitude":row['lat'], "longitude": row['lon']}, "title": ""+row['street1']+" & "+row['street2'], "description" :"SINGLE CORNER"}
-            dictlist.append(d)
-    print(dictlist)
+    dictlist = [i.serialize for i in Corner.query.all()]
     #return dictlist
     return json.dumps(dictlist, indent=2)
 
@@ -501,18 +501,19 @@ def authenticate():
     if request.path[0:15]=="/register_user":
         return None #registering new users is special and should be treated as such
     authenticated=False
-    id = request.values['id']
-    token = request.values['token']
-    connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
-
-    cur = connection.cursor(cursor_factory=RealDictCursor);
-    cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
-    c=cur.fetchall()
-    if len(c) == 0: #if user doesn't exist
+    print(request.values)
+    id = request.values.get('id')
+    token = request.values.get('token')
+    # connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
+    #
+    # cur = connection.cursor(cursor_factory=RealDictCursor);
+    # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
+    # c=cur.fetchall()
+    usr = User.query.get(id)
+    if usr is None : #if user doesn't exist
         return "User doesn't exist", 404
-    for var in c: #i don't think order is guaranteed so we have to check the whole list
-        if var==token:
-            authenticated=True
+    if usr.token == token:
+        authenticated=True
     if authenticated:
         return None
     else:
