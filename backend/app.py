@@ -199,8 +199,19 @@ def register_user():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    dictlist = [i.serialize for i in Corner.query.all()]
-    #return dictlist
+    connection = psycopg2.connect('dbname=template1 user=postgres password=password')
+    cur = connection.cursor(cursor_factory=RealDictCursor)
+    cur.execute("""
+          SELECT * FROM corners
+        """)
+    columns = ['id', 'lat', 'lon', 'street1', 'street2']
+    c = cur.fetchall()
+    dictlist = []
+    for row in c:
+        #when we add support for 4 corners we need to change description
+            d = {"coordinate": {"lattitude":row['lat'], "longitude": row['lon']}, "title": ""+row['street1']+" & "+row['street2'], "description" :"SINGLE CORNER"}
+            dictlist.append(d)
+    print(dictlist)
     return json.dumps(dictlist, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
