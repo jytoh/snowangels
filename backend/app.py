@@ -499,7 +499,7 @@ def get_top_szn_leader_ids():
 @app.before_request
 def authenticate():
     if request.path[0:15]=="/register_user":
-        pass #registering new users is special and should be treated as such
+        return None #registering new users is special and should be treated as such
     authenticated=False
     id = request.values['id']
     token = request.values['token']
