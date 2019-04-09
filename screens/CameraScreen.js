@@ -76,7 +76,7 @@ export default class CameraScreen extends React.Component {
         } ;
         formBody = formBody.join("&");
         console.log('made it to line 70');
-        let response = await fetch('https://snowangels-api.herokuapp.com/new_request', {
+        let response = await fetch('http://127.0.0.1:5000/new_request', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded', 

@@ -10,7 +10,7 @@ export default class ProfileScreen extends React.Component {
 		signedIn: false,
         name: "",
         photoUrl: "",
-        id: "",
+        google_id: "",
         token: ""
     };
 
@@ -27,13 +27,39 @@ export default class ProfileScreen extends React.Component {
 	    		signedIn: true,
 	    		name: result.user.name,
 	    		photoUrl: result.user.photoUrl,
-	    		id: result.user.id
+	    		google_id: result.user.id,
+          token: result.accessToken,
 
 	    	})
 	    	SecureStore.setItemAsync('token', result.accessToken)
-	    	SecureStore.setItemAsync('id', result.user.id)
+	    	SecureStore.setItemAsync('id', result.user.id) //need to change id to google_id here
 	    	console.log(this.state.name);
 	    	console.log(this.state.photoUrl);
+        
+        var details = {
+              'name': this.state.name,
+              'google_id': this.state.google_id,
+              'photourl': this.state.photoUrl,
+              'token': this.state.token,
+            };
+
+        var formBody = [];
+        for (var property in details) {
+          var encodedKey = encodeURIComponent(property);
+          var encodedValue = encodeURIComponent(details[property]);
+          formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
+        let response = await fetch('http://127.0.0.1:5000/register_user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formBody,
+          });
+        let responseJson = await response.json();
+        console.log(responseJson);
+
 	      return result.accessToken;
 	    } else {
 	      return {cancelled: true};

@@ -54,10 +54,10 @@ class Request(db.Model):
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    google_id = db.Column(db.String(80))
-    name = db.Column(db.String(80))
-    photourl = db.Column(db.String(80))
-    token = db.Column(db.String(80))
+    google_id = db.Column(db.String(255))
+    name = db.Column(db.String(255))
+    photourl = db.Column(db.String(255))
+    token = db.Column(db.String(255))
 
     point = db.relationship(
         "Point", backref="user", lazy="select", uselist=False
@@ -182,21 +182,24 @@ def index():
 @app.route("/register_user",methods=['POST'])
 def register_user():
     name = request.form["name"]
-    id = request.form["id"]
+    google_id = request.form["google_id"]
     url = request.form["photourl"]
     tk = request.form["token"]
-    #initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
+    if (User.query.filter_by(google_id= google_id).first() == None):
+        #initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
 
-    #if initialAuth =/= "teststring":
-        #return "Error: new users must be registered through the app", 401
-    usr = User(name, id, url, tk)
-    pts = Point(id)
-    usr.point = pts
-    db.session.add(usr)
-    db.session.add(pts)
-    db.session.commit()
-    return jsonify(user = name)
-    # return "%s has been added to the database" % name
+        #if initialAuth =/= "teststring":
+            #return "Error: new users must be registered through the app", 401
+        usr = User(name, google_id, url, tk)
+        pts = Point(usr.id)
+        usr.point = pts
+        db.session.add(usr)
+        db.session.add(pts)
+        db.session.commit()
+        return jsonify(user = name)
+        # return "%s has been added to the database" % name
+    else:
+        return "user was already registered"
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
