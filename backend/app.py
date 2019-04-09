@@ -168,7 +168,7 @@ for dummy_point in dummy_points:
 db.session.commit()
 # end of put in dummy data
 
-@app.route('/')
+@app.route('/') #delet for production
 def index():
     print(Corner.query.all())
     print(Point.query.all())
@@ -184,7 +184,7 @@ def register_user():
     id = request.form["id"]
     url = request.form["photourl"]
     tk = request.form["token"]
-    initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
+    #initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
 
     #if initialAuth =/= "teststring":
         #return "Error: new users must be registered through the app", 401
@@ -488,7 +488,6 @@ def get_top_week_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 #get top x user ids for the season
-
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
     x = request.args.get('num_users')
