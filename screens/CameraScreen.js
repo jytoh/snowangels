@@ -64,8 +64,8 @@ export default class CameraScreen extends React.Component {
         console.log(this.state.hash);
 
         var details = {
-          'uid' : 1,
-          'cid' : 1,
+          'uid' : 1, //hardcoding for now
+          'cid' : 1, //hardcoding for now
           'before_pic' : this.state.hash,
         };
         var formBody = [];

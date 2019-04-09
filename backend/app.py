@@ -17,12 +17,12 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': os.environ.get("PORT", 5000),
+    'port': 5432, #the port 5000 option gave problems when testing locally
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-
+#using this to test locally
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #added this to not keep restarting
 app.config['DEBUG'] = True
@@ -43,7 +43,7 @@ class Request(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
-    before_pic = db.Column(db.LargeBinary)
+    before_pic = db.Column(db.String(80))
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
         self.state = 0
@@ -54,6 +54,7 @@ class Request(db.Model):
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    google_id = db.Column(db.String(80))
     name = db.Column(db.String(80))
     photourl = db.Column(db.String(80))
     token = db.Column(db.String(80))
@@ -70,9 +71,9 @@ class User(db.Model):
     shoveling = db.relationship(
         "Shoveling", backref="user", lazy="select", uselist=True
     )
-    def __init__(self, name=None, id=None, url=None, token=None):#remove None for production
+    def __init__(self, name=None, google_id=None, url=None, token=None):#remove None for production
         self.name = name
-        self.id =id
+        self.google_id =google_id
         self.photourl = url
         self.token = token
         self.subscription = []
@@ -244,56 +245,32 @@ def new_subscription():
     return jsonify(user = uid, corner=cid, username=user.name)
     #return "User %s has subscribed to Corner %s" % (uid, cid)
 
+
 @app.route("/new_request", methods=['POST'])
 def new_request():
-    print("HI");
-    uid = request.form["uid"]
-    cid = request.form["cid"]
-    before_pic = request.form["before_pic"]
+
+    uid = request.values.get("uid")
+    cid = request.values.get("cid")
+    before_pic = request.values.get("before_pic")
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
 
-    connection=None
-    try:
-        print("HI");
-        user_id=uid;
-        corner_id=cid;
-        time = datetime.datetime.now();
-        state = 0;
-        print("HI");
 
-        connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=5432);
-        cur = connection.cursor(cursor_factory=RealDictCursor);
-        print("HI");
-
-        cur.execute("INSERT INTO requests(user_id, corner_id, time, state, before_pic) " +
-        "VALUES(%s, %s, %s, %s,%s)",
-        (user_id, corner_id, time, state, before_pic));
-        print("HI");
+    req= Request(uid, cid, before_pic)
+    db.session.add(req) 
+    db.session.commit()
 
 
-        connection.commit();
-
-        cur.close();
-
-
-
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if connection is not None:
-            connection.close()
 
     # may have to convert back to this below
     # user.request.append(req)
     # corner.request.append(req)
     # db.session.add(req)
-    db.session.commit()
+
     #you can't conv
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
     # #return "User %s has made a request for Corner %s" % (uid, cid)
-
 
 @app.route("/new_shovel", methods=['POST'])
 def new_shovel():
