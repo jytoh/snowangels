@@ -2,50 +2,55 @@ import React from 'react';
 import { View, StyleSheet, Button, Modal } from 'react-native';
 import MapView from 'react-native-maps';
 import MarkerOverlay from '../components/MarkerOverlay';
-var RNFS = require('react-native-fs');
+//var RNFS = require('react-native-fs');
 
 
 let state = {
-    markers: [
-      {
-        coordinate: {
-          latitude: 42.44272,
-          longitude: -76.49587,
-        },
-        title: "N Aurora St & E Court Street",
-        description: "NW Corner",
-      },
-      {
-        coordinate: {
-          latitude: 42.44272,
-          longitude: -76.49575,
-        },
-        title: "N Aurora St & E Court Street",
-        description: "NE Corner",
-      },
-      {
-        coordinate: {
-          latitude: 42.44264,
-          longitude: -76.49587,
-        },
-        title: "N Aurora St & E Court Street",
-        description: "SW Corner",
-      },
-      {
-        coordinate: {
-          latitude: 42.44264,
-          longitude: -76.49575,
-        },
-        title: "N Aurora St & E Court Street",
-        description: "SE Corner",
-      },
-    ]
+    markers: []
   };
+/**
+ * Format from responseJson formatting {id, lat, lon, street1, street2} to MapView.Marker formatting {key, coordinate, title, description}
+ * @param  {json} reponseJson This is the json from the get_all_corners GET request
+ * @return {json}             in MapView.Marker formatting
+ */
+function formatGetAllCorners(responseJson) {
+  responseJson.map(x => {
+    x.key = x.id
+    delete x.id
 
+    x.coordinate = {
+      latitude: x.lat,
+      longitude: x.lon
+    }
+    delete x.lat
+    delete x.lon
+
+    x.title = x.street1 + " & " + x.street2
+    delete x.street1
+    delete x.street2
+  })
+  return responseJson
+}
+/**
+ * Fetches the json for the corners in the database
+ * The database returns an array with elements of the format {id, lat, lon, street1, street2}
+ * Saves an array with elements of the format {key, coordinate, title, description}
+ * with help of formatGetAllCorners() to state.markers
+ */
+function getAllCorners() {
+  return fetch('http://127.0.0.1:5000/get_all_corners')
+    .then((response) => response.json())
+    .then((responseJson) => {
+      state.markers = formatGetAllCorners(responseJson);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 
 const usersMap = props => {
-    const {userLocation, setModalVisible, setUserLocation} = props;
+    const {userLocation, setModalVisible, setUserLocation, setModalTitle} = props;
     let usersMapState = {
       region: userLocation
     }
@@ -63,42 +68,53 @@ const usersMap = props => {
       setUserLocation();
     }
 
+    /**
+     * sets up the environemnt for UsersMap when a corner is pressed
+     * @param {title} string (The title of the corner. ex... "College Ave & Bool St")
+     * setModalTitle(title) -> sets the modal title. The modal is the popup
+     * setModalVisible() -> toggles the visibility of the modal
+     */
+    function cornerOnPress(title) {
+      setModalTitle(title)
+      setModalVisible()
+    }
+
     return (
         <View style={styles.mapContainer}>
-            <MapView
-                initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0622,
-                longitudeDelta: 0.0421,
-              }}
-              region={usersMapState.region}
-              onRegionChange={onRegionChange}
-              style={styles.map}>
-                {
-                /*userLocationMarker*/
-                    state.markers.map((marker, index) => {
-                        return (
-                            <MapView.Marker
-                              key={index}
-                              coordinate={marker.coordinate}
-                              title={marker.title}
-                              description={marker.description}
 
-                              onPress = {setModalVisible}
-                              />
-                        );
-                    })
-                }
-                { userLocationMarker }
-            </MapView>
+          <MapView
+              initialRegion={{
+              latitude: 42.4451,
+              longitude: -76.4837,
+              latitudeDelta: 0.0622,
+              longitudeDelta: 0.0421,
+            }}
+            region={usersMapState.region}
+            onRegionChange={onRegionChange}
+            style={styles.map}>
+              {
+              /*userLocationMarker*/
+                  state.markers.map((marker, index) => {
+                      return (
+                          <MapView.Marker
+                            key={index}
+                            coordinate={marker.coordinate}
+                            onPress = {() => {cornerOnPress(marker.title)}}
+                            />
+                      );
+                  })
+              }
+              { userLocationMarker }
+          </MapView>
+          <View style={styles.getCornersContainer}>
+            <Button
+              title="Get Corners"
+              onPress={getAllCorners}
+            />
+          </View>
         </View>
     );
 };
-
-function shouldComponentUpdate(nextProps, nextState) {
-  return false;
-}
 
 const styles = StyleSheet.create({
     mapContainer: {
@@ -117,6 +133,15 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 40,
         alignItems: "center"
+    },
+    getCornersContainer: {
+      zIndex: 100,
+      position: "absolute",
+      bottom: 40,
+      alignItems: "center",
+      justifyContent: 'center',
+      flex: 1,
+      marginLeft: '29%'
     }
 });
 
