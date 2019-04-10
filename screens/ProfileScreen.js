@@ -13,6 +13,8 @@ export default class ProfileScreen extends React.Component {
         photoUrl: "",
         token: "",
         loaded: false,
+        num_requests: 0,
+        num_shovels: 0,
     };
 
   async componentDidMount() {
@@ -88,6 +90,51 @@ export default class ProfileScreen extends React.Component {
           let responseJson_for_uid = await response_for_uid.json();
           console.log(responseJson_for_uid);
           console.log(responseJson_for_uid.uid);
+
+          var details_for_requests = {
+                'uid': 1, //hardcoded for now
+              };
+
+          var formBody_for_requests = [];
+          for (var property in details_for_requests) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details_for_requests[property]);
+            formBody_for_requests.push(encodedKey + "=" + encodedValue);
+          }
+          formBody_for_requests = formBody_for_requests.join("&");
+          let response_for_requests = await fetch('http://127.0.0.1:5000/num_requests', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: formBody_for_requests,
+            });
+          let responseJson_for_requests = await response_for_requests.json();
+
+          var details_for_shovels = {
+                'uid': 1, //hardcoded for now
+              };
+
+          var formBody_for_shovels = [];
+          for (var property in details_for_shovels) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details_for_shovels[property]);
+            formBody_for_shovels.push(encodedKey + "=" + encodedValue);
+          }
+          formBody_for_shovels = formBody_for_shovels.join("&");
+          let response_for_shovels = await fetch('http://127.0.0.1:5000/num_shovels', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: formBody_for_shovels,
+            });
+          let responseJson_for_shovels = await response_for_shovels.json();
+          this.setState({
+            num_requests: responseJson_for_requests.num_requests,
+            num_shovels: responseJson_for_shovels.num_shovels,
+          })
+
           SecureStore.setItemAsync('token', result.accessToken)
           SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
           console.log(this.state.name);
@@ -162,7 +209,7 @@ export default class ProfileScreen extends React.Component {
       return (
         <View style={styles.container}>
           {this.state.signedIn ? (
-            <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} logout={this.logout.bind(this)} />
+            <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} logout={this.logout.bind(this)} />
           ) : (
             <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
           )}
@@ -194,8 +241,8 @@ const LoggedInPage = props => {
       </View>
       <View style={styles.containerbottom}>
         <Text style={styles.header}> {"Summary"}</Text>
-        <Text style= {styles.text}> {"Total Shovels: 15"}</Text>
-        <Text style= {styles.text}> {"Total Reports: 3"}</Text>
+        <Text style= {styles.text}> {"Total Shovels:" + props.num_requests}</Text>
+        <Text style= {styles.text}> {"Total Reports:" + props.num_shovels}</Text>
         <Text style={styles.text}> {"Rank: 3/120"}</Text>
       </View>
       <View style={styles.buttonContainer}>
