@@ -14,7 +14,7 @@ export default class RequestScreen extends React.Component {
             formdata.append('street2','itworks!')
             //let response = await 
             await fetch(
-                'http://127.0.0.1:5000/create_corner',{
+                'https://snowangels-api.herokuapp.com/create_corner',{
                     method: 'POST',
                     headers: {
                          Accept: 'multipart/form-data',

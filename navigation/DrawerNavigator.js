@@ -7,9 +7,10 @@ import LinkScreen from '../screens/LinkScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CameraScreen from '../screens/CameraScreen';
-
+import ProfileScreen from '../screens/ProfileScreen';
 
 import MenuDrawer from '../components/MenuDrawer'
+import LeaderboardScreen from '../screens/LeaderboardScreen';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -25,6 +26,9 @@ const DrawerNavigator = createDrawerNavigator(
         Home: {
             screen: HomeScreen
         },
+        Profile: {
+            screen: ProfileScreen
+        },
         Links: {
             screen: LinkScreen
         },
@@ -36,6 +40,9 @@ const DrawerNavigator = createDrawerNavigator(
         },
         Camera: {
             screen: CameraScreen
+        }, 
+        Leaderboard: { 
+            screen: LeaderboardScreen
         }
     },
     DrawerConfig

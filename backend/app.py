@@ -8,6 +8,7 @@ from psycopg2.extras import RealDictCursor
 from flask import jsonify
 import json
 import sys
+import base64
 
 app = Flask(__name__)
 
@@ -16,11 +17,13 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': '5432',
+    'port': 5432, #the port 5000 option gave problems when testing locally
 }
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
+#using this to test locally
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-# 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
+
 #added this to not keep restarting
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -40,7 +43,7 @@ class Request(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
-    before_pic = db.Column(db.PickleType)
+    before_pic = db.Column(db.String(80))
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
         self.state = 0
@@ -51,7 +54,11 @@ class Request(db.Model):
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+    google_id = db.Column(db.String(255))
+    name = db.Column(db.String(255))
+    photourl = db.Column(db.String(255))
+    token = db.Column(db.String(255))
+
     point = db.relationship(
         "Point", backref="user", lazy="select", uselist=False
     )
@@ -64,8 +71,11 @@ class User(db.Model):
     shoveling = db.relationship(
         "Shoveling", backref="user", lazy="select", uselist=True
     )
-    def __init__(self, name=None):
+    def __init__(self, name=None, google_id=None, url=None, token=None):#remove None for production
         self.name = name
+        self.google_id =google_id
+        self.photourl = url
+        self.token = token
         self.subscription = []
         self.request = []
 
@@ -77,11 +87,12 @@ class Point(db.Model):
     week_pts = db.Column(db.Integer)
     szn_pts = db.Column(db.Integer)
     after_pics = db.Column(db.PickleType)
-    def __init__(self):
+    def __init__(self,id):
         self.day_pts = 0
         self.week_pts = 0
         self.szn_pts = 0
         self.after_pics = []
+        self.user_id=id
 
 class Corner(db.Model):
     __tablename__ = 'corners'
@@ -90,6 +101,7 @@ class Corner(db.Model):
     lon = db.Column(db.Float)
     street1 = db.Column(db.String(80))
     street2 = db.Column(db.String(80))
+
     subscription = db.relationship(
         "Subscription", backref="corner", lazy="select", uselist=True
     )
@@ -106,6 +118,15 @@ class Corner(db.Model):
         self.lon=lon
         self.subscription = []
         self.request = []
+
+    @property
+    def serialize(self):
+        return {
+            'key':self.id,
+            'coordinate':{'latitude':self.lat, 'longtitude':self.lon},
+            'title': self.street1 + " & " + self.street2,
+            'description': "Single Corner"
+        }
 
 class Shoveling(db.Model):
     __tablename__ = 'shovelings'
@@ -128,6 +149,8 @@ class Shoveling(db.Model):
 # COMMENT THIS OUT WHEN DEPLOYING
 db.reflect()
 db.drop_all()
+
+
 # db.init_app(app)
 db.create_all()
 db.session.commit()
@@ -146,7 +169,7 @@ for dummy_point in dummy_points:
 db.session.commit()
 # end of put in dummy data
 
-@app.route('/')
+@app.route('/') #delet for production
 def index():
     print(Corner.query.all())
     print(Point.query.all())
@@ -156,33 +179,41 @@ def index():
     print(User.query.all())
     return 'works'
 
-@app.route("/register/<name>")
-def register_user(name):
-    usr = User(name)
-    pts = Point()
-    usr.point = pts
-    db.session.add(usr)
-    db.session.add(pts)
-    db.session.commit()
-    return jsonify(user = name)
-    # return "%s has been added to the database" % name
+@app.route("/register_user",methods=['POST'])
+def register_user():
+    name = request.form["name"]
+    google_id = request.form["google_id"]
+    url = request.form["photourl"]
+    tk = request.form["token"]
+    if (User.query.filter_by(google_id= google_id).first() == None):
+        #initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
+
+        #if initialAuth =/= "teststring":
+            #return "Error: new users must be registered through the app", 401
+        usr = User(name, google_id, url, tk)
+        pts = Point(usr.id)
+        usr.point = pts
+        db.session.add(usr)
+        db.session.add(pts)
+        db.session.commit()
+        return jsonify(user = name)
+        # return "%s has been added to the database" % name
+    else:
+        return "user was already registered"
+
+@app.route("/googleid_to_uid",methods=['POST'])
+def googleid_to_uid():
+    google_id = request.form["google_id"]
+    print(google_id)
+    uid= User.query.filter_by(google_id= google_id).first().id
+    print(uid)
+    return jsonify(uid = uid)
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    connection = psycopg2.connect('dbname=template1 user=postgres password=password')
-    cur = connection.cursor(cursor_factory=RealDictCursor)
-    cur.execute("""
-          SELECT * FROM corners
-        """)
-    columns = ['id', 'lat', 'lon', 'street1', 'street2']
-    c = cur.fetchall()
-    dictlist = []
-    for row in c:
-        #when we add support for 4 corners we need to change description
-            d = {"coordinate": {"lattitude":row[3], "longitude": row[4]}, "title": ""+row[1]+" & "+row[2], description:"SINGLE CORNER"}
-            dictlist.append(d)
-    print(d)
-    return json.dumps(d, indent=2)
+    dictlist = [i.serialize for i in Corner.query.all()]
+    # return dictlist
+    return json.dumps(dictlist, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
@@ -200,6 +231,7 @@ def create_corner():
 def create_corners_from_file():
     file= request.form["filename"]
     dframe = filereading.fetchGISdata(file)
+    print("success")
     for index, row in dframe.iterrows():#don't change these
         lat = row[2]
         long = row[3]
@@ -224,21 +256,32 @@ def new_subscription():
     return jsonify(user = uid, corner=cid, username=user.name)
     #return "User %s has subscribed to Corner %s" % (uid, cid)
 
+
 @app.route("/new_request", methods=['POST'])
 def new_request():
-    uid = request.form["uid"]
-    cid = request.form["cid"]
-    before_pic = request.form["before_pic"]
+
+    uid = request.values.get("uid")
+    cid = request.values.get("cid")
+    before_pic = request.values.get("before_pic")
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    req = Request(uid, cid, before_pic)
-    user.request.append(req)
-    corner.request.append(req)
-    db.session.add(req)
+    # req = Request(uid, cid, before_pic)
+
+
+    req= Request(uid, cid, before_pic)
+    db.session.add(req) 
     db.session.commit()
+
+
+
+    # may have to convert back to this below
+    # user.request.append(req)
+    # corner.request.append(req)
+    # db.session.add(req)
+
     #you can't conv
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
-    #return "User %s has made a request for Corner %s" % (uid, cid)
+    # #return "User %s has made a request for Corner %s" % (uid, cid)
 
 @app.route("/new_shovel", methods=['POST'])
 def new_shovel():
@@ -433,7 +476,6 @@ def get_top_week_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 #get top x user ids for the season
-
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
     x = request.args.get('num_users')
@@ -441,5 +483,29 @@ def get_top_szn_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 
+# @app.before_request
+# def authenticate():
+#     if request.path[0:15]=="/register_user":
+#         return None #registering new users is special and should be treated as such
+#     authenticated=False
+#     print(request.values)
+#     id = request.values.get('id')
+#     token = request.values.get('token')
+#     # connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
+#     #
+#     # cur = connection.cursor(cursor_factory=RealDictCursor);
+#     # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
+#     # c=cur.fetchall()
+#     usr = User.query.get(id)
+#     if usr is None : #if user doesn't exist
+#         return "User doesn't exist", 404
+#     if usr.token == token:
+#         authenticated=True
+#     if authenticated:
+#         return None
+#     else:
+#         return "User authentication token doesn't match id", 401
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
