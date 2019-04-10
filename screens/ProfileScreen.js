@@ -23,6 +23,7 @@ export default class ProfileScreen extends React.Component {
 	    });
 
 	    if (result.type === 'success') {
+        console.log(result)
 	    	this.setState({
 	    		signedIn: true,
 	    		name: result.user.name,
@@ -31,11 +32,8 @@ export default class ProfileScreen extends React.Component {
           token: result.accessToken,
 
 	    	})
-	    	SecureStore.setItemAsync('token', result.accessToken)
-	    	SecureStore.setItemAsync('id', result.user.id) //need to change id to google_id here
-	    	console.log(this.state.name);
-	    	console.log(this.state.photoUrl);
-        
+
+
         var details = {
               'name': this.state.name,
               'google_id': this.state.google_id,
@@ -59,6 +57,38 @@ export default class ProfileScreen extends React.Component {
           });
         let responseJson = await response.json();
         console.log(responseJson);
+
+        console.log("1");
+        var details_for_uid = {
+              'google_id': this.state.google_id,
+            };
+        console.log("2");
+        var formBody_for_uid = [];
+        for (var property_for_uid in details_for_uid) {
+          var encodedKey_for_uid = encodeURIComponent(property_for_uid);
+          var encodedValue_for_uid = encodeURIComponent(details_for_uid[property_for_uid]);
+          formBody_for_uid.push(encodedKey_for_uid + "=" + encodedValue_for_uid);
+        }
+
+        console.log("3");
+        formBody_for_uid = formBody_for_uid.join("&");
+        let response_for_uid = await fetch('http://127.0.0.1:5000/googleid_to_uid', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formBody_for_uid,
+          });
+
+        console.log("4");
+        let responseJson_for_uid = await response_for_uid.json();
+        console.log(responseJson_for_uid);
+        console.log(responseJson_for_uid.uid);
+        SecureStore.setItemAsync('token', result.accessToken)
+        SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
+        console.log(this.state.name);
+        console.log(this.state.photoUrl);
+        
 
 	      return result.accessToken;
 	    } else {

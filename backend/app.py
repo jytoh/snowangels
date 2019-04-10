@@ -201,6 +201,14 @@ def register_user():
     else:
         return "user was already registered"
 
+@app.route("/googleid_to_uid",methods=['POST'])
+def googleid_to_uid():
+    google_id = request.form["google_id"]
+    print(google_id)
+    uid= User.query.filter_by(google_id= google_id).first().id
+    print(uid)
+    return jsonify(uid = uid)
+
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
     dictlist = [i.serialize for i in Corner.query.all()]
