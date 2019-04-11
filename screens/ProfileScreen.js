@@ -17,10 +17,27 @@ export default class ProfileScreen extends React.Component {
         num_shovels: 0,
     };
 
+
   async componentDidMount() {
     await this.fetch_state();
   };
   
+  async refresh() {
+    let response_request = await fetch(
+      'http://127.0.0.1:5000/num_requests?uid=1'
+    );
+    let response_shovel = await fetch(
+      'http://127.0.0.1:5000/num_shovels?uid=1'
+    );
+    let response1Json = await response_request.json();
+    let response2Json = await response_shovel.json();
+    this.setState({
+      num_requests: response1Json.num_requests,
+      num_shovels: response2Json.num_shovels
+    });
+    await this.store_state(this.state);
+  };
+
   async signInWithGoogleAsync() {
     console.log('pressed');
       try {
@@ -31,7 +48,7 @@ export default class ProfileScreen extends React.Component {
         });
 
         if (result.type === 'success') {
-          //console.log(result)
+
           this.setState({
             signedIn: true,
             name: result.user.name,
@@ -39,7 +56,9 @@ export default class ProfileScreen extends React.Component {
             google_id: result.user.id,
             token: result.accessToken,
           })
+
           await this.store_state(this.state);
+          console.log('44')
           var details = {
                 'name': this.state.name,
                 'google_id': this.state.google_id,
@@ -54,39 +73,35 @@ export default class ProfileScreen extends React.Component {
             formBody.push(encodedKey + "=" + encodedValue);
           }
           formBody = formBody.join("&");
-          let response = await fetch('https://snowangels-api.herokuapp.com/register_user', {
+          let response = await fetch('http://127.0.0.1:5000/register_user', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
               body: formBody,
-            });
+          });
+          console.log('66')
           let responseJson = await response.json();
-          //console.log(responseJson);
-
-          console.log("1");
+          console.log('68')
           var details_for_uid = {
                 'google_id': this.state.google_id,
               };
-          console.log("2");
           var formBody_for_uid = [];
           for (var property_for_uid in details_for_uid) {
             var encodedKey_for_uid = encodeURIComponent(property_for_uid);
             var encodedValue_for_uid = encodeURIComponent(details_for_uid[property_for_uid]);
             formBody_for_uid.push(encodedKey_for_uid + "=" + encodedValue_for_uid);
           }
-
-          console.log("3");
+          console.log('76')
           formBody_for_uid = formBody_for_uid.join("&");
-          let response_for_uid = await fetch('https://snowangels-api.herokuapp.com/googleid_to_uid', {
+          let response_for_uid = await fetch('http://127.0.0.1:5000/googleid_to_uid', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
               body: formBody_for_uid,
-            });
-
-          console.log("4");
+          });
+          console.log('85')
           let responseJson_for_uid = await response_for_uid.json();
           console.log(responseJson_for_uid);
           console.log(responseJson_for_uid.uid);
@@ -101,15 +116,19 @@ export default class ProfileScreen extends React.Component {
             var encodedValue = encodeURIComponent(details_for_requests[property]);
             formBody_for_requests.push(encodedKey + "=" + encodedValue);
           }
+
           formBody_for_requests = formBody_for_requests.join("&");
-          let response_for_requests = await fetch('https://snowangels-api.herokuapp.com/num_requests', {
+
+          let response_for_requests = await fetch('http://127.0.0.1:5000/num_requests', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
               body: formBody_for_requests,
             });
+
           let responseJson_for_requests = await response_for_requests.json();
+          console.log(responseJson_for_requests);
 
           var details_for_shovels = {
                 'uid': 1, //hardcoded for now
@@ -121,16 +140,19 @@ export default class ProfileScreen extends React.Component {
             var encodedValue = encodeURIComponent(details_for_shovels[property]);
             formBody_for_shovels.push(encodedKey + "=" + encodedValue);
           }
+
           formBody_for_shovels = formBody_for_shovels.join("&");
-          let response_for_shovels = await fetch('https://snowangels-api.herokuapp.com/num_shovels', {
+          let response_for_shovels = await fetch('http://127.0.0.1:5000/num_shovels', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
               body: formBody_for_shovels,
             });
+
           let responseJson_for_shovels = await response_for_shovels.json();
           console.log("1");
+          console.log(responseJson_for_requests)
           console.log(responseJson_for_requests.num_requests);
           console.log("1");
           this.setState({
@@ -138,13 +160,10 @@ export default class ProfileScreen extends React.Component {
             num_shovels: responseJson_for_shovels.num_shovels,
           })
           await this.store_state(this.state);
-
           SecureStore.setItemAsync('token', result.accessToken)
           SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
           console.log(this.state.name);
           console.log(this.state.photoUrl);
-          
-
           return result.accessToken;
         } else {
           return {cancelled: true};
@@ -194,6 +213,8 @@ export default class ProfileScreen extends React.Component {
         google_id: '',
         token: '',
         loaded: true,
+        num_requests: 0,
+        num_shovels: 0
       })
     }
   };
@@ -205,17 +226,20 @@ export default class ProfileScreen extends React.Component {
       photoUrl: "",
       token: "",
       loaded: true,
+      num_requests: 0,
+      num_shovels: 0
     });
     await this.store_state(this.state);
   };
 
   render() {
     if (this.state.loaded = true){
-      console.log('loaded');
       return (
         <View style={styles.container}>
           {this.state.signedIn ? (
-            <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} logout={this.logout.bind(this)} />
+            <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
+            num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} 
+            logout={this.logout.bind(this)} feedback={this.refresh.bind(this)} />
           ) : (
             <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
           )}
@@ -247,12 +271,12 @@ const LoggedInPage = props => {
       </View>
       <View style={styles.containerbottom}>
         <Text style={styles.header}> {"Summary"}</Text>
-        <Text style= {styles.text}> {"Total Shovels:" + props.num_requests}</Text>
-        <Text style= {styles.text}> {"Total Reports:" + props.num_shovels}</Text>
+        <Text style= {styles.text}> {"Total Shovels:" + props.num_shovels}</Text>
+        <Text style= {styles.text}> {"Total Reports:" + props.num_requests}</Text>
         <Text style={styles.text}> {"Rank: 3/120"}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Give Feedback" size='30' onPress={() => null}/>
+        <Button title="Give Feedback" size='30' onPress={() => props.feedback()}/>
       </View>
       <View style={styles.buttonContainer}>
         <Button title="Logout" size='30' color="#FF0000" onPress={() => props.logout()}/>
@@ -315,3 +339,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
+
