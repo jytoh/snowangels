@@ -285,6 +285,7 @@ def new_request():
 
 @app.route("/num_requests", methods=['POST'])
 def num_requests():
+
     uid = request.values.get("uid")
     num_requests= Request.query.filter_by(user_id=uid).count()
     return jsonify(num_requests = num_requests)

@@ -130,10 +130,14 @@ export default class ProfileScreen extends React.Component {
               body: formBody_for_shovels,
             });
           let responseJson_for_shovels = await response_for_shovels.json();
+          console.log("1");
+          console.log(responseJson_for_requests.num_requests);
+          console.log("1");
           this.setState({
             num_requests: responseJson_for_requests.num_requests,
             num_shovels: responseJson_for_shovels.num_shovels,
           })
+          await this.store_state(this.state);
 
           SecureStore.setItemAsync('token', result.accessToken)
           SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
@@ -176,6 +180,8 @@ export default class ProfileScreen extends React.Component {
         google_id: lastState.google_id,
         token: lastState.token,
         loaded: true,
+        num_requests: lastState.num_requests,
+        num_shovels: lastState.num_shovels
       });
       console.log('Got last state');
     }
