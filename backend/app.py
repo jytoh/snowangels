@@ -177,7 +177,7 @@ def index():
     print(Request.query.all())
     print(Shoveling.query.all())
     print(User.query.all())
-    return User.query.all()
+    return str(User.query.all())
 
 @app.route("/register_user",methods=['POST'])
 def register_user():
