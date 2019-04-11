@@ -13,12 +13,15 @@
     "filesystem": "^1.0.1",
     "pickle": "^0.2.0",
     "react": "16.5.0",
+    "react-json-to-table": "^0.1.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
+    "react-native-leaderboard": "^1.0.5",
     "react-native-maps": "^0.23.0",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.3.2",
-    "shorthash": "0.0.2"
+    "shorthash": "0.0.2",
+    "ts-react-json-table": "^0.1.1"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"

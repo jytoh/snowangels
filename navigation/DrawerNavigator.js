@@ -8,6 +8,7 @@ import HistoryScreen from '../screens/HistoryScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import RequestScreen from '../screens/RequestScreen';
 
 import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
@@ -43,6 +44,9 @@ const DrawerNavigator = createDrawerNavigator(
         }, 
         Leaderboard: { 
             screen: LeaderboardScreen
+        },
+        Requests:{
+            screen: RequestScreen
         }
     },
     DrawerConfig

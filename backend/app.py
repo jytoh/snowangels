@@ -19,10 +19,10 @@ POSTGRES = {
     'host': 'localhost',
     'port': 5432, #the port 5000 option gave problems when testing locally
 }
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 #using this to test locally
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #added this to not keep restarting
 app.config['DEBUG'] = True
@@ -157,17 +157,22 @@ db.session.commit()
 # initialize database migration management
 migrate = Migrate(app, db)
 
-# put in dummy data
-dummy_points = [
-    Corner("Olin Ave", "Library Street", 42.4476, -76.4827),
-    Corner("Campus Rd", "East Ave", 42.4452, -76.4826),
-    Corner("Campus Rd", "Sage Ave", 42.4451, -76.4837)
-]
+#importing corners locally from GIS dataset
+def import_corners(file):
+    dframe = filereading.fetchGISdata(file)
+    for index, row in dframe.iterrows():#don't change these
+        lat = row[2]
+        long = row[3]
+        st1 = row[4]
+        st2 = row[5]
+        crnr = Corner(st1, st2, lat, long)
+        db.session.add(crnr)
+    db.session.commit()
+    print("end of import_corners fn")
 
-for dummy_point in dummy_points:
-    db.session.add(dummy_point)
-db.session.commit()
-# end of put in dummy data
+import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
+print("added corners")
+
 
 @app.route('/') #delet for production
 def index():
@@ -177,7 +182,7 @@ def index():
     print(Request.query.all())
     print(Shoveling.query.all())
     print(User.query.all())
-    return 'works'
+    return "works"
 
 @app.route("/register_user",methods=['POST'])
 def register_user():
@@ -259,17 +264,17 @@ def new_subscription():
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
-
-    uid = request.values.get("uid")
-    cid = request.values.get("cid")
-    before_pic = request.values.get("before_pic")
+    data_dict = json.loads(request.get_data().decode())
+    uid = data_dict['uid']
+    cid = data_dict['cid']
+    before_pic = data_dict["before_pic"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
 
 
     req= Request(uid, cid, before_pic)
-    db.session.add(req) 
+    db.session.add(req)
     db.session.commit()
 
 
@@ -285,6 +290,7 @@ def new_request():
 
 @app.route("/num_requests", methods=['POST'])
 def num_requests():
+
     uid = request.values.get("uid")
     num_requests= Request.query.filter_by(user_id=uid).count()
     return jsonify(num_requests = num_requests)
