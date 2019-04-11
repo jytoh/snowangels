@@ -1,6 +1,7 @@
 import React from 'react';
 import Leaderboard from 'react-native-leaderboard';
 import { ButtonGroup } from 'react-native-elements';
+import MenuButton from '../components/MenuButton';
 import {Text, View, Image } from 'react-native';
 
 //SOURCES:https://github.com/JoeRoddy/react-native-leaderboard/blob/master/examples/AvatarAndClickable.js
@@ -117,6 +118,7 @@ render() {
       <View style={{ flex: 1, backgroundColor: 'white', }}>
           {this.renderHeader()}
           <Leaderboard {...props} />
+          <MenuButton navigation={this.props.navigation} />
       </View>
   )
 
