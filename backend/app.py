@@ -268,6 +268,12 @@ def new_request():
     uid = data_dict['uid']
     cid = data_dict['cid']
     before_pic = data_dict["before_pic"]
+    
+    #uncomment these to test profile screen locally 
+    #uid = request.values.get('uid')
+    #cid = request.values.get('cid')
+    #before_pic = request.values.get("before_pic")
+    
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
@@ -288,7 +294,7 @@ def new_request():
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
     # #return "User %s has made a request for Corner %s" % (uid, cid)
 
-@app.route("/num_requests", methods=['POST'])
+@app.route("/num_requests", methods=['GET'])
 def num_requests():
 
     uid = request.values.get("uid")
@@ -327,7 +333,7 @@ def new_shovel():
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic, after_pic=after_pic, start_time=start, end_time=end, total_time=0)
     #return "User %s has claimed to shovel Corner %s" % (uid, cid)
 
-@app.route("/num_shovels", methods=['POST'])
+@app.route("/num_shovels", methods=['GET'])
 def num_shovels():
     uid = request.values.get("uid")
     num_shovels= Shoveling.query.filter_by(user_id=uid).count()
