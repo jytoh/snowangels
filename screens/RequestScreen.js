@@ -25,26 +25,19 @@ export default class RequestScreen extends React.Component {
   })}
 
     async sendRequest() {
-        var details = {
-                'uid': 1,
-                'cid': 1,
-                'before_pic': "sd"
-              };
 
-          var formBody = [];
-          for (var property in details) {
-            var encodedKey = encodeURIComponent(property);
-            var encodedValue = encodeURIComponent(details[property]);
-            formBody.push(encodedKey + "=" + encodedValue);
-          }
-          fetch('https://snowangels-api.herokuapp.com/new_request' ,
+          await fetch('https://snowangels-api.herokuapp.com/new_request' ,
             {
               method: 'POST',
-              headers: {
+              headers: {Accept: 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
-              body: formBody,
-            }).catch((error) => {
+              body: JSON.stringify({
+                'uid': 1,
+                'cid': 1,
+                'before_pic': 'sd'
+              })
+            }).then(response => response.text()).then((jsonData) => {console.log(jsonData)}).catch((error) => {
       // handle your errors here
       console.error(error)
   })

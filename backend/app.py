@@ -177,7 +177,7 @@ def index():
     print(Request.query.all())
     print(Shoveling.query.all())
     print(User.query.all())
-    return str(User.query.all())
+    return "works"
 
 @app.route("/register_user",methods=['POST'])
 def register_user():
@@ -259,10 +259,10 @@ def new_subscription():
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
-
-    uid = request.values.get("uid")
-    cid = request.values.get("cid")
-    before_pic = request.values.get("before_pic")
+    data_dict = json.loads(request.get_data().decode())
+    uid = data_dict['uid']
+    cid = data_dict['cid']
+    before_pic = data_dict["before_pic"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)

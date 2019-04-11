@@ -54,7 +54,7 @@ export default class ProfileScreen extends React.Component {
             formBody.push(encodedKey + "=" + encodedValue);
           }
           formBody = formBody.join("&");
-          let response = await fetch('http://127.0.0.1:5000/register_user', {
+          let response = await fetch('https://snowangels-api.herokuapp.com/register_user', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -78,7 +78,7 @@ export default class ProfileScreen extends React.Component {
 
           console.log("3");
           formBody_for_uid = formBody_for_uid.join("&");
-          let response_for_uid = await fetch('http://127.0.0.1:5000/googleid_to_uid', {
+          let response_for_uid = await fetch('https://snowangels-api.herokuapp.com/googleid_to_uid', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -102,7 +102,7 @@ export default class ProfileScreen extends React.Component {
             formBody_for_requests.push(encodedKey + "=" + encodedValue);
           }
           formBody_for_requests = formBody_for_requests.join("&");
-          let response_for_requests = await fetch('http://127.0.0.1:5000/num_requests', {
+          let response_for_requests = await fetch('https://snowangels-api.herokuapp.com/num_requests', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -122,7 +122,7 @@ export default class ProfileScreen extends React.Component {
             formBody_for_shovels.push(encodedKey + "=" + encodedValue);
           }
           formBody_for_shovels = formBody_for_shovels.join("&");
-          let response_for_shovels = await fetch('http://127.0.0.1:5000/num_shovels', {
+          let response_for_shovels = await fetch('https://snowangels-api.herokuapp.com/num_shovels', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
