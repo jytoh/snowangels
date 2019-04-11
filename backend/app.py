@@ -19,10 +19,10 @@ POSTGRES = {
     'host': 'localhost',
     'port': 5432, #the port 5000 option gave problems when testing locally
 }
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 #using this to test locally
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #added this to not keep restarting
 app.config['DEBUG'] = True
@@ -285,6 +285,7 @@ def new_request():
 
 @app.route("/num_requests", methods=['POST'])
 def num_requests():
+
     uid = request.values.get("uid")
     num_requests= Request.query.filter_by(user_id=uid).count()
     return jsonify(num_requests = num_requests)
