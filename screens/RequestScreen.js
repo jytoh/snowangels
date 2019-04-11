@@ -3,46 +3,57 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 
 import MenuButton from '../components/MenuButton'
 
+const JsonTable = require('ts-react-json-table');
 export default class RequestScreen extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {"cornerslist" :[]};
+        this.getCorners();
+
+    }
+    async getCorners() {
+            fetch('https://snowangels-api.herokuapp.com/get_all_corners')
+  .then(response => response.json())
+  .then((jsonData) => {
+    // jsonData is parsed json object received from url
+      this.setState({"cornerslist": jsonData});
+    console.log(jsonData)
+  })
+  .catch((error) => {
+      // handle your errors here
+      console.error(error)
+  })}
 
     async sendRequest() {
-        try {                
-            let formdata = new FormData();
-            formdata.append('lat',34)
-            formdata.append('long',34)
-            formdata.append('street1','yay')
-            formdata.append('street2','itworks!')
-            //let response = await 
-            await fetch(
-                'https://snowangels-api.herokuapp.com/create_corner',{
-                    method: 'POST',
-                    headers: {
-                         Accept: 'multipart/form-data',
-                         'Content-Type': 'multipart/form-data',
-                     },
-                    body: formdata
-                        // JSON.stringify({
-                        // lat: '34',
-                        // long: '40',
-                        // street1: 'yay',
-                        // street2: 'it works!',
-                    //}),
-                });
-            //let responseJson = await response;
-			//console.log(responseJson);
-		} catch (error) {
-			console.log("error!");
-		}
-	}
+        var details = {
+                'uid': 1,
+                'cid': 1,
+                'before_pic': "sd"
+              };
+
+          var formBody = [];
+          for (var property in details) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+          }
+          fetch('https://snowangels-api.herokuapp.com/new_request' ,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: formBody,
+            }).catch((error) => {
+      // handle your errors here
+      console.error(error)
+  })
+    }
     render() {
         return (
         <View style={styles.container}>
-            <Text style = {styles.text}>Request Screen</Text>
-            <MenuButton navigation={this.props.navigation} />
-            <View style={styles.button}>
-                <Button title= "Send Request"
-                onPress={() => this.sendRequest()}/> 
-            </View>
+            <Button title= "Send Request"
+                onPress={() => this.sendRequest()}/>
         </View>
         );
     }
