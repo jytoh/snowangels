@@ -169,22 +169,10 @@ def import_corners(file):
         db.session.add(crnr)
     db.session.commit()
     print("end of import_corners fn")
-    #return "data from file %s has been added to the corner database" % (file)
 
-import_corners("Ints2019 copy.xls")
+import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
 print("added corners")
 
-# put in dummy data
-# dummy_points = [
-#     Corner("Olin Ave", "Library Street", 42.4476, -76.4827),
-#     Corner("Campus Rd", "East Ave", 42.4452, -76.4826),
-#     Corner("Campus Rd", "Sage Ave", 42.4451, -76.4837)
-# ]
-#
-# for dummy_point in dummy_points:
-#     db.session.add(dummy_point)
-# db.session.commit()
-# end of put in dummy data
 
 @app.route('/') #delet for production
 def index():
