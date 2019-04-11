@@ -131,8 +131,8 @@ class Corner(db.Model):
 class Shoveling(db.Model):
     __tablename__ = 'shovelings'
     id = db.Column(db.Integer, primary_key=True)
-    before_pic = db.Column(db.PickleType)
-    after_pic = db.Column(db.PickleType)
+    before_pic = db.Column(db.String(80))
+    after_pic = db.Column(db.String(80))
     start = db.Column(db.DateTime)
     end = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
@@ -300,6 +300,14 @@ def new_request():
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
     # #return "User %s has made a request for Corner %s" % (uid, cid)
 
+@app.route("/num_requests", methods=['POST'])
+def num_requests():
+
+    uid = request.values.get("uid")
+    num_requests= Request.query.filter_by(user_id=uid).count()
+    return jsonify(num_requests = num_requests)
+
+
 @app.route("/new_shovel", methods=['POST'])
 def new_shovel():
     uid = request.form["uid"]
@@ -330,8 +338,15 @@ def new_shovel():
     #TODO: figure out total time
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic, after_pic=after_pic, start_time=start, end_time=end, total_time=0)
     #return "User %s has claimed to shovel Corner %s" % (uid, cid)
-#validate shoveling
 
+@app.route("/num_shovels", methods=['POST'])
+def num_shovels():
+    uid = request.values.get("uid")
+    num_shovels= Shoveling.query.filter_by(user_id=uid).count()
+    return jsonify(num_shovels = num_shovels)
+
+
+#validate shoveling
 @app.route("/validate_shovel", methods=['POST'])
 def validate_shovel():
     uid_requester = request.form["uid_requester"]

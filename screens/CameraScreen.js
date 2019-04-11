@@ -107,7 +107,7 @@ export default class CameraScreen extends React.Component {
                 <View style={styles.bottombar}>
                 <TouchableOpacity 
                 style={styles.uploadphototouchable}
-                onPress = {() => this.props.navigation.navigate('Home')}>
+                onPress = {() => {this.uploadPicture(); this.props.navigation.navigate('Home');} }>
                 <Text
                   style={styles.takephoto}>
                   {' '}Upload Photo{' '}
