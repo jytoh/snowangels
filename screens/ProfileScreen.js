@@ -1,9 +1,8 @@
 import React from 'react';
-import { Image, Button, StyleSheet, Text, View, ImageBackground } from 'react-native';
+import { Image, Button, StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { SecureStore } from 'expo';
 import {AsyncStorage} from 'react-native';
-
-
+import { Ionicons } from '@expo/vector-icons'
 import MenuButton from '../components/MenuButton'
 
 export default class ProfileScreen extends React.Component {
@@ -48,17 +47,17 @@ export default class ProfileScreen extends React.Component {
         });
 
         if (result.type === 'success') {
-
           this.setState({
             signedIn: true,
             name: result.user.name,
             photoUrl: result.user.photoUrl,
             google_id: result.user.id,
             token: result.accessToken,
+            loaded: true,
           })
-
+          await this.refresh();
           await this.store_state(this.state);
-          console.log('44')
+
           var details = {
                 'name': this.state.name,
                 'google_id': this.state.google_id,
@@ -80,9 +79,7 @@ export default class ProfileScreen extends React.Component {
               },
               body: formBody,
           });
-          console.log('66')
-          let responseJson = await response.json();
-          console.log('68')
+          console.log('82')
           var details_for_uid = {
                 'google_id': this.state.google_id,
               };
@@ -92,7 +89,6 @@ export default class ProfileScreen extends React.Component {
             var encodedValue_for_uid = encodeURIComponent(details_for_uid[property_for_uid]);
             formBody_for_uid.push(encodedKey_for_uid + "=" + encodedValue_for_uid);
           }
-          console.log('76')
           formBody_for_uid = formBody_for_uid.join("&");
           let response_for_uid = await fetch('http://127.0.0.1:5000/googleid_to_uid', {
               method: 'POST',
@@ -101,7 +97,6 @@ export default class ProfileScreen extends React.Component {
               },
               body: formBody_for_uid,
           });
-          console.log('85')
           let responseJson_for_uid = await response_for_uid.json();
           console.log(responseJson_for_uid);
           console.log(responseJson_for_uid.uid);
@@ -175,11 +170,9 @@ export default class ProfileScreen extends React.Component {
   
   async store_state(state) {
     const json_state = JSON.stringify(state);
-    console.log('called store state')
     console.log(json_state)
     try {
       await AsyncStorage.setItem('lastState', json_state)
-      console.log('state stored')
     }
     catch (error){
       console.log('State could not be stored.')
@@ -239,7 +232,7 @@ export default class ProfileScreen extends React.Component {
           {this.state.signedIn ? (
             <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
             num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} 
-            logout={this.logout.bind(this)} feedback={this.refresh.bind(this)} />
+            logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} />
           ) : (
             <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
           )}
@@ -255,16 +248,31 @@ export default class ProfileScreen extends React.Component {
 
 const LoginPage = props => {
   return (
-    <View>
-      <Button title="Sign in with Google" onPress={() => props.signInWithGoogleAsync()} />
+    <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
+    <View style={styles.container}>
+      <View style ={styles.imgView}>
+        <Image style = {styles.loginpic} source={require('../assets/snowflake.jpg')}/>
+      </View>
+      <View style={styles.loginButton}>
+        <TouchableOpacity
+          onPress={props.signInWithGoogleAsync}>
+          <Text 
+            style={styles.signintext}>
+            {' '}Sign In With Google{' '}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
+    </ImageBackground>
   )
 }
 
 const LoggedInPage = props => {
   return (
-    <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} >
+    <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
     <View style={styles.container}>
+      <Ionicons name = "md-refresh" color = "#000000" size = {32} style = {styles.refreshicon}
+            onPress={() => props.refresh()}/>
       <View style={styles.containertop}>
         <Image style={styles.image} source={{ uri: props.photoUrl }} />
         <Text style={styles.name}>{props.name}</Text>
@@ -276,7 +284,7 @@ const LoggedInPage = props => {
         <Text style={styles.text}> {"Rank: 3/120"}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Give Feedback" size='30' onPress={() => props.feedback()}/>
+        <Button title="Give Feedback" size='30' onPress={() => null}/>
       </View>
       <View style={styles.buttonContainer}>
         <Button title="Logout" size='30' color="#FF0000" onPress={() => props.logout()}/>
@@ -289,8 +297,9 @@ const LoggedInPage = props => {
 const styles = StyleSheet.create({
   img: {
     flex: 1,
-    resizeMode: 'cover',
-    width: '100%'
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain'
   },
   container: {
     flex: 1,
@@ -298,7 +307,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 24
+    paddingTop: 24,
+    height: '100%'
   },
   containertop:{
     flex: 8,
@@ -314,6 +324,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   header: {
+    paddingTop: 20,
     fontSize: 30,
     fontWeight: 'bold'
   },
@@ -337,6 +348,34 @@ const styles = StyleSheet.create({
     flex: 2,
     width: '100%',
     justifyContent: 'center'
+  },
+  refreshicon: {
+    zIndex: 9,
+    position: "absolute",
+    top: 40,
+    right: 20,
+  },
+  loginButton: {
+    borderRadius: 28,
+    borderWidth: 0.5,
+    width: "90%", 
+    margin: 10, 
+    backgroundColor: "#76A1EF"
+  },
+  loginpic: {
+    height: 120,
+    width: 120,
+    borderRadius: 40,
+    marginBottom: 40,
+    backgroundColor: '#D1E1F8',
+  },
+  signintext: {
+    fontSize: 24,
+    marginBottom: 20,
+    color: 'white',
+    textAlign: 'center',
+    alignItems: 'center',
+    paddingTop: 24
   }
 });
 

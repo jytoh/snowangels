@@ -133,15 +133,15 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
+		height: '100%'
 	},
 	container2: {
-	flex: 1,
-	zIndex: 2,
-	top: 40,
-	alignItems: 'center',
-	justifyContent: 'center',
-	position: "absolute",
-
+		flex: 1,
+		zIndex: 2,
+		top: 40,
+		alignItems: 'center',
+		justifyContent: 'center',
+		position: "absolute",
 	},
 	text: {
 		fontSize: 20,
@@ -151,9 +151,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	mapContainer: {
-				width: '100%',
-				height: 800,
-				marginTop: 0,
-				zIndex: -1
-		}
+		width: '100%',
+		height: '100%',
+		marginTop: 0,
+		zIndex: -1
+	}
 });

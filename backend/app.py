@@ -17,7 +17,7 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': 5432, #the port 5000 option gave problems when testing locally
+    'port': 5433, #the port 5000 option gave problems when testing locally
 }
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
@@ -264,15 +264,15 @@ def new_subscription():
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
-    data_dict = json.loads(request.get_data().decode())
-    uid = data_dict['uid']
-    cid = data_dict['cid']
-    before_pic = data_dict["before_pic"]
+    #data_dict = json.loads(request.get_data().decode())
+    #uid = data_dict['uid']
+    #cid = data_dict['cid']
+    #before_pic = data_dict["before_pic"]
     
     #uncomment these to test profile screen locally 
-    #uid = request.values.get('uid')
-    #cid = request.values.get('cid')
-    #before_pic = request.values.get("before_pic")
+    uid = request.values.get('uid')
+    cid = request.values.get('cid')
+    before_pic = request.values.get("before_pic")
     
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
