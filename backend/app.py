@@ -19,10 +19,10 @@ POSTGRES = {
     'host': 'localhost',
     'port': 5432, #the port 5000 option gave problems when testing locally
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 #using this to test locally
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #added this to not keep restarting
 app.config['DEBUG'] = True
@@ -78,6 +78,7 @@ class User(db.Model):
         self.token = token
         self.subscription = []
         self.request = []
+        self.shoveling = []
 
 class Point(db.Model):
     __tablename__ = 'points'
@@ -158,20 +159,20 @@ db.session.commit()
 migrate = Migrate(app, db)
 
 #importing corners locally from GIS dataset
-def import_corners(file):
-    dframe = filereading.fetchGISdata(file)
-    for index, row in dframe.iterrows():#don't change these
-        lat = row[2]
-        long = row[3]
-        st1 = row[4]
-        st2 = row[5]
-        crnr = Corner(st1, st2, lat, long)
-        db.session.add(crnr)
-    db.session.commit()
-    print("end of import_corners fn")
-
-import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
-print("added corners")
+# def import_corners(file):
+#     dframe = filereading.fetchGISdata(file)
+#     for index, row in dframe.iterrows():#don't change these
+#         lat = row[2]
+#         long = row[3]
+#         st1 = row[4]
+#         st2 = row[5]
+#         crnr = Corner(st1, st2, lat, long)
+#         db.session.add(crnr)
+#     db.session.commit()
+#     print("end of import_corners fn")
+#
+# import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
+# print("added corners")
 
 
 @app.route('/') #delet for production
@@ -362,24 +363,71 @@ def validate_shovel():
         db.session.commit()
         return jsonify(requester = uid_requester, shoveler=uid_shoveler, corner=cid, validate_bit=validate_bit)
         #return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
-#get all people subscribed to a corner
 
+
+#dummy test for user history
+#@app.route("/add_user_history", methods=['POST'])
+# def add_user_history():
+#
+
+dummy_profiles= [
+    Corner('Wyckoff St','Heights Court',42.4550874247821,-76.4838560729503),
+    Corner('Wyckoff St','Dearborn Pl',42.4552301688275,-76.4839151377581),
+    Corner('Woodcrest Terrace','Woodcrest Ave',42.4332223831747,-76.4747075168164),
+    Corner('Willow Ave','Pier Rd',42.4534911735782,-76.5062921053108),
+    Corner('Willet Pl','E Buffalo St',42.4414896398069,-76.4928359378613),
+    Request(1,2,'aaa'),
+    Request(2,5,'bbb'),
+    Request(3,3,'ccc'),
+    Request(1,4,'ddd'),
+    User('name1','gid1','111','token1'),
+    User('name2','gid2','222','token2'),
+    User('name3','gid3','333','token3')
+]
+for prof in dummy_profiles:
+    db.session.add(prof)
+db.session.commit()
+
+
+#get info for user history, in the form (User name, Address of shovel, Time of shovel)
+@app.route("/get_user_history", methods=['GET'])
+def get_user_history():
+    #join User, Request and Corner
+    join = db.session.query(\
+        User.id.label("userid"),
+        User.name.label("name"),
+        Request.time.label("time"),
+        Corner.street1.label("street1"),
+        Corner.street2.label("street2"))\
+    .select_from(Request)\
+    .join(User, Request.user_id==User.id)\
+    .join(Corner, Request.corner_id==Corner.id)\
+    .order_by(User.id.asc(), Request.time.desc()).all()
+
+    result = []
+    for row in join:
+        row_json = {"uid": row.userid,"name":row.name, "address": ""+row.street1+" & "+row.street2, "time": row.time.__str__()}
+        result.append(row_json)
+    return json.dumps(result, indent=2)
+
+
+#get all people subscribed to a corner
 @app.route("/ppl_subscribed", methods=['GET'])
 def get_ppl_subscribed():
     cid = request.args.get('cid')
     users_subscribed = map(str,[s.user_id for s in Subscription.query.filter_by(corner_id=cid)])
     return jsonify(corner = cid, users_subscribed=users_subscribed)
     #return "Users %s are subscribed to corner %s" % (' '.join(users_subscribed), cid)
-#get corners that user is subscribed to
 
+#get corners that user is subscribed to
 @app.route("/subscribed_corners", methods=['GET'])
 def get_subscribed_corners():
     uid = request.args.get('uid')
     corners = map(str,[s.corner_id for s in Subscription.query.filter_by(user_id=uid)])
     return jsonify(user = uid, corners = corners)
     #return "User %s is subscribed to corners %s" % (uid, ' '.join(corners))
-#unsubscribe a user from a corner
 
+#unsubscribe a user from a corner
 @app.route("/unsubscribe_corner", methods=['DELETE'])
 def unsubscribe_corner():
     uid = request.args.get('uid')
@@ -389,24 +437,24 @@ def unsubscribe_corner():
     db.session.commit()
     return jsonify(user = uid, corner = cid)
     #return "User %s has unsubscribed from corner %s" % (uid, cid)
-#get state of a corner request
 
+#get state of a corner request
 @app.route("/state", methods=['GET'])
 def get_state():
     cid = request.args.get('cid')
     state = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().state
     return jsonify(corner = cid, state = state)
     # return "Corner %s has  %s" % (cid, state)
-#get user id who last requested a corner
 
+#get user id who last requested a corner
 @app.route("/latest_requester_id", methods=['GET'])
 def get_latest_requester_id():
     cid = request.args.get('cid')
     uid = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().user_id
     return jsonify(corner = cid, user = uid)
     # return "%s was the last person to make a request on corner %s" % (uid, cid)
-#get name of who last requested a corner
 
+#get name of who last requested a corner
 @app.route("/latest_requester_name", methods=['GET'])
 def get_latest_requester_name():
     cid = request.args.get('cid')
