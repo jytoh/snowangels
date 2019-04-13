@@ -24,6 +24,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d276
 #using this to test locally
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+# 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
 #added this to not keep restarting
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -43,7 +45,7 @@ class Request(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
-    before_pic = db.Column(db.String(80))
+    before_pic = db.Column(db.PickleType)
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
         self.state = 0
@@ -149,8 +151,6 @@ class Shoveling(db.Model):
 # COMMENT THIS OUT WHEN DEPLOYING
 db.reflect()
 db.drop_all()
-
-
 # db.init_app(app)
 db.create_all()
 db.session.commit()
@@ -173,6 +173,10 @@ def import_corners(file):
 import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
 print("added corners")
 
+for dummy_point in dummy_points:
+    db.session.add(dummy_point)
+db.session.commit()
+# end of put in dummy data
 
 @app.route('/') #delet for production
 def index():
@@ -216,8 +220,19 @@ def googleid_to_uid():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    dictlist = [i.serialize for i in Corner.query.all()]
-    # return dictlist
+    connection = psycopg2.connect('dbname=template1 user=postgres password=password')
+    cur = connection.cursor(cursor_factory=RealDictCursor)
+    cur.execute("""
+          SELECT * FROM corners
+        """)
+    columns = ['id', 'lat', 'lon', 'street1', 'street2']
+    c = cur.fetchall()
+    dictlist = []
+    for row in c:
+        #when we add support for 4 corners we need to change description
+            d = {"coordinate": {"lattitude":row['lat'], "longitude": row['lon']}, "title": ""+row['street1']+" & "+row['street2'], "description" :"SINGLE CORNER"}
+            dictlist.append(d)
+    print(dictlist)
     return json.dumps(dictlist, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
@@ -341,6 +356,7 @@ def num_shovels():
 
 
 #validate shoveling
+
 @app.route("/validate_shovel", methods=['POST'])
 def validate_shovel():
     uid_requester = request.form["uid_requester"]
@@ -502,6 +518,7 @@ def get_top_week_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 #get top x user ids for the season
+
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
     x = request.args.get('num_users')
