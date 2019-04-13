@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, TouchableOpacity, SafeAreaView, Button, StyleSheet, Text, View } from 'react-native';
+import { Image, TouchableOpacity, SafeAreaView, Button, StyleSheet, Text, View, Dimensions } from 'react-native';
 import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
 import {Camera, Permissions, ImagePicker} from 'expo';
@@ -64,8 +64,8 @@ export default class CameraScreen extends React.Component {
         console.log(this.state.hash);
 
         var details = {
-          'uid' : 1,
-          'cid' : 1,
+          'uid' : 1, //hardcoding for now
+          'cid' : 1, //hardcoding for now
           'before_pic' : this.state.hash,
         };
         var formBody = [];
@@ -76,7 +76,7 @@ export default class CameraScreen extends React.Component {
         } ;
         formBody = formBody.join("&");
         console.log('made it to line 70');
-        let response = await fetch('https://snowangels-api.herokuapp.com/new_request', {
+        let response = await fetch('http://127.0.0.1:5000/new_request', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded', 
@@ -104,97 +104,113 @@ export default class CameraScreen extends React.Component {
               <View style={styles.container}>
                 <Image style={styles.image} 
                 source={{uri: this.state.imageUri}}/>
-                <Button title="Back to Camera" style={styles.camerabutton}
-                onPress={() => {this.setState({imageUri : null})}} />
-                <Button title="Upload" onPress={() => this.uploadPicture()}/>
+                <View style={styles.bottombar}>
+                <TouchableOpacity 
+                style={styles.uploadphototouchable}
+                onPress = {() => {this.uploadPicture(); this.props.navigation.navigate('Home');} }>
+                <Text
+                  style={styles.takephoto}>
+                  {' '}Upload Photo{' '}
+                </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.fliptouchable}
+                  onPress={() => {this.setState({imageUri : null})}}>
+                  <Text
+                    style={styles.flip}>
+                    {' '}Retake Photo{' '}
+                  </Text>
+                </TouchableOpacity>
+                </View>
               </View> )}
             else {
             return (
         <View style={styles.container}>
           <MenuButton navigation={this.props.navigation} />
-          <Camera ref={ref => {
-            this.camera = ref;
-          }} 
-          style={styles.camera} type={this.state.type}>
-            <View
-              style={styles.bottombar}>
-              <TouchableOpacity style={styles.fliptouchable}
-                onPress={() => {this.setState({
-                    type: this.state.type === Camera.Constants.Type.back
-                      ? Camera.Constants.Type.front
-                      : Camera.Constants.Type.back,
-                  });
-                }}>
-                <Text
-                  style={styles.flip}>
-                  {' '}Flip{' '}
-                </Text>
-              </TouchableOpacity>
-
-              {/* nicer-looking button for later!
-                <Feather 
-                name = "camera"
-                color = "#000000"
-                size = {40}
-                style = {styles.camerabutton}
-                onPress={() => this.capturePicture.bind(this)}/> */}
-
-              <TouchableOpacity style={styles.camerabutton}
-                onPress={() => this.capturePicture()}>
-                <Text style={styles.buttontext}> {' '}Take Picture{' '}
-                </Text>
-              </TouchableOpacity>
-            </View>
+          <Camera
+            ref={ref => {
+              this.camera = ref;
+            }} 
+            style={styles.camera}
+            type={this.state.type}>
           </Camera>
+           <View style={styles.bottombar}>
+            <TouchableOpacity 
+            style={styles.takephototouchable}
+            onPress = {() => this.capturePicture()}>
+            <Text
+              style={styles.takephoto}>
+              {' '}Take a Photo{' '}
+            </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.fliptouchable}
+              onPress={() => {this.setState({
+                  type: this.state.type === Camera.Constants.Type.back
+                    ? Camera.Constants.Type.front
+                    : Camera.Constants.Type.back,
+                });
+              }}>
+              <Text
+                style={styles.flip}>
+                {' '}Flip Camera{' '}
+              </Text>
+             </TouchableOpacity>
+          </View>
         </View>
       )};
     }
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  bottombar: {
-    backgroundColor: 'transparent',
-  },
-  fliptouchable: {
-    zIndex: 12,
-    position: 'absolute',
-    right: 10,
-    bottom: 10
-  },
-  flip: {
-    zIndex: 10,
-    fontSize: 24,
-    marginBottom: 20,
-    color: 'white',
-    position: 'absolute',
-    right: 10,
-    bottom: 10
+    flexDirection: 'column'
   },
   camera: {
-    zIndex: -1,
+    flex: 6,
     width: '100%',
     height: '100%',
-    alignItems:'flex-end',
-    justifyContent: 'flex-end',
   },
-  camerabutton: {
-    zIndex: 1000,
-    position: 'absolute',
-    right: 120,
-    bottom: 10
+  bottombar: {
+    flex: 1,
+    backgroundColor: '#E1EAFB',
+    flexDirection: 'column',
+    alignItems: 'center'
+    
   },
-  buttontext: {    
+  takephototouchable: {
+    flex: 3,
+    width: Dimensions.get('window').width * 0.4,
+    backgroundColor: '#E1EAFB'
+  },
+  takephoto: {
     fontSize: 24,
     marginBottom: 20,
-    color: 'white',
+    color: '#76A1EF',
+    textAlign: 'center',
+    alignItems: 'center',
+    paddingTop: 24
+  },
+  fliptouchable: {
+    flex: 2,
+  },
+  flip: {
+    fontSize: 16,
+    color: '#76A1EF',
+    textAlign: 'center',
+    paddingBottom: 24,
+    marginTop: 10
   },
   image: {
     zIndex: 100,
-    flex: 1,
-    height: '50%'
+    flex: 6,
+  },
+  uploadphototouchable: {
+    flex: 3,
+    width: Dimensions.get('window').width * 0.4,
+    backgroundColor: '#E1EAFB'
   }
+
 });

@@ -3,11 +3,10 @@ import { Platform, Dimensions } from 'react-native';
 import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
-import LinkScreen from '../screens/LinkScreen';
 import HistoryScreen from '../screens/HistoryScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import RequestScreen from '../screens/RequestScreen';
 
 import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
@@ -29,20 +28,17 @@ const DrawerNavigator = createDrawerNavigator(
         Profile: {
             screen: ProfileScreen
         },
-        Links: {
-            screen: LinkScreen
-        },
         History: {
             screen: HistoryScreen
-        },
-        Settings: {
-            screen: SettingsScreen
         },
         Camera: {
             screen: CameraScreen
         }, 
         Leaderboard: { 
             screen: LeaderboardScreen
+        },
+        Requests:{
+            screen: RequestScreen
         }
     },
     DrawerConfig
