@@ -495,6 +495,15 @@ def get_top_szn_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 
+@app.route("get_user", methods=['GET'])
+def get_user():
+    id = request.values.get('id')
+    pass
+
+@app.route("get_all_users", methods = ['GET'])
+def get_all_users():
+    pass
+
 @app.before_request
 def authenticate():
     if request.path[0:15]=="/register_user":
@@ -517,6 +526,15 @@ def authenticate():
         return None
     else:
         return "User authentication token doesn't match id", 401
+
+#helper functions
+def get_num_users():
+    users = User.query.all()
+    return len(user)
+
+#get all users
+
+#get specific user
 
 
 if __name__ == "__main__":
