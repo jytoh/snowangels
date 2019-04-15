@@ -50,14 +50,24 @@ export default class ListOfShovels extends React.Component {
       // leftAvatar={{ source: { uri: item.avatar_url } }}
       leftIcon={{
         reverse: true,
-        color: '#517fa4',
+        color: '#d1e1f8',
         name: item.icon,
         type: 'font-awesome'
       }}
     />
   )
-
-
+  renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "80%",
+          backgroundColor: "#CED0CE",
+          marginLeft: "20%"
+        }}
+      />
+    );
+  };
 
   render() {
     return (
@@ -66,6 +76,7 @@ export default class ListOfShovels extends React.Component {
         data={list}
         renderItem={this.renderItem}
         style={{ width: 400 }}
+        ItemSeparatorComponent={this.renderSeparator}
       />
 
       // <View>
