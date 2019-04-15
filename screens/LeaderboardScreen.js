@@ -25,39 +25,17 @@ state = {
         { name: 'Betty Davis', score: 25, iconUrl: 'https://landofblogging.files.wordpress.com/2014/01/bitstripavatarprofilepic.jpeg?w=300&h=300' },
         { name: 'Lauren Leonard', score: 30, iconUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr27ZFBaclzKcxg2FgJh6xi3Z5-9vP_U1DPcB149bYXxlPKqv-' },
     ],
-    topten_userstanding: [
-        { name: 'Adam Savage', score: 300, iconUrl: 'https://www.shareicon.net/data/128x128/2016/09/15/829473_man_512x512.png' },
-        { name: 'Derek Black', score: 244, iconUrl: 'http://ttsbilisim.com/wp-content/uploads/2014/09/20120807.png' },
-        { name: 'Joe Roddy', score: 69, iconUrl: 'http://www.lovemarks.com/wp-content/uploads/profile-avatars/default-avatar-braindead-zombie.png' },
-        { name: 'Ericka Johannesburg', score: 101, iconUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShPis8NLdplTV1AJx40z-KS8zdgaSPaCfNINLtQ-ENdPvrtMWz' },
-        { name: 'Tim Thomas', score: 41, iconUrl: 'http://conserveindia.org/wp-content/uploads/2017/07/teamMember4.png' }
-     
-    ],
-    filter: 0,
-    userRank: 1,
-    //default fields should be those of the top person
-    pic: 'https://www.shareicon.net/data/128x128/2016/09/15/829473_man_512x512.png',
-    score: 300,
     user: {
         name: 'Erika Johannesburg',
-        score: 30,
+        score: 101,
         pic: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShPis8NLdplTV1AJx40z-KS8zdgaSPaCfNINLtQ-ENdPvrtMWz',
-        rank: 6
+        rank: 4
     },
-    top_user: {
-        name: 'Adam Savage',
-        score: 300,
-        pic: 'https://www.shareicon.net/data/128x128/2016/09/15/829473_man_512x512.png',
-        rank: 1
-    }
-    //top user!! 
 }
 
 //try to return whole thing with user info. Potentially make backend function that gets 5 before and 5 after 
 
 renderHeader() {
-  
-
   return (
       <View colors={[, '#1da2c6', '#1695b7']}
           style={{ backgroundColor: '#119abf', padding: 15, paddingTop: 35, alignItems: 'center' }}>
@@ -67,36 +45,14 @@ renderHeader() {
               marginBottom: 15, marginTop: 20
           }}>
               <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'right', marginRight: 40 }}>
-                  {ordinal_suffix_of(this.state.userRank)}
+                  {ordinal_suffix_of(this.state.user.rank)}
               </Text>
               <Image style={{ flex: .66, height: 60, width: 60, borderRadius: 60 / 2 }}
-                  source={{ uri: this.state.pic}} />
+                  source={{ uri: this.state.user.pic}} />
               <Text style={{ color: 'white', fontSize: 25, flex: 1, marginLeft: 40 }}>
-                  {this.state.score}pts
+                  {this.state.user.score}pts
               </Text>
           </View>
-          <ButtonGroup
-                    onPress={(x) => { 
-                        if (!(this.state.filter)){
-                            //set the state to display the info of the top person
-                            this.setState({
-                                pic : this.state.user.pic,
-                                userRank: this.state.user.rank,
-                                score: this.state.user.score
-                            })
-                          }
-                        else{
-                            this.setState({
-                                pic : this.state.top_user.pic,
-                                userRank : this.state.top_user.rank,
-                                score : this.state.top_user.score
-                            
-                            })
-                        }
-                        this.setState({ filter: x }) }}
-                    selectedIndex={this.state.filter}
-                    buttons={['All', 'Your Standing']}
-                    containerStyle={{ height: 30 }} />
           </View>
           )
           }
@@ -106,10 +62,10 @@ render() {
   const props = {
       labelBy: 'name',
       sortBy: 'score',
-      data: this.state.filter > 0 ? this.state.topten_userstanding : this.state.globalData,
+      data:  this.state.globalData,
       icon: 'iconUrl',
       evenRowColor: '#edfcf9',
-      rankStyle: { fontSize:0 }
+      //labelStyle: this.state.user.rank % 2 > 0 ? {color: 'white'} : {color: 'red'}
   }
   
 
