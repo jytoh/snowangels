@@ -38,9 +38,9 @@ state = {
 
 renderHeader() {
   return (
-      <View colors={[, '#1da2c6', '#1695b7']}
-          style={{ backgroundColor: '#119abf', padding: 15, paddingTop: 35, alignItems: 'center' }}>
-          <Text style={{ fontSize: 25, color: 'white', }}>Leaderboard</Text>
+      <View colors={[, '#DDE8FC', '#76A1EF']}
+          style={{ backgroundColor: '#76A1EF', padding: 15, paddingTop: 35, alignItems: 'center' }}>
+          <Text style={{ fontSize: 25, color: 'white', paddingTop: 20}}>Leaderboard</Text>
           <View style={{
               flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
               marginBottom: 15, marginTop: 20
@@ -51,13 +51,12 @@ renderHeader() {
               <Image style={{ flex: .66, height: 60, width: 60, borderRadius: 60 / 2 }}
                   source={{ uri: this.state.user.pic}} />
               <Text style={{ color: 'white', fontSize: 25, flex: 1, marginLeft: 40 }}>
-                  {this.state.user.score}pts
+                  {this.state.user.score} pts
               </Text>
           </View>
           </View>
-          )
-          }
-
+    )
+}
 
 render() {
   const props = {
@@ -65,19 +64,17 @@ render() {
       sortBy: 'score',
       data:  this.state.globalData,
       icon: 'iconUrl',
-      evenRowColor: '#edfcf9',
+      evenRowColor: '#F5F6FE',
       //labelStyle: this.state.user.rank % 2 > 0 ? {color: 'white'} : {color: 'red'}
   }
   
-
-    return (
-      <View style={{ flex: 1, backgroundColor: 'white', }}>
-          {this.renderHeader()}
-          <Leaderboard {...props} />
-          <MenuButton navigation={this.props.navigation} />
-      </View>
-  )
-
+return (
+    <View style={{ flex: 1, backgroundColor: 'white', }}>
+      {this.renderHeader()}
+      <Leaderboard {...props} />
+      <MenuButton navigation={this.props.navigation} />
+    </View>
+    )
 }
 
 }
@@ -95,3 +92,4 @@ const ordinal_suffix_of = (i) => {
   }
   return i + "th";
 }
+
