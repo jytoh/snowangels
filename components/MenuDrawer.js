@@ -1,5 +1,5 @@
 import React from 'react';
-import{ View, Text, Image, ScrollView, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import{ View, Text, Image, ScrollView, Platform, Dimensions, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native'
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -14,12 +14,13 @@ export default class MenuDrawer extends React.Component {
     }
     render() {
         return(
+            <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} >
             <View style = {styles.container}>
                 <View style = {styles.topLinks}>
                     <View style={styles.profile}>
                         <View style ={styles.imgView}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-                            <Image style = {styles.img} source={require('../assets/sarah.jpeg')}/>
+                            <Image style = {styles.profpic} source={require('../assets/sarah.jpeg')}/>
                             </TouchableOpacity>
                         </View>
                         <View style = {styles.profileText}>
@@ -34,9 +35,7 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Home', 'Home')}
                         {this.navLink('Profile', 'Profile')}
                         {this.navLink('Leaderboard', 'Leaderboard')}
-                        {this.navLink('Links', 'Links')}
                         {this.navLink('History', 'History')}
-                        {this.navLink('Settings', 'Settings')}
                         {this.navLink('Camera','Camera')}
                         {this.navLink('Requests','Requests')}
                     </View>
@@ -46,6 +45,7 @@ export default class MenuDrawer extends React.Component {
                     <Text style={styles.version}>v1.0</Text>
                 </View>
             </View>
+            </ImageBackground>
         )
     }
 }
@@ -53,7 +53,12 @@ export default class MenuDrawer extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E1EAFB',
+        backgroundColor: 'transparent',
+    },
+    img: {
+        flex: 1,
+        resizeMode: 'cover',
+        width: '100%'
     },
     scroller: {
         flex: 1
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#777777',
     },
-    img: {
+    profpic: {
         height: 90,
         width: 90,
         borderRadius: 40,
@@ -93,7 +98,7 @@ const styles = StyleSheet.create({
     },
     bottomLinks:{
         flex: 1,
-        backgroundColor: '#E1EAFB',
+        backgroundColor: 'transparent',
         paddingTop: 10,
         paddingBottom: 450,
     },

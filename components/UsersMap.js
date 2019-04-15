@@ -120,7 +120,7 @@ const usersMap = props => {
 const styles = StyleSheet.create({
     mapContainer: {
         width: '100%',
-        height: 800,
+        height: '100%',
         marginTop: 0,
         zIndex: -1
     },

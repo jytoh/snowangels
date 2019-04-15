@@ -17,13 +17,15 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': 5432, #the port 5000 option gave problems when testing locally
+    'port': 5433, #the port 5000 option gave problems when testing locally
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 #using this to test locally
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+# 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
 #added this to not keep restarting
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -43,7 +45,7 @@ class Request(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
-    before_pic = db.Column(db.String(80))
+    before_pic = db.Column(db.PickleType)
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
         self.state = 0
@@ -78,6 +80,7 @@ class User(db.Model):
         self.token = token
         self.subscription = []
         self.request = []
+        self.shoveling = []
 
 class Point(db.Model):
     __tablename__ = 'points'
@@ -149,8 +152,6 @@ class Shoveling(db.Model):
 # COMMENT THIS OUT WHEN DEPLOYING
 db.reflect()
 db.drop_all()
-
-
 # db.init_app(app)
 db.create_all()
 db.session.commit()
@@ -158,21 +159,25 @@ db.session.commit()
 migrate = Migrate(app, db)
 
 #importing corners locally from GIS dataset
-def import_corners(file):
-    dframe = filereading.fetchGISdata(file)
-    for index, row in dframe.iterrows():#don't change these
-        lat = row[2]
-        long = row[3]
-        st1 = row[4]
-        st2 = row[5]
-        crnr = Corner(st1, st2, lat, long)
-        db.session.add(crnr)
-    db.session.commit()
-    print("end of import_corners fn")
+# def import_corners(file):
+#     dframe = filereading.fetchGISdata(file)
+#     for index, row in dframe.iterrows():#don't change these
+#         lat = row[2]
+#         long = row[3]
+#         st1 = row[4]
+#         st2 = row[5]
+#         crnr = Corner(st1, st2, lat, long)
+#         db.session.add(crnr)
+#     db.session.commit()
+#     print("end of import_corners fn")
+#
+# import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
+# print("added corners")
 
-import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
-print("added corners")
-
+for dummy_point in dummy_points:
+    db.session.add(dummy_point)
+db.session.commit()
+# end of put in dummy data
 
 @app.route('/') #delet for production
 def index():
@@ -216,8 +221,19 @@ def googleid_to_uid():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
-    dictlist = [i.serialize for i in Corner.query.all()]
-    # return dictlist
+    connection = psycopg2.connect('dbname=template1 user=postgres password=password')
+    cur = connection.cursor(cursor_factory=RealDictCursor)
+    cur.execute("""
+          SELECT * FROM corners
+        """)
+    columns = ['id', 'lat', 'lon', 'street1', 'street2']
+    c = cur.fetchall()
+    dictlist = []
+    for row in c:
+        #when we add support for 4 corners we need to change description
+            d = {"coordinate": {"lattitude":row['lat'], "longitude": row['lon']}, "title": ""+row['street1']+" & "+row['street2'], "description" :"SINGLE CORNER"}
+            dictlist.append(d)
+    print(dictlist)
     return json.dumps(dictlist, indent=2)
 
 @app.route("/create_corner", methods=['POST'])
@@ -264,10 +280,16 @@ def new_subscription():
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
-    data_dict = json.loads(request.get_data().decode())
-    uid = data_dict['uid']
-    cid = data_dict['cid']
-    before_pic = data_dict["before_pic"]
+    #data_dict = json.loads(request.get_data().decode())
+    #uid = data_dict['uid']
+    #cid = data_dict['cid']
+    #before_pic = data_dict["before_pic"]
+
+    #uncomment these to test profile screen locally
+    uid = request.values.get('uid')
+    cid = request.values.get('cid')
+    before_pic = request.values.get("before_pic")
+
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
@@ -288,7 +310,7 @@ def new_request():
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
     # #return "User %s has made a request for Corner %s" % (uid, cid)
 
-@app.route("/num_requests", methods=['POST'])
+@app.route("/num_requests", methods=['GET'])
 def num_requests():
 
     uid = request.values.get("uid")
@@ -327,7 +349,7 @@ def new_shovel():
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic, after_pic=after_pic, start_time=start, end_time=end, total_time=0)
     #return "User %s has claimed to shovel Corner %s" % (uid, cid)
 
-@app.route("/num_shovels", methods=['POST'])
+@app.route("/num_shovels", methods=['GET'])
 def num_shovels():
     uid = request.values.get("uid")
     num_shovels= Shoveling.query.filter_by(user_id=uid).count()
@@ -335,6 +357,7 @@ def num_shovels():
 
 
 #validate shoveling
+
 @app.route("/validate_shovel", methods=['POST'])
 def validate_shovel():
     uid_requester = request.form["uid_requester"]
@@ -362,24 +385,71 @@ def validate_shovel():
         db.session.commit()
         return jsonify(requester = uid_requester, shoveler=uid_shoveler, corner=cid, validate_bit=validate_bit)
         #return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
-#get all people subscribed to a corner
 
+
+#dummy test for user history
+#@app.route("/add_user_history", methods=['POST'])
+# def add_user_history():
+#
+
+dummy_profiles= [
+    Corner('Wyckoff St','Heights Court',42.4550874247821,-76.4838560729503),
+    Corner('Wyckoff St','Dearborn Pl',42.4552301688275,-76.4839151377581),
+    Corner('Woodcrest Terrace','Woodcrest Ave',42.4332223831747,-76.4747075168164),
+    Corner('Willow Ave','Pier Rd',42.4534911735782,-76.5062921053108),
+    Corner('Willet Pl','E Buffalo St',42.4414896398069,-76.4928359378613),
+    Request(1,2,'aaa'),
+    Request(2,5,'bbb'),
+    Request(3,3,'ccc'),
+    Request(1,4,'ddd'),
+    User('name1','gid1','111','token1'),
+    User('name2','gid2','222','token2'),
+    User('name3','gid3','333','token3')
+]
+for prof in dummy_profiles:
+    db.session.add(prof)
+db.session.commit()
+
+
+#get info for user history, in the form (User name, Address of shovel, Time of shovel)
+@app.route("/get_user_history", methods=['GET'])
+def get_user_history():
+    #join User, Request and Corner
+    join = db.session.query(\
+        User.id.label("userid"),
+        User.name.label("name"),
+        Request.time.label("time"),
+        Corner.street1.label("street1"),
+        Corner.street2.label("street2"))\
+    .select_from(Request)\
+    .join(User, Request.user_id==User.id)\
+    .join(Corner, Request.corner_id==Corner.id)\
+    .order_by(User.id.asc(), Request.time.desc()).all()
+
+    result = []
+    for row in join:
+        row_json = {"uid": row.userid,"name":row.name, "address": ""+row.street1+" & "+row.street2, "time": row.time.__str__()}
+        result.append(row_json)
+    return json.dumps(result, indent=2)
+
+
+#get all people subscribed to a corner
 @app.route("/ppl_subscribed", methods=['GET'])
 def get_ppl_subscribed():
     cid = request.args.get('cid')
     users_subscribed = map(str,[s.user_id for s in Subscription.query.filter_by(corner_id=cid)])
     return jsonify(corner = cid, users_subscribed=users_subscribed)
     #return "Users %s are subscribed to corner %s" % (' '.join(users_subscribed), cid)
-#get corners that user is subscribed to
 
+#get corners that user is subscribed to
 @app.route("/subscribed_corners", methods=['GET'])
 def get_subscribed_corners():
     uid = request.args.get('uid')
     corners = map(str,[s.corner_id for s in Subscription.query.filter_by(user_id=uid)])
     return jsonify(user = uid, corners = corners)
     #return "User %s is subscribed to corners %s" % (uid, ' '.join(corners))
-#unsubscribe a user from a corner
 
+#unsubscribe a user from a corner
 @app.route("/unsubscribe_corner", methods=['DELETE'])
 def unsubscribe_corner():
     uid = request.args.get('uid')
@@ -389,24 +459,24 @@ def unsubscribe_corner():
     db.session.commit()
     return jsonify(user = uid, corner = cid)
     #return "User %s has unsubscribed from corner %s" % (uid, cid)
-#get state of a corner request
 
+#get state of a corner request
 @app.route("/state", methods=['GET'])
 def get_state():
     cid = request.args.get('cid')
     state = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().state
     return jsonify(corner = cid, state = state)
     # return "Corner %s has  %s" % (cid, state)
-#get user id who last requested a corner
 
+#get user id who last requested a corner
 @app.route("/latest_requester_id", methods=['GET'])
 def get_latest_requester_id():
     cid = request.args.get('cid')
     uid = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().user_id
     return jsonify(corner = cid, user = uid)
     # return "%s was the last person to make a request on corner %s" % (uid, cid)
-#get name of who last requested a corner
 
+#get name of who last requested a corner
 @app.route("/latest_requester_name", methods=['GET'])
 def get_latest_requester_name():
     cid = request.args.get('cid')
@@ -496,6 +566,7 @@ def get_top_week_leader_ids():
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
 #get top x user ids for the season
+
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
     x = request.args.get('num_users')
@@ -525,6 +596,15 @@ def get_top_szn_leader_ids():
 #         return None
 #     else:
 #         return "User authentication token doesn't match id", 401
+
+#helper functions
+def get_num_users():
+    users = User.query.all()
+    return len(user)
+
+#get all users
+
+#get specific user
 
 
 if __name__ == "__main__":
