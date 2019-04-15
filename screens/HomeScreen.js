@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
-
 import MenuButton from '../components/MenuButton';
 import MarkerOverlay from '../components/MarkerOverlay';
 import UsersMap from '../components/UsersMap';
+import {AppLoading, Font} from 'expo';
 
 export default class HomeScreen extends React.Component {
 	constructor(props) {
@@ -14,8 +14,18 @@ export default class HomeScreen extends React.Component {
 		this.state = {
 			userLocation: null,
 			markerOverlayIsVisible: false,
-			title: "Test title"
+			title: "Test title",
+			fontLoaded: false
 		}
+	}
+
+	async componentDidMount() {
+		await Font.loadAsync({
+		  'Cabin-Regular': require('../assets/fonts/Cabin-Regular.ttf'),
+		  'Cabin-Bold': require('../assets/fonts/Cabin-Bold.ttf')
+		});
+		console.log('font loaded home!');
+		this.setState({fontLoaded : true});
 	}
 
 	/**
@@ -104,6 +114,10 @@ export default class HomeScreen extends React.Component {
 	}
 
 	render() {
+		if( !this.state.fontLoaded ) {
+			return (<AppLoading/>
+			);
+		}
 		return (
 			<View style={styles.container}>
 				<MenuButton navigation={this.props.navigation} />

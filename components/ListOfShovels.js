@@ -46,7 +46,9 @@ export default class ListOfShovels extends React.Component {
   renderItem = ({ item }) => (
     <ListItem
       title={item.name}
+      titleStyle={{fontFamily: 'Cabin-Bold',}}
       subtitle={item.subtitle}
+      subtitleStyle={{fontFamily: 'Cabin-Regular',}}
       // leftAvatar={{ source: { uri: item.avatar_url } }}
       leftIcon={{
         reverse: true,

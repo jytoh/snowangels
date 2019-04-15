@@ -318,15 +318,17 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 40,
+    fontFamily: 'Cabin-Bold'
   },
   text: {
     fontSize: 20,
     paddingTop: 20,
+    fontFamily: 'Cabin-Regular'
   },
   header: {
     paddingTop: 20,
     fontSize: 30,
-    fontWeight: 'bold'
+    fontFamily: 'Cabin-Bold'
   },
   image: {
   	width: 100, 
@@ -347,7 +349,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     flex: 2,
     width: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    fontFamily: 'Cabin-Regular'
   },
   refreshicon: {
     zIndex: 9,
@@ -375,7 +378,8 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop: 24
+    paddingTop: 24,
+    fontFamily: 'Cabin-Regular'
   }
 });
 

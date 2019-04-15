@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -14,12 +14,18 @@ import LeaderboardScreen from '../screens/LeaderboardScreen';
 const WIDTH = Dimensions.get('window').width;
 
 const DrawerConfig = {
+    contentOptions: {
+        activeBackgroundColor: '#e91e63',
+        itemsContainerStyle: {
+            marginTop: 50,
+        },
+        itemStyle: {fontFamily: 'Cabin-Regular'}
+    },
     drawerWidth: WIDTH * 0.83,
     contentComponent: ({ navigation }) => {
         return (<MenuDrawer navigation={navigation} />)
-    }
+    },
 }
-
 const DrawerNavigator = createDrawerNavigator(
     {
         Home: {
@@ -43,5 +49,6 @@ const DrawerNavigator = createDrawerNavigator(
     },
     DrawerConfig
 );
+
 
 export default createAppContainer(DrawerNavigator);

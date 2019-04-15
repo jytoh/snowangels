@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     name:{
-        fontSize: 20,
+        fontFamily: 'Cabin-Bold',
+        fontSize: 30,
         paddingBottom: 5,
         color: 'white',
         textAlign: 'left',

@@ -15,7 +15,6 @@ export default class MenuButton extends React.Component {
         )
     }
 }
-
 const styles = StyleSheet.create({
     menuIcon: {
         zIndex: 9,

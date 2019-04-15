@@ -40,17 +40,17 @@ renderHeader() {
   return (
       <View colors={[, '#DDE8FC', '#76A1EF']}
           style={{ backgroundColor: '#76A1EF', padding: 15, paddingTop: 35, alignItems: 'center' }}>
-          <Text style={{ fontSize: 25, color: 'white', paddingTop: 20}}>Leaderboard</Text>
+          <Text style={{ fontSize: 25, fontFamily: 'Cabin-Bold', color: 'white', paddingTop: 20}}>Leaderboard</Text>
           <View style={{
               flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
               marginBottom: 15, marginTop: 20
           }}>
-              <Text style={{ color: 'white', fontSize: 25, flex: 1, textAlign: 'right', marginRight: 40 }}>
+              <Text style={{ color: 'white', fontSize: 25, fontFamily: 'Cabin-Bold', flex: 1, textAlign: 'right', marginRight: 40 }}>
                   {ordinal_suffix_of(this.state.user.rank)}
               </Text>
               <Image style={{ flex: .66, height: 60, width: 60, borderRadius: 60 / 2 }}
                   source={{ uri: this.state.user.pic}} />
-              <Text style={{ color: 'white', fontSize: 25, flex: 1, marginLeft: 40 }}>
+              <Text style={{ color: 'white', fontSize: 25, fontFamily: 'Cabin-Bold', flex: 1, marginLeft: 40 }}>
                   {this.state.user.score} pts
               </Text>
           </View>
@@ -65,6 +65,8 @@ render() {
       data:  this.state.globalData,
       icon: 'iconUrl',
       evenRowColor: '#F5F6FE',
+      labelStyle: {fontFamily: 'Cabin-Regular'},
+      scoreStyle: {fontFamily: 'Cabin-Bold'}
       //labelStyle: this.state.user.rank % 2 > 0 ? {color: 'white'} : {color: 'red'}
   }
   
