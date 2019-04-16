@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import MenuButton from '../components/MenuButton'
 
 export default class ProfileScreen extends React.Component {
-	state = {
+  state = {
         signedIn: false,
         name: "",
         photoUrl: "",
@@ -22,11 +22,13 @@ export default class ProfileScreen extends React.Component {
   };
   
   async refresh() {
+    var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+    console.log(user_id)
     let response_request = await fetch(
-      'http://127.0.0.1:5000/num_requests?uid=1'
+      'http://127.0.0.1:5000/num_requests?uid=' + user_id
     );
     let response_shovel = await fetch(
-      'http://127.0.0.1:5000/num_shovels?uid=1'
+      'http://127.0.0.1:5000/num_shovels?uid=' + user_id
     );
     let response1Json = await response_request.json();
     let response2Json = await response_shovel.json();
@@ -55,7 +57,7 @@ export default class ProfileScreen extends React.Component {
             token: result.accessToken,
             loaded: true,
           })
-          await this.refresh();
+
           await this.store_state(this.state);
 
           var details = {
@@ -101,62 +103,25 @@ export default class ProfileScreen extends React.Component {
           console.log(responseJson_for_uid);
           console.log(responseJson_for_uid.uid);
 
-          var details_for_requests = {
-                'uid': 1, //hardcoded for now
-              };
 
-          var formBody_for_requests = [];
-          for (var property in details_for_requests) {
-            var encodedKey = encodeURIComponent(property);
-            var encodedValue = encodeURIComponent(details_for_requests[property]);
-            formBody_for_requests.push(encodedKey + "=" + encodedValue);
-          }
-
-          formBody_for_requests = formBody_for_requests.join("&");
-
-          let response_for_requests = await fetch('http://127.0.0.1:5000/num_requests', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: formBody_for_requests,
-            });
-
-          let responseJson_for_requests = await response_for_requests.json();
-          console.log(responseJson_for_requests);
-
-          var details_for_shovels = {
-                'uid': 1, //hardcoded for now
-              };
-
-          var formBody_for_shovels = [];
-          for (var property in details_for_shovels) {
-            var encodedKey = encodeURIComponent(property);
-            var encodedValue = encodeURIComponent(details_for_shovels[property]);
-            formBody_for_shovels.push(encodedKey + "=" + encodedValue);
-          }
-
-          formBody_for_shovels = formBody_for_shovels.join("&");
-          let response_for_shovels = await fetch('http://127.0.0.1:5000/num_shovels', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: formBody_for_shovels,
-            });
-
-          let responseJson_for_shovels = await response_for_shovels.json();
-          console.log("1");
-          console.log(responseJson_for_requests)
-          console.log(responseJson_for_requests.num_requests);
-          console.log("1");
+          let response_request = await fetch(
+            'http://127.0.0.1:5000/num_requests?uid=' + responseJson_for_uid.uid.toString()
+          );
+          let response_shovel = await fetch(
+            'http://127.0.0.1:5000/num_shovels?uid=' + responseJson_for_uid.uid.toString()
+          );
+          let response1Json = await response_request.json();
+          let response2Json = await response_shovel.json();
           this.setState({
-            num_requests: responseJson_for_requests.num_requests,
-            num_shovels: responseJson_for_shovels.num_shovels,
-          })
+            num_requests: response1Json.num_requests,
+            num_shovels: response2Json.num_shovels
+          });
+
           await this.store_state(this.state);
-          SecureStore.setItemAsync('token', result.accessToken)
-          SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
+          await SecureStore.setItemAsync('token', result.accessToken)
+          await SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString())
+          this.refresh();
+          // SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
           console.log(this.state.name);
           console.log(this.state.photoUrl);
           return result.accessToken;
@@ -318,20 +283,18 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 40,
-    fontFamily: 'Cabin-Bold'
   },
   text: {
     fontSize: 20,
     paddingTop: 20,
-    fontFamily: 'Cabin-Regular'
   },
   header: {
     paddingTop: 20,
     fontSize: 30,
-    fontFamily: 'Cabin-Bold'
+    fontWeight: 'bold'
   },
   image: {
-  	width: 100, 
+    width: 100, 
     height: 100,
     marginBottom: 20,
     borderRadius: 40,
@@ -349,8 +312,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     flex: 2,
     width: '100%',
-    justifyContent: 'center',
-    fontFamily: 'Cabin-Regular'
+    justifyContent: 'center'
   },
   refreshicon: {
     zIndex: 9,
@@ -378,8 +340,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop: 24,
-    fontFamily: 'Cabin-Regular'
+    paddingTop: 24
   }
 });
 
