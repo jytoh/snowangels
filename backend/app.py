@@ -3,6 +3,8 @@ from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
+import re
+from urllib.parse import urlparse
 from psycopg2.extras import RealDictCursor
 #from werkzeug.utils import secure_filename
 from flask import jsonify
@@ -549,6 +551,44 @@ def get_top_szn_leader_ids():
 #     else:
 #         return "User authentication token doesn't match id", 401
 
+@app.before_request
+def sanitize():
+    name = request.form["name"]
+    google_id = request.form["google_id"]
+    url = request.form["photourl"]
+    tk = request.form["token"]
+    cid = request.form["cid"]
+    uid = request.form["uid"]
+    uid_requester = request.form["uid_requester"]
+    uid_shoveler = request.form["uid_shoveler"]
+
+    if name: #names can have various characters so it's easier to just escape all of them than to accidently have somebody's real name not work
+        name = re.escape(name)
+
+    if google_id && !(google_id.isdigit()):
+        return 404, "google id must be a number"
+
+    if url:
+        parsed = urlparse(photourl) #checking to make sure the file is coming from google
+        if !("googleusercontent.com" in parsed.netloc):
+            return 404, "photo must come from googleusercontent.com"
+
+    if tk && !(tk.isalnum()):
+        return 404, "token must be alphanumeric"
+
+    if cid && !(cid.isdigit()):
+        return 404, "id must be a number"
+
+    if uid && !(uid.isdigit()):
+        return 404, "id must be a number"
+
+    if uid_requester && !(uid_requester.isdigit()):
+        return 404, "id ust be a number"
+
+    if uid_shoveler && !(uid_shoveler.isdigit()):
+        return 404, "id ust be a number"
+
+
 #helper functions
 def get_num_users():
     users = User.query.all()
@@ -563,8 +603,8 @@ def get_user_with_points(id):
     Point.day_pts,
     Point.week_pts,
     Point.szn_pts)
-    join = query.join(User, id==User.id).join(Point, id==Point.user_id)
-    return join
+    join = query.join(Point.user_id == User.id).filter(User.id == id)
+    return join.all()
 
 
 #get all users
