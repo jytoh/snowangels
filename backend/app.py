@@ -565,28 +565,28 @@ def sanitize():
     if name: #names can have various characters so it's easier to just escape all of them than to accidently have somebody's real name not work
         request.values.set("name",re.escape("name"))
 
-    if google_id && !(google_id.isdigit()):
+    if google_id and not(google_id.isdigit()):
         return 404, "google id must be a number"
 
     if url:
         parsed = urlparse(photourl) #checking to make sure the file is coming from google
         request.values.set("photourl", re.escape("name"))
-        if !("googleusercontent.com" in parsed.netloc):
+        if not("googleusercontent.com" in parsed.netloc):
             return 404, "photo must come from googleusercontent.com"
 
-    if tk && !(tk.isalnum()):
+    if tk and not(tk.isalnum()):
         return 404, "token must be alphanumeric"
 
-    if cid && !(cid.isdigit()):
+    if cid and not(cid.isdigit()):
         return 404, "id must be a number"
 
-    if uid && !(uid.isdigit()):
+    if uid and not(uid.isdigit()):
         return 404, "id must be a number"
 
-    if uid_requester && !(uid_requester.isdigit()):
+    if uid_requester and not(uid_requester.isdigit()):
         return 404, "id ust be a number"
 
-    if uid_shoveler && !(uid_shoveler.isdigit()):
+    if uid_shoveler and not(uid_shoveler.isdigit()):
         return 404, "id ust be a number"
 
 
