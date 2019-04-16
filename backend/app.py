@@ -25,7 +25,7 @@ POSTGRES = {
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #added this to not keep restarting
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # initialize the database connection
 db = SQLAlchemy(app)
@@ -171,7 +171,7 @@ migrate = Migrate(app, db)
 
 @app.route('/') #delet for production
 def index():
-    
+
     print(Corner.query.all())
     print(Point.query.all())
     print(Subscription.query.all())
@@ -270,7 +270,7 @@ def new_request():
 
 
     req= Request(uid, cid, before_pic)
-    db.session.add(req) 
+    db.session.add(req)
     db.session.commit()
 
 
