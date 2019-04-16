@@ -554,9 +554,34 @@ def get_num_users():
     users = User.query.all()
     return len(user)
 
+def get_user_with_points(id):
+    query = db.session.query(
+    User.id,
+    User.user_id,
+    User.name,
+    User.photourl,
+    Point.day_pts,
+    Point.week_pts,
+    Point.szn_pts)
+    join = query.join(User, id==User.id).join(Point, id==Point.user_id)
+    return join
+
+
 #get all users
+@app.route("/get_user", methods=['GET'])
+def get_user():
+    google_id = request.values.get('google_id')
+    uid= User.query.filter_by(google_id= google_id).first().id
+    return get_user_with_points(uid)
 
 #get specific user
+@app.route("/get_all_users", methods=['GET'])
+def get_all_users():
+    us = list()
+    users = User.query.all()
+    for user in users:
+        us.append(get_user_with_points(user.id))
+    return(us)
 
 
 if __name__ == "__main__":
