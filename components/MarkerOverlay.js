@@ -12,7 +12,7 @@ const MarkerOverlay = (props) => {
      * title: title of the point
      * visible: visibility of the marker
      */
-    const { title, visible, setModalVisible } = props;
+    const { title, visible, setModalVisibility } = props;
 
     console.log("visible", visible);
 
@@ -114,7 +114,7 @@ const MarkerOverlay = (props) => {
 
 
                 />
-                <Button title="Hide" onPress={setModalVisible}/>
+                <Button title="Hide" onPress={() => setModalVisibility(false)}/>
             </View>
         </View>
         )

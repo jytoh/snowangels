@@ -8,13 +8,13 @@ import {AppLoading, Font} from 'expo';
 export default class HomeScreen extends React.Component {
 	constructor(props) {
 		super(props)
-		this.setModalVisible = this.setModalVisible.bind(this);
+		this.setModalVisibility = this.setModalVisibility.bind(this);
 		this.setUserLocation = this.setUserLocation.bind(this);
-		this.setModalTitle = this.setModalTitle.bind(this);
+		this.setModalMetaData = this.setModalMetaData.bind(this);
 		this.state = {
 			userLocation: null,
 			markerOverlayIsVisible: false,
-			title: "Test title",
+			title: null,
 			fontLoaded: false
 		}
 	}
@@ -88,19 +88,19 @@ export default class HomeScreen extends React.Component {
 	/**
 	 * toggles the visibility of modal visible
 	 */
-	setModalVisible() {
+	setModalVisibility(isVisible) {
 		this.setState({
-			markerOverlayIsVisible: !this.state.markerOverlayIsVisible
+			markerOverlayIsVisible: isVisible
 		});
 	}
 
-	setModalTitle(title) {
+	setModalMetaData(marker) {
 		this.setState({
-			title: title
+			title: marker.title
 		});
 	}
 
-	getUserLocationHandler = () => {
+	getUserLocationHandler() {
 		navigator.geolocation.getCurrentPosition(position => {
 			this.setState({
 				userLocation: {
@@ -122,16 +122,16 @@ export default class HomeScreen extends React.Component {
 			<View style={styles.container}>
 				<MenuButton navigation={this.props.navigation} />
 				<View style={styles.mapContainer}>
-				<MarkerOverlay title={this.state.title} visible={this.state.markerOverlayIsVisible} setModalVisible={this.setModalVisible}/>
+				<MarkerOverlay title={this.state.title} visible={this.state.markerOverlayIsVisible} setModalVisibility={this.setModalVisibility}/>
 				<UsersMap
 					userLocation={this.state.userLocation}
-					setModalVisible={this.setModalVisible}
+					setModalVisibility={this.setModalVisibility}
 					setUserLocation={this.setUserLocation}
-					setModalTitle={this.setModalTitle}/>
+					setModalMetaData={this.setModalMetaData}/>
 				</View>
 				<View style={styles.container2}>
-					<Button title="Get Location"
-					onPress={() => this.getOlinLibrary()} />
+					{/*<Button title="Get Location"
+					onPress={() => this.getUserLocationHandler()} />*/}
 					<Button title="Go to Camera"
 					onPress={() => this.props.navigation.navigate('Camera')} />
 				</View>

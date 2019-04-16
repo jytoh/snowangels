@@ -38,13 +38,16 @@ function formatGetAllCorners(responseJson) {
  * with help of formatGetAllCorners() to state.markers
  */
 function getAllCorners() {
-  return fetch('https://snowangels-api.herokuapp.com/get_all_corners')
+  console.log("made it to get all corners")
+  /*return fetch('https://snowangels-api.herokuapp.com/get_all_corners')
+    .then((response) => response.json())
     .then((response) => {
       markers = response;
+      console.log(markers);
     })
     .catch((error) => {
       console.error(error);
-    });
+    });*/
 }
 
 
@@ -108,7 +111,7 @@ const usersMap = props => {
           <View style={styles.getCornersContainer}>
             <Button
               title="Get Corners"
-              onPress={getAllCorners}
+              onPress={() => console.log("get corners")}
             />
           </View>
         </View>
