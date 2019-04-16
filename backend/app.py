@@ -553,23 +553,24 @@ def get_top_szn_leader_ids():
 
 @app.before_request
 def sanitize():
-    name = request.form["name"]
-    google_id = request.form["google_id"]
-    url = request.form["photourl"]
-    tk = request.form["token"]
-    cid = request.form["cid"]
-    uid = request.form["uid"]
-    uid_requester = request.form["uid_requester"]
-    uid_shoveler = request.form["uid_shoveler"]
+    name = request.values.get("name")
+    google_id = request.values.get("google_id")
+    url = request.values.get("photourl")
+    tk = request.values.get("token")
+    cid = request.values.get("cid")
+    uid = request.values.get("uid")
+    uid_requester = request.values.get("uid_requester")
+    uid_shoveler = request.values.get("uid_shoveler")
 
     if name: #names can have various characters so it's easier to just escape all of them than to accidently have somebody's real name not work
-        name = re.escape(name)
+        request.values.set("name",re.escape("name"))
 
     if google_id && !(google_id.isdigit()):
         return 404, "google id must be a number"
 
     if url:
         parsed = urlparse(photourl) #checking to make sure the file is coming from google
+        request.values.set("photourl", re.escape("name"))
         if !("googleusercontent.com" in parsed.netloc):
             return 404, "photo must come from googleusercontent.com"
 
