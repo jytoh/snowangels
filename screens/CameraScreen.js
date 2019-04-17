@@ -2,6 +2,8 @@ import React from 'react';
 import { Image, TouchableOpacity, SafeAreaView, Button, StyleSheet, Text, View, Dimensions } from 'react-native';
 import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
+import { SecureStore } from 'expo';
+
 import {Camera, Permissions, ImagePicker} from 'expo';
 import {Feather} from '@expo/vector-icons';
 // import {decode as atob, encode as btoa} from 'base-64';
@@ -62,9 +64,10 @@ export default class CameraScreen extends React.Component {
       try {
         console.log('clicked upload picture');
         console.log(this.state.hash);
-
+        var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+        console.log()
         var details = {
-          'uid' : 1, //hardcoding for now
+          'uid' : user_id,
           'cid' : 1, //hardcoding for now
           'before_pic' : this.state.hash,
         };

@@ -330,6 +330,12 @@ def num_shovels():
     num_shovels= Shoveling.query.filter_by(user_id=uid).count()
     return jsonify(num_shovels = num_shovels)
 
+@app.route("/num_points", methods=['GET'])
+def num_points():
+
+    uid = request.values.get("uid")
+    num_points= Point.query.filter_by(user_id=uid).first().szn_pts
+    return jsonify(points = num_points)
 
 #validate shoveling
 @app.route("/validate_shovel", methods=['POST'])

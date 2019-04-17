@@ -14,6 +14,7 @@ export default class ProfileScreen extends React.Component {
         loaded: false,
         num_requests: 0,
         num_shovels: 0,
+        points: 0,
     };
 
 
@@ -30,11 +31,19 @@ export default class ProfileScreen extends React.Component {
     let response_shovel = await fetch(
       'http://127.0.0.1:5000/num_shovels?uid=' + user_id
     );
+    let response_points = await fetch(
+      'http://127.0.0.1:5000/num_points?uid=' + user_id
+    );
     let response1Json = await response_request.json();
     let response2Json = await response_shovel.json();
+    let response3Json = await response_points.json();
+
     this.setState({
       num_requests: response1Json.num_requests,
-      num_shovels: response2Json.num_shovels
+      num_shovels: response2Json.num_shovels,
+      points: response3Json.points,
+
+
     });
     await this.store_state(this.state);
   };
@@ -110,11 +119,17 @@ export default class ProfileScreen extends React.Component {
           let response_shovel = await fetch(
             'http://127.0.0.1:5000/num_shovels?uid=' + responseJson_for_uid.uid.toString()
           );
+          let response_points = await fetch(
+            'http://127.0.0.1:5000/num_points?uid=' + responseJson_for_uid.uid.toString()
+          );
           let response1Json = await response_request.json();
           let response2Json = await response_shovel.json();
+          let response3Json = await response_points.json();
+
           this.setState({
             num_requests: response1Json.num_requests,
-            num_shovels: response2Json.num_shovels
+            num_shovels: response2Json.num_shovels,
+            points: response3Json.points
           });
 
           await this.store_state(this.state);
@@ -158,7 +173,8 @@ export default class ProfileScreen extends React.Component {
         token: lastState.token,
         loaded: true,
         num_requests: lastState.num_requests,
-        num_shovels: lastState.num_shovels
+        num_shovels: lastState.num_shovels,
+        points: lastState.points
       });
       console.log('Got last state');
     }
@@ -172,7 +188,8 @@ export default class ProfileScreen extends React.Component {
         token: '',
         loaded: true,
         num_requests: 0,
-        num_shovels: 0
+        num_shovels: 0,
+        points:0,
       })
     }
   };
@@ -185,7 +202,8 @@ export default class ProfileScreen extends React.Component {
       token: "",
       loaded: true,
       num_requests: 0,
-      num_shovels: 0
+      num_shovels: 0,
+      points:0
     });
     await this.store_state(this.state);
   };
@@ -196,7 +214,7 @@ export default class ProfileScreen extends React.Component {
         <View style={styles.container}>
           {this.state.signedIn ? (
             <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
-            num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} 
+            num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} points = {this.state.points} 
             logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} />
           ) : (
             <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
@@ -244,6 +262,7 @@ const LoggedInPage = props => {
       </View>
       <View style={styles.containerbottom}>
         <Text style={styles.header}> {"Summary"}</Text>
+        <Text style= {styles.text}> {"Total Points:" + props.points}</Text>
         <Text style= {styles.text}> {"Total Shovels:" + props.num_shovels}</Text>
         <Text style= {styles.text}> {"Total Reports:" + props.num_requests}</Text>
         <Text style={styles.text}> {"Rank: 3/120"}</Text>
