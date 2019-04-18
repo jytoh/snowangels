@@ -17,16 +17,16 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': int(os.environ.get("PORT", 5000)), #the port 5000 option gave problems when testing locally
+    'port': 5432, #the port 5000 option gave problems when testing locally
 }
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 #using this to test locally
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #added this to not keep restarting
-# app.config['DEBUG'] = False
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['DEBUG'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # initialize the database connection
 db = SQLAlchemy(app)
 
@@ -148,7 +148,7 @@ class Shoveling(db.Model):
         self.end = end
 # COMMENT THIS OUT WHEN DEPLOYING
 db.reflect()
-# db.drop_all()
+db.drop_all()
 
 
 # db.init_app(app)
@@ -157,28 +157,32 @@ db.session.commit()
 # initialize database migration management
 migrate = Migrate(app, db)
 
-# put in dummy data
-dummy_points = [
-    Corner("Olin Ave", "Library Street", 42.4476, -76.4827),
-    Corner("Campus Rd", "East Ave", 42.4452, -76.4826),
-    Corner("Campus Rd", "Sage Ave", 42.4451, -76.4837)
-]
+#importing corners locally from GIS dataset
+def import_corners(file):
+    dframe = filereading.fetchGISdata(file)
+    for index, row in dframe.iterrows():#don't change these
+        lat = row[2]
+        long = row[3]
+        st1 = row[4]
+        st2 = row[5]
+        crnr = Corner(st1, st2, lat, long)
+        db.session.add(crnr)
+    db.session.commit()
+    print("end of import_corners fn")
 
-for dummy_point in dummy_points:
-    db.session.add(dummy_point)
-db.session.commit()
-# end of put in dummy data
+import_corners("Ints2019.xls") #TODO: change to "Ints2019" for full dataset
+print("added corners")
+
 
 @app.route('/') #delet for production
 def index():
-
     print(Corner.query.all())
     print(Point.query.all())
     print(Subscription.query.all())
     print(Request.query.all())
     print(Shoveling.query.all())
     print(User.query.all())
-    return 'works'
+    return "works"
 
 @app.route("/register_user",methods=['POST'])
 def register_user():
@@ -260,10 +264,10 @@ def new_subscription():
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
-
-    uid = request.values.get("uid")
-    cid = request.values.get("cid")
-    before_pic = request.values.get("before_pic")
+    data_dict = json.loads(request.get_data())
+    uid = data_dict['uid']
+    cid = data_dict['cid']
+    before_pic = data_dict["before_pic"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
@@ -284,7 +288,7 @@ def new_request():
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic)
     # #return "User %s has made a request for Corner %s" % (uid, cid)
 
-@app.route("/num_requests", methods=['GET'])
+@app.route("/num_requests", methods=['POST'])
 def num_requests():
 
     uid = request.values.get("uid")
@@ -323,19 +327,12 @@ def new_shovel():
     return jsonify(user = uid, corner=cid, username=user.name, before_pic=before_pic, after_pic=after_pic, start_time=start, end_time=end, total_time=0)
     #return "User %s has claimed to shovel Corner %s" % (uid, cid)
 
-@app.route("/num_shovels", methods=['GET'])
+@app.route("/num_shovels", methods=['POST'])
 def num_shovels():
-
     uid = request.values.get("uid")
     num_shovels= Shoveling.query.filter_by(user_id=uid).count()
     return jsonify(num_shovels = num_shovels)
 
-@app.route("/num_points", methods=['GET'])
-def num_points():
-
-    uid = request.values.get("uid")
-    num_points= Point.query.filter_by(user_id=uid).first().szn_pts
-    return jsonify(points = num_points)
 
 #validate shoveling
 @app.route("/validate_shovel", methods=['POST'])
@@ -365,50 +362,6 @@ def validate_shovel():
         db.session.commit()
         return jsonify(requester = uid_requester, shoveler=uid_shoveler, corner=cid, validate_bit=validate_bit)
         #return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
-
-
-#dummy test for user history
-dummy_profiles= [
-    Corner('Wyckoff St','Heights Court',42.4550874247821,-76.4838560729503),
-    Corner('Wyckoff St','Dearborn Pl',42.4552301688275,-76.4839151377581),
-    Corner('Woodcrest Terrace','Woodcrest Ave',42.4332223831747,-76.4747075168164),
-    Corner('Willow Ave','Pier Rd',42.4534911735782,-76.5062921053108),
-    Corner('Willet Pl','E Buffalo St',42.4414896398069,-76.4928359378613),
-    Request(1,2,'aaa'),
-    Request(2,5,'bbb'),
-    Request(3,3,'ccc'),
-    Request(1,4,'ddd'),
-    User('name1','gid1','111','token1'),
-    User('name2','gid2','222','token2'),
-    User('name3','gid3','333','token3')
-]
-for prof in dummy_profiles:
-    db.session.add(prof)
-db.session.commit()
-
-
-#get info for user history, in the form (User id, User name, Address of shovel, Time of shovel)
-@app.route("/get_user_history", methods=['GET'])
-def get_user_history():
-    #join User, Request and Corner
-    join = db.session.query(\
-        User.id.label("userid"),
-        User.name.label("name"),
-        Request.time.label("time"),
-        Corner.street1.label("street1"),
-        Corner.street2.label("street2"))\
-    .select_from(Request)\
-    .join(User, Request.user_id==User.id)\
-    .join(Corner, Request.corner_id==Corner.id)\
-    .order_by(User.id.asc(), Request.time.desc()).all()
-
-    result = []
-    for row in join:
-        row_json = {"uid": row.userid,"name":row.name, "address": ""+row.street1+" & "+row.street2, "time": row.time.__str__()}
-        result.append(row_json)
-    return json.dumps(result, indent=2)
-
-
 #get all people subscribed to a corner
 
 @app.route("/ppl_subscribed", methods=['GET'])
@@ -462,32 +415,6 @@ def get_latest_requester_name():
     return jsonify(corner = cid, user=uid, name = name)
     #return "%s was the last person to make a request on corner %s" % (name, cid)
 #get corner info: street names
-
-@app.route("/get_requests", methods=['GET'])
-def get_requests():
-    uid = request.args.get('uid')
-    reqs = Request.query.filter_by(user_id=uid).order_by(Request.time.desc(
-
-    )).all()
-    result = []
-    for req in reqs:
-        corner = Corner.query.filter_by(id=req.corner_id).first()
-        result.append({'request_id': req.id,
-                       'corner_id': req.corner_id,
-                       'street1': corner.street1,
-                       'street2': corner.street2,
-                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
-    return json.dumps(result)
-
-
-@app.route("/remove_request", methods=['DELETE'])
-def remove_req():
-    req_id = request.args.get('id')
-    req = Request.query.filter_by(id=req_id).one()
-    db.session.delete(req)
-    db.session.commit()
-    return jsonify(request=req_id)
-
 
 @app.route("/corner_street_names", methods=['GET'])
 def get_corner_street_names():
@@ -599,6 +526,7 @@ def get_top_szn_leader_ids():
 #     else:
 #         return "User authentication token doesn't match id", 401
 
+ON_HEROKU = os.environ.get('ON_HEROKU')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
