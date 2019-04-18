@@ -30,54 +30,6 @@ export default class HomeScreen extends React.Component {
 	}
 
 	/**
-	 * DEPRECATED: no need for this function anymore
-	 * test to get olin library fake corner
-	 * @return {[type]} [description]
-	 */
-	async getOlinLibrary() {
-		try {
-
-	        var details = {
-					    'lat': 1,
-					    'long': 2,
-					    'street1': 'c',
-					    'street2': 'd',
-					  };
-
-			var formBody = [];
-			for (var property in details) {
-				var encodedKey = encodeURIComponent(property);
-				var encodedValue = encodeURIComponent(details[property]);
-				formBody.push(encodedKey + "=" + encodedValue);
-			}
-			formBody = formBody.join("&");
-			let response2 = await fetch('https://snowangels-api.herokuapp.com/create_corner', {
-				  method: 'POST',
-				  headers: {
-				    'Content-Type': 'application/x-www-form-urlencoded',
-				  },
-				  body: formBody,
-				});
-			let responseJson2 = await response2.json();
-
-			console.log(responseJson2);
-			console.log(responseJson2.street1);
-			console.log(responseJson2.street2);
-
-// moved this down so get follows a post to avoid nonetype error
-			let response = await fetch(
-				'https://snowangels-api.herokuapp.com/corner_street_names?cid=1'
-			);
-			let responseJson = await response.json();
-			console.log(responseJson.street1);
-			console.log(responseJson.street2);
-		} catch (error) {
-			console.error(error);
-		}
-
-	}
-
-	/**
 	 * sets the user's current location in the HomeScreen's state
 	 * @param {userLocation} userLocation (object with latitude, longitude, latitudeDelta, and longitudeDelta)
 	 */
