@@ -479,6 +479,19 @@ def get_requests():
                        'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
     return json.dumps(result)
 
+
+@app.route("/remove_request", methods=['DELETE'])
+def remove_req():
+    uid = request.args.get('uid')
+    cid = request.args.get('cid')
+    reqs = Request.query.filter_by(user_id=uid, corner_id=cid).all()
+    result = []
+    for req in reqs:
+        db.session.delete(req)
+        db.session.commit()
+    return jsonify(user=uid, corner=cid)
+
+
 @app.route("/corner_street_names", methods=['GET'])
 def get_corner_street_names():
     #cid = request.form["cid"]

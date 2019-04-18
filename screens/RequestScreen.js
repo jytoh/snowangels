@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View, FlatList} from 'react-native';
-
+import {List, ListItem} from 'react-native-elements';
 import MenuButton from '../components/MenuButton'
 import {SecureStore} from "expo";
 
@@ -37,12 +37,12 @@ export default class RequestScreen extends React.Component {
     render() {
         console.log(this.state.reqs);
         return (
-            <View style={{flex: 1, paddingTop: 20}}>
+            <View style={{flex: 1, paddingTop: 50}}>
                 <FlatList
                     data={this.state.reqs}
                     renderItem={({item}) =>
                         <Text>{item.corner_id}, {item.street2}, {item.street1}, {item.time}</Text>}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item.request_id.toString()}
                 />
             </View>
         );
