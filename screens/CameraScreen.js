@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#E1EAFB',
     flexDirection: 'column',
     alignItems: 'center'
-    
   },
   takephototouchable: {
     flex: 3,
