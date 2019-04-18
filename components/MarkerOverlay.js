@@ -43,7 +43,7 @@ const MarkerOverlay = (props) => {
                                         formBody.push(encodedKey + "=" + encodedValue);
                                     }
                                     formBody = formBody.join("&");
-                                    let response2 = await fetch('http://127.0.0.1:5000/new_request', {
+                                    let response2 = await fetch('https://snowangels-api.herokuapp.com/new_request', {
                                           method: 'POST',
                                           headers: {
                                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -85,7 +85,7 @@ const MarkerOverlay = (props) => {
                         formBody.push(encodedKey + "=" + encodedValue);
                     }
                     formBody = formBody.join("&");
-                    let response2 = await fetch('http://127.0.0.1:5000/new_shovel', {
+                    let response2 = await fetch('https://snowangels-api.herokuapp.com/new_shovel', {
                           method: 'POST',
                           headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
