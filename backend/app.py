@@ -569,6 +569,91 @@ def get_top_szn_leader_ids():
     top_users = map(str,[u.user_id for u in Point.query.order_by(Point.szn_pts.desc())][:int(x)])
     return jsonify(top_users = ' '.join(top_users))
     # return ' '.join(top_users)
+# @app.before_request
+# def sanitize():
+#     name = request.values.get("name")
+#     google_id = request.values.get("google_id")
+#     url = request.values.get("photourl")
+#     tk = request.values.get("token")
+#     cid = request.values.get("cid")
+#     uid = request.values.get("uid")
+#     uid_requester = request.values.get("uid_requester")
+#     uid_shoveler = request.values.get("uid_shoveler")
+#
+#     if name: #names can have various characters so it's easier to just escape all of them than to accidently have somebody's real name not work
+#         request.values.set("name",re.escape("name"))
+#
+#     if google_id and not(google_id.isdigit()):
+#         return 404, "google id must be a number"
+#
+#     if url:
+#         parsed = urlparse(photourl) #checking to make sure the file is coming from google
+#         request.values.set("photourl", re.escape("name"))
+#         if not("googleusercontent.com" in parsed.netloc):
+#             return 404, "photo must come from googleusercontent.com"
+#
+#     if tk and not(tk.isalnum()):
+#         return 404, "token must be alphanumeric"
+#
+#     if cid and not(cid.isdigit()):
+#         return 404, "id must be a number"
+#
+#     if uid and not(uid.isdigit()):
+#         return 404, "id must be a number"
+#
+#     if uid_requester and not(uid_requester.isdigit()):
+#         return 404, "id ust be a number"
+#
+#     if uid_shoveler and not(uid_shoveler.isdigit()):
+#         return 404, "id ust be a number"
+
+
+#helper functions
+def get_num_users():
+    users = User.query.all()
+    return len(users)
+
+def get_user_with_points(id):
+    #query = db.session.query(
+    #User.id,
+    #User.user_id,
+    #User.name,
+    #User.photourl,
+    #Point.day_pts,
+    #Point.week_pts,
+    #Point.szn_pts)
+    #join = query.join(Point.user_id == User.id).filter(User.id == id)
+    query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
+
+def get_user_with_points_alt(id):
+    query = db.session.query(
+    User.id,
+    User.user_id,
+    User.name,
+    User.photourl,
+    Point.day_pts,
+    Point.week_pts,
+    Point.szn_pts)
+    join = query.join(Point.user_id == User.id).filter(User.id == id)
+    #query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
+
+
+@app.route("/get_user", methods=['GET'])
+def get_user():
+    id = request.values.get('id')
+    uid= User.query.filter_by(id=id).first().id
+    return jsonify(user = get_user_with_points(uid))
+
+#get specific user
+@app.route("/get_all_users", methods=['GET'])
+def get_all_users():
+    us = []
+    users = User.query.all()
+    for u in users:
+        us.append(get_user_with_points(u.id))
+    return jsonify(users = us)
 
 # @app.before_request
 # def authenticate():
