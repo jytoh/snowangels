@@ -21,13 +21,13 @@ POSTGRES = {
     'host': 'localhost',
     'port': 5433, #the port 5000 option gave problems when testing locally
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 #using this to test locally
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-# 'postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
+
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+# postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
 #added this to not keep restarting
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -175,9 +175,9 @@ def import_corners(file):
 import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
 print("added corners")
 
-for dummy_point in dummy_points:
-    db.session.add(dummy_point)
-db.session.commit()
+#for dummy_point in dummy_points:
+#    db.session.add(dummy_point)
+#db.session.commit()
 # end of put in dummy data
 
 @app.route('/') #delet for production
@@ -596,6 +596,19 @@ def get_num_users():
     return len(user)
 
 def get_user_with_points(id):
+    #query = db.session.query(
+    #User.id,
+    #User.user_id,
+    #User.name,
+    #User.photourl,
+    #Point.day_pts,
+    #Point.week_pts,
+    #Point.szn_pts)
+    #join = query.join(Point.user_id == User.id).filter(User.id == id)
+    query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
+
+def get_user_with_points_alt(id):
     query = db.session.query(
     User.id,
     User.user_id,
@@ -605,24 +618,25 @@ def get_user_with_points(id):
     Point.week_pts,
     Point.szn_pts)
     join = query.join(Point.user_id == User.id).filter(User.id == id)
-    return join.all()
+    #query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
 
 
 #get all users
 @app.route("/get_user", methods=['GET'])
 def get_user():
-    google_id = request.values.get('google_id')
-    uid= User.query.filter_by(google_id= google_id).first().id
-    return get_user_with_points(uid)
+    id = request.values.get('id')
+    uid= User.query.filter_by(id=id).first().id
+    return jsonify(user = get_user_with_points(uid))
 
 #get specific user
 @app.route("/get_all_users", methods=['GET'])
 def get_all_users():
-    us = list()
+    us = []
     users = User.query.all()
-    for user in users:
-        us.append(get_user_with_points(user.id))
-    return(us)
+    for u in users:
+        us.append(get_user_with_points(u.id))
+    return jsonify(users = us)
 
 
 if __name__ == "__main__":
