@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import MenuButton from '../components/MenuButton'
+import {SecureStore} from "expo";
 
 const JsonTable = require('ts-react-json-table');
 export default class RequestScreen extends React.Component {
@@ -25,7 +26,7 @@ export default class RequestScreen extends React.Component {
   })}
 
     async sendRequest() {
-
+        var user_id = await SecureStore.getItemAsync('id');
           await fetch('https://snowangels-api.herokuapp.com/new_request' ,
             {
               method: 'POST',
@@ -33,7 +34,7 @@ export default class RequestScreen extends React.Component {
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
               body: JSON.stringify({
-                'uid': 1,
+                'uid': user_id,
                 'cid': 1,
                 'before_pic': 'sd'
               })

@@ -463,6 +463,21 @@ def get_latest_requester_name():
     #return "%s was the last person to make a request on corner %s" % (name, cid)
 #get corner info: street names
 
+@app.route("/get_requests", methods=['GET'])
+def get_requests():
+    uid = request.args.get('uid')
+    reqs = Request.query.filter_by(user_id=uid).order_by(Request.time.desc(
+
+    )).all()
+    result = []
+    for req in reqs:
+        corner = Corner.query.filter_by(id=req.corner_id).first()
+        result.append({'corner_id': req.corner_id,
+                       'street1': corner.street1,
+                       'street2': corner.street2,
+                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
+    return json.dumps(result)
+
 @app.route("/corner_street_names", methods=['GET'])
 def get_corner_street_names():
     #cid = request.form["cid"]
