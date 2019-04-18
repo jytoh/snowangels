@@ -486,7 +486,7 @@ def remove_req():
     req = Request.query.filter_by(id=req_id).one()
     db.session.delete(req)
     db.session.commit()
-    return jsonify(request=id)
+    return jsonify(request=req_id)
 
 
 @app.route("/corner_street_names", methods=['GET'])
