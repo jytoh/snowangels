@@ -229,7 +229,7 @@ def create_corners_from_file():
         st2 = row[5]
         crnr = Corner(st1, st2, lat, long)
         db.session.add(crnr)
-    db.session.commit()
+        db.session.commit()
     return "data from file %s has been added to the corner database" % (file)
 
 @app.route("/new_subscription", methods=['POST'])
