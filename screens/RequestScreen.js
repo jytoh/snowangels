@@ -1,5 +1,13 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View, FlatList} from 'react-native';
+import {
+    Button,
+    StyleSheet,
+    Text,
+    View,
+    FlatList,
+    TouchableWithoutFeedback,
+    Alert
+} from 'react-native';
 import {List, ListItem} from 'react-native-elements';
 import MenuButton from '../components/MenuButton'
 import {SecureStore} from "expo";
@@ -13,6 +21,22 @@ export default class RequestScreen extends React.Component {
 
     }
 
+    al(rid) {
+        Alert.alert(
+            'Sure?',
+            'Do you want to remove this Request?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: () => this.removeRequest(rid)},
+            ],
+            {cancelable: true},
+        );
+    }
+
 
     async sendRequest() {
         var user_id = await SecureStore.getItemAsync('id');
@@ -21,41 +45,73 @@ export default class RequestScreen extends React.Component {
                 method: 'GET'
             }).then(response => response.json())
             .then((jsonData) => {
-            console.log(jsonData);
-            return jsonData;
+                console.log(jsonData);
+                return jsonData;
 
-        }).catch((error) => {
-            // handle your errors here
-            console.error(error)
-        })
+            }).catch((error) => {
+                // handle your errors here
+                console.error(error)
+            })
         this.setState({
             reqs: re
         });
         console.log(this.state.reqs)
     }
 
+    async removeRequest(rid) {
+        // var rid = this.state.reqs[0].request_id;
+        var re = await fetch('https://snowangels-api.herokuapp.com/remove_request?id=%d'.replace("%d", rid),
+            {
+                method: 'DELETE'
+            }).then(response => response.json())
+            .then((jsonData) => {
+                console.log(jsonData);
+                return jsonData;
+
+            }).catch((error) => {
+                // handle your errors here
+                console.error(error)
+            })
+
+
+        this.sendRequest();
+        console.log(this.state.reqs)
+    }
+
     render() {
-        console.log(this.state.reqs);
+
         return (
-            <View style={{flex: 1, paddingTop: 50}}>
-                <FlatList
-                    data={this.state.reqs}
-                    renderItem={({item}) =>
-                        <Text>{item.corner_id}, {item.street2}, {item.street1}, {item.time}</Text>}
-                    keyExtractor={item => item.request_id.toString()}
-                />
-            </View>
+
+            <FlatList
+                style={styles.container}
+                data={this.state.reqs}
+                renderItem={({item}) =>
+                    (<TouchableWithoutFeedback
+                        onPress={() => this.al(item.request_id)}>
+                        <View style={styles.row}>
+                            <Text>
+                                {"Corner id: " + item.corner_id} {"\nStreet" +
+                            " 1: " + item.street2}{"\nStreet 2: " + item.street1}
+                                {"\n" + item.time}
+                            </Text>
+                        </View>
+                    </TouchableWithoutFeedback>)}
+                keyExtractor={item => item.request_id.toString()}
+            />
+            // <View style={styles.buttonContainer}>
+            //     <Button
+            //         onPress={() => {
+            //             this.removeRequest();
+            //         }}
+            //         title="Remove Most Recent Request"
+            //     />
+            // </View>
+
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     text: {
         fontSize: 30,
     },
@@ -63,5 +119,17 @@ const styles = StyleSheet.create({
         zIndex: 9,
         alignItems: 'center',
         top: 80,
+    },
+    container: {
+        marginTop: 50,
+        flex: 1,
+    },
+    row: {
+        padding: 15,
+        marginBottom: 5,
+        backgroundColor: 'skyblue',
+    },
+    buttonContainer: {
+        margin: 20
     }
 });
