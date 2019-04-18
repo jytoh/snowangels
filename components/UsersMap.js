@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Button, Modal, Text } from 'react-native';
+import { View, StyleSheet, Button, Modal, Text, AsyncStorage } from 'react-native';
 import MapView from 'react-native-maps';
 import MarkerOverlay from '../components/MarkerOverlay';
 import LocationMarkerPicture from '../assets/LocationMarkerPicture.png'
@@ -75,23 +75,26 @@ export default class UsersMap extends React.Component {
    * with help of formatGetAllCorners() to state.markers
    */
   async getAllCorners() {
-    var corner_data = await fetch('https://snowangels-api.herokuapp.com/get_all_corners')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      return responseJson
-    })
-    .catch((error) => {
-      console.error(error);
-    })
+    AsyncStorage.setItem('pulledFromMarkersOnce', "true")
+    if (await AsyncStorage.getItem('pulledFromMarkersOnce') == "true") {
+      var corner_data = await fetch('https://snowangels-api.herokuapp.com/get_all_corners')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson
+      })
+      .catch((error) => {
+        console.error(error);
+      })
 
-    // make fake data if the databse is down
-    if (corner_data == []) {
-      corner_data = getFakeCornerDataIfNoCornersAreRetrieved();
+      // make fake data if the databse is down
+      if (corner_data == []) {
+        corner_data = getFakeCornerDataIfNoCornersAreRetrieved();
+      }
+
+      this.setState({
+        markers: corner_data
+      })
     }
-
-    this.setState({
-      markers: corner_data
-    })
   }
 
   /**

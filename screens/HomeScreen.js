@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import MenuButton from '../components/MenuButton';
 import MarkerOverlay from '../components/MarkerOverlay';
 import UsersMap from '../components/UsersMap';
