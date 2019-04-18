@@ -4,6 +4,8 @@ import { SecureStore } from 'expo';
 import {AsyncStorage} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 import MenuButton from '../components/MenuButton'
+import { MailComposer } from 'expo';
+
 
 export default class ProfileScreen extends React.Component {
   state = {
@@ -47,6 +49,14 @@ export default class ProfileScreen extends React.Component {
     });
     await this.store_state(this.state);
   };
+
+  async give_feedback(){
+    MailComposer.composeAsync({
+      recipients: ['mi243@cornell.edu'], 
+      subject: "SnowAngels User Report", 
+      body: "Please tell us your concern"
+    })
+  }
 
   async signInWithGoogleAsync() {
     console.log('pressed');
@@ -215,7 +225,7 @@ export default class ProfileScreen extends React.Component {
           {this.state.signedIn ? (
             <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
             num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} points = {this.state.points} 
-            logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} />
+            logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} give_feedback= {this.give_feedback.bind(this)} />
           ) : (
             <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
           )}
@@ -268,7 +278,7 @@ const LoggedInPage = props => {
         <Text style={styles.text}> {"Rank: 3/120"}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Give Feedback" size='30' onPress={() => null}/>
+        <Button title="Send Report or Feedback" size='30' onPress={() => props.give_feedback()}/>
       </View>
       <View style={styles.buttonContainer}>
         <Button title="Logout" size='30' color="#FF0000" onPress={() => props.logout()}/>
