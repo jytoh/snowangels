@@ -430,7 +430,12 @@ def unsubscribe_corner():
 @app.route("/state", methods=['GET'])
 def get_state():
     cid = request.args.get('cid')
-    state = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc()).first().state
+    statequery = Request.query.filter_by(corner_id=cid).order_by(
+        Request.time.desc()).first()
+    if statequery is not None:
+        state = statequery.state
+    else:
+        state = 0
     return jsonify(corner = cid, state = state)
     # return "Corner %s has  %s" % (cid, state)
 #get user id who last requested a corner
