@@ -157,17 +157,6 @@ db.session.commit()
 # initialize database migration management
 migrate = Migrate(app, db)
 
-# put in dummy data
-dummy_points = [
-    Corner("Olin Ave", "Library Street", 42.4476, -76.4827),
-    Corner("Campus Rd", "East Ave", 42.4452, -76.4826),
-    Corner("Campus Rd", "Sage Ave", 42.4451, -76.4837)
-]
-
-for dummy_point in dummy_points:
-    db.session.add(dummy_point)
-db.session.commit()
-# end of put in dummy data
 
 @app.route('/') #delet for production
 def index():
