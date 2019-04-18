@@ -146,7 +146,6 @@ export default class UsersMap extends React.Component {
     .catch((error) => {
       console.error(error);
     })
-    console.log("corner_state", corner_state)
     return corner_state
   }
 

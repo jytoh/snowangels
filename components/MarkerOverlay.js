@@ -48,9 +48,7 @@ const MarkerOverlay = (props) => {
 
     async function fetch_state() {
         try {
-          console.log('got here');
           const lastStateJSON = await AsyncStorage.getItem('lastState');
-          console.log(lastStateJSON)
           const lastState = JSON.parse(lastStateJSON);
           userState = {
             signedIn: lastState.signedIn,
@@ -63,10 +61,8 @@ const MarkerOverlay = (props) => {
             num_shovels: lastState.num_shovels,
             points: lastState.points
           }
-          console.log('Got last state');
         }
         catch (error) {
-          console.log('No last state to fetch');
           userState = {
             signedIn: false,
             name: '',
