@@ -148,7 +148,7 @@ class Shoveling(db.Model):
         self.end = end
 # COMMENT THIS OUT WHEN DEPLOYING
 db.reflect()
-# db.drop_all()
+db.drop_all()
 
 
 # db.init_app(app)
