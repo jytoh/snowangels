@@ -194,7 +194,8 @@ const styles = StyleSheet.create({
     color: '#76A1EF',
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop: 24
+    paddingTop: 24,
+    fontFamily: 'Cabin-Bold'
   },
   fliptouchable: {
     flex: 2,
@@ -204,7 +205,8 @@ const styles = StyleSheet.create({
     color: '#76A1EF',
     textAlign: 'center',
     paddingBottom: 24,
-    marginTop: 10
+    marginTop: 10,
+    fontFamily: 'Cabin-Bold'
   },
   image: {
     zIndex: 100,

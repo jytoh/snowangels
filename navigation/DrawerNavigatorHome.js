@@ -27,13 +27,13 @@ const DrawerConfig = {
         return (<MenuDrawer navigation={navigation} />)
     },
 }
-const DrawerNavigator = createDrawerNavigator(
+const DrawerNavigatorHome = createDrawerNavigator(
     {
-        Profile: {
-            screen: ProfileScreen
-        },
         Home: {
             screen: HomeScreen
+        },
+        Profile: {
+            screen: ProfileScreen
         },
         History: {
             screen: HistoryScreen
@@ -52,4 +52,4 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 
-export default createAppContainer(DrawerNavigator);
+export default createAppContainer(DrawerNavigatorHome);

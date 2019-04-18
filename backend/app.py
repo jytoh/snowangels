@@ -17,7 +17,7 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1', #had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': 5432, #the port 5000 option gave problems when testing locally
+    'port': 5433, #the port 5000 option gave problems when testing locally
 }
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 

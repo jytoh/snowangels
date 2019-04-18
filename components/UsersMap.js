@@ -157,7 +157,7 @@ export default class UsersMap extends React.Component {
 const styles = StyleSheet.create({
     mapContainer: {
     width: '100%',
-    height: 800,
+    height: '100%',
     marginTop: 0,
     zIndex: -1
   },

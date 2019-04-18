@@ -16,8 +16,6 @@ export default class ProfileScreen extends React.Component {
         num_shovels: 0,
         points: 0,
     };
-
-
   async componentDidMount() {
     await this.fetch_state();
   };
@@ -49,14 +47,12 @@ export default class ProfileScreen extends React.Component {
   };
 
   async signInWithGoogleAsync() {
-    console.log('pressed');
       try {
         const result = await Expo.Google.logInAsync({
           androidClientId: '144414055124-h8ahrjbhjf2j9icso7qkb7i1s3ceie7k.apps.googleusercontent.com',
           iosClientId: '144414055124-7l2s1hcmt21i37g09s31i62o3nstqn1l.apps.googleusercontent.com',
           scopes: ['profile', 'email'],
         });
-
         if (result.type === 'success') {
           this.setState({
             signedIn: true,
@@ -90,7 +86,6 @@ export default class ProfileScreen extends React.Component {
               },
               body: formBody,
           });
-          console.log('82')
           var details_for_uid = {
                 'google_id': this.state.google_id,
               };
@@ -153,6 +148,7 @@ export default class ProfileScreen extends React.Component {
     console.log(json_state)
     try {
       await AsyncStorage.setItem('lastState', json_state)
+      console.log('state successfully stored, state is now', JSON.parse(json_state).signedIn)
     }
     catch (error){
       console.log('State could not be stored.')
@@ -161,7 +157,6 @@ export default class ProfileScreen extends React.Component {
 
   async fetch_state() {
     try {
-      console.log('got here');
       const lastStateJSON = await AsyncStorage.getItem('lastState');
       console.log(lastStateJSON)
       const lastState = JSON.parse(lastStateJSON);
@@ -195,17 +190,20 @@ export default class ProfileScreen extends React.Component {
   };
 
   async logout() {
-    this.setState({
+    await this.setState({
       signedIn: false,
       name: "",
       photoUrl: "",
       token: "",
       loaded: true,
+      google_id: null,
       num_requests: 0,
       num_shovels: 0,
       points:0
     });
     await this.store_state(this.state);
+    console.log(this.state)
+    console.log('successfully logged out')
   };
 
   render() {
@@ -215,11 +213,10 @@ export default class ProfileScreen extends React.Component {
           {this.state.signedIn ? (
             <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
             num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} points = {this.state.points} 
-            logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} />
+            logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} navigation = {this.props.navigation}/>
           ) : (
             <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
           )}
-          <MenuButton navigation={this.props.navigation} />
         </View>
       );
     }
@@ -274,6 +271,7 @@ const LoggedInPage = props => {
         <Button title="Logout" size='30' color="#FF0000" onPress={() => props.logout()}/>
       </View>
     </View>
+    <MenuButton navigation={props.navigation} />
     </ImageBackground>
   )
 }
@@ -302,15 +300,17 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 40,
+    fontFamily: 'Cabin-Bold'
   },
   text: {
     fontSize: 20,
     paddingTop: 20,
+    fontFamily: 'Cabin-Regular'
   },
   header: {
     paddingTop: 20,
     fontSize: 30,
-    fontWeight: 'bold'
+    fontFamily: 'Cabin-Bold'
   },
   image: {
     width: 100, 
@@ -359,6 +359,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     alignItems: 'center',
+    fontFamily: 'Cabin-Bold',
     paddingTop: 24
   }
 });

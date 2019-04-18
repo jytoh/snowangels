@@ -20,15 +20,12 @@ const MarkerOverlay = (props) => {
         return null;
     }
 
-
-
     return(
         <View style={styles.overlayContainer}>
             <View style={styles.intersectionTextContainer}>
                 <Text style={styles.intersectionText}>{title}</Text>
                 <Button title="Report Shovel"
                  onPress= {async () => {
-
                                     try {
                                         var details = {
                                         'uid': 1,
@@ -57,9 +54,6 @@ const MarkerOverlay = (props) => {
                                     console.log(responseJson2.corner);
                                     console.log(responseJson2.username);
                                     console.log("Report Shovel");
-
-
-
                                     } catch (error) {
                                         console.error(error);
                                     }
