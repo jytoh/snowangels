@@ -482,14 +482,11 @@ def get_requests():
 
 @app.route("/remove_request", methods=['DELETE'])
 def remove_req():
-    uid = request.args.get('uid')
-    cid = request.args.get('cid')
-    reqs = Request.query.filter_by(user_id=uid, corner_id=cid).all()
-    result = []
-    for req in reqs:
-        db.session.delete(req)
-        db.session.commit()
-    return jsonify(user=uid, corner=cid)
+    req_id = request.args.get('id')
+    req = Request.query.filter_by(id=req_id).one()
+    db.session.delete(req)
+    db.session.commit()
+    return jsonify(request=id)
 
 
 @app.route("/corner_street_names", methods=['GET'])
