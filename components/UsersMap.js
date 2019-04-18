@@ -43,6 +43,27 @@ export default class UsersMap extends React.Component {
     this.getUserLocationHandler()
   }
 
+  getFakeCornerDataIfNoCornersAreRetrieved() {
+    return [
+        {
+          'coordinate': {
+            'latitude': 42.4476,
+            'longtitude': -76.4827
+          },
+          'title': "East Ave & Tower Rd",
+          'description': "Single Corner"
+        },
+        {
+          'coordinate': {
+            'latitude': 42.4475,
+            'longtitude': -76.4843
+          },
+          'title': 'Ho Plz & Cornell University St',
+          'description': 'Single Corner'
+        }
+    ]
+  }
+
   /**
    * Fetches the json for the corners in the database
    * The database returns an array with elements of the format {id, lat, lon, street1, street2}
@@ -58,6 +79,11 @@ export default class UsersMap extends React.Component {
     .catch((error) => {
       console.error(error);
     })
+
+    // make fake data if the databse is down
+    if (corner_data == []) {
+      corner_data = getFakeCornerDataIfNoCornersAreRetrieved();
+    }
 
     this.setState({
       markers: corner_data
@@ -99,11 +125,29 @@ export default class UsersMap extends React.Component {
           longitudeDelta: 0.0421
         }
         }
-        pinColor="black"
+        pinColor="blue"
         title="My Location"
       />
       })
     }), err => console.error(err);
+  }
+
+  /**
+   * Checks to see if the marker is shoveled or not
+   * @param  marker
+   * @return [integer] {the marker's state}
+   */
+  async getMarkerState(marker) {
+    var corner_state = await fetch('https://snowangels-api.herokuapp.com/state?cid=' + marker.key)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+    console.log("corner_state", corner_state)
+    return corner_state
   }
 
   displayMarkers() {
@@ -111,10 +155,12 @@ export default class UsersMap extends React.Component {
       return <Text> </Text>
     } else {
       return marker_list = this.state.markers.map((marker, index) => {
+        // this.getMarkerState(marker)
         return (
           <MapView.Marker
             key={index}
             coordinate={{
+              // TODO: have to change longtitude to longitude in backend
               "latitude": marker.coordinate.latitude,
               "longitude": marker.coordinate.longtitude
             }}
@@ -143,12 +189,6 @@ export default class UsersMap extends React.Component {
           {this.displayMarkers()}
           {this.state.userLocationMarker}
         </MapView>
-        {/*<View style={styles.getCornersContainer}>
-          <Button
-            title="Get Corners"
-            onPress={() => this.getAllCorners()}
-          />
-        </View>*/}
       </View>
     );
   }

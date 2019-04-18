@@ -14,7 +14,8 @@ export default class HomeScreen extends React.Component {
 		this.state = {
 			userLocation: null,
 			markerOverlayIsVisible: false,
-			title: null,
+			markerOverlayTitle: null,
+			markerPosition: null,
 			fontLoaded: false
 		}
 	}
@@ -29,6 +30,7 @@ export default class HomeScreen extends React.Component {
 	}
 
 	/**
+	 * DEPRECATED: no need for this function anymore
 	 * test to get olin library fake corner
 	 * @return {[type]} [description]
 	 */
@@ -89,15 +91,26 @@ export default class HomeScreen extends React.Component {
 	 * toggles the visibility of modal visible
 	 */
 	setModalVisibility(isVisible) {
+		// this.setState isn't working
 		this.setState({
 			markerOverlayIsVisible: isVisible
 		});
+		// but this is working, for some reason
+		this.state.markerOverlayIsVisible = isVisible
 	}
 
+	/**
+	 * Sets the state for all the appropriate marker overlay information
+	 * @param {[type]} marker [description]
+	 */
 	setModalMetaData(marker) {
+		console.log("setModalMetaData", marker)
 		this.setState({
-			title: marker.title
+			markerOverlayTitle: marker.title,
+			markerPosition: marker.coordinate
 		});
+		this.state.markerOverlayTitle = marker.title
+		this.state.markerPosition = marker.coordinate
 	}
 
 	getUserLocationHandler() {
@@ -122,7 +135,13 @@ export default class HomeScreen extends React.Component {
 			<View style={styles.container}>
 				<MenuButton navigation={this.props.navigation} />
 				<View style={styles.mapContainer}>
-				<MarkerOverlay title={this.state.title} visible={this.state.markerOverlayIsVisible} setModalVisibility={this.setModalVisibility}/>
+				<MarkerOverlay
+					title={this.state.markerOverlayTitle}
+					markerPosition={this.state.markerPosition}
+					visible={this.state.markerOverlayIsVisible}
+					setModalVisibility={this.setModalVisibility}
+					userLocation={this.state.userLocation}
+					navigation={this.props.navigation}/>
 				<UsersMap
 					userLocation={this.state.userLocation}
 					setModalVisibility={this.setModalVisibility}
