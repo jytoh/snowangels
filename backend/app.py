@@ -472,7 +472,8 @@ def get_requests():
     result = []
     for req in reqs:
         corner = Corner.query.filter_by(id=req.corner_id).first()
-        result.append({'corner_id': req.corner_id,
+        result.append({'request_id': req.id,
+                       'corner_id': req.corner_id,
                        'street1': corner.street1,
                        'street2': corner.street2,
                        'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
