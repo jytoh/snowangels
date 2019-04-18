@@ -26,13 +26,13 @@ export default class ProfileScreen extends React.Component {
     var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
     console.log(user_id)
     let response_request = await fetch(
-      'http://127.0.0.1:5000/num_requests?uid=' + user_id
+      'https://snowangels-api.herokuapp.com/num_requests?uid=' + user_id
     );
     let response_shovel = await fetch(
-      'http://127.0.0.1:5000/num_shovels?uid=' + user_id
+      'https://snowangels-api.herokuapp.com/num_shovels?uid=' + user_id
     );
     let response_points = await fetch(
-      'http://127.0.0.1:5000/num_points?uid=' + user_id
+      'https://snowangels-api.herokuapp.com/num_points?uid=' + user_id
     );
     let response1Json = await response_request.json();
     let response2Json = await response_shovel.json();
@@ -83,7 +83,7 @@ export default class ProfileScreen extends React.Component {
             formBody.push(encodedKey + "=" + encodedValue);
           }
           formBody = formBody.join("&");
-          let response = await fetch('http://127.0.0.1:5000/register_user', {
+          let response = await fetch('https://snowangels-api.herokuapp.com/register_user', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -101,7 +101,7 @@ export default class ProfileScreen extends React.Component {
             formBody_for_uid.push(encodedKey_for_uid + "=" + encodedValue_for_uid);
           }
           formBody_for_uid = formBody_for_uid.join("&");
-          let response_for_uid = await fetch('http://127.0.0.1:5000/googleid_to_uid', {
+          let response_for_uid = await fetch('https://snowangels-api.herokuapp.com/googleid_to_uid', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -114,13 +114,13 @@ export default class ProfileScreen extends React.Component {
 
 
           let response_request = await fetch(
-            'http://127.0.0.1:5000/num_requests?uid=' + responseJson_for_uid.uid.toString()
+            'https://snowangels-api.herokuapp.com/num_requests?uid=' + responseJson_for_uid.uid.toString()
           );
           let response_shovel = await fetch(
-            'http://127.0.0.1:5000/num_shovels?uid=' + responseJson_for_uid.uid.toString()
+            'https://snowangels-api.herokuapp.com/num_shovels?uid=' + responseJson_for_uid.uid.toString()
           );
           let response_points = await fetch(
-            'http://127.0.0.1:5000/num_points?uid=' + responseJson_for_uid.uid.toString()
+            'https://snowangels-api.herokuapp.com/num_points?uid=' + responseJson_for_uid.uid.toString()
           );
           let response1Json = await response_request.json();
           let response2Json = await response_shovel.json();
