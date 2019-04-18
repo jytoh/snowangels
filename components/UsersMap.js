@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Button, Modal, Text } from 'react-native';
 import MapView from 'react-native-maps';
 import MarkerOverlay from '../components/MarkerOverlay';
+import LocationMarkerPicture from '../assets/LocationMarkerPicture.png'
 //var RNFS = require('react-native-fs');
 
 export default class UsersMap extends React.Component {
@@ -26,7 +27,10 @@ export default class UsersMap extends React.Component {
       markers: [],
 
       // The marker for the user's location
-      userLocationMarker: null
+      userLocationMarker: null,
+
+      // circle around user location marker
+      userLocationCircle: null
     }
     this.getAllCorners()
     this.getUserLocationHandler()
@@ -111,8 +115,8 @@ export default class UsersMap extends React.Component {
         userLocation: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-          latitudeDelta: 0.0622,
-          longitudeDelta: 0.0421
+          latitudeDelta: 0.0322,
+          longitudeDelta: 0.0221
         }
       })
       this.setState({
@@ -121,13 +125,26 @@ export default class UsersMap extends React.Component {
           {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-          latitudeDelta: 0.0622,
-          longitudeDelta: 0.0421
+          latitudeDelta: 0.0322,
+          longitudeDelta: 0.0221
         }
         }
-        pinColor="blue"
+        image={LocationMarkerPicture}
         title="My Location"
       />
+      })
+      this.setState({
+        userLocationCircle: <MapView.Circle
+          center={
+            {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            }
+          }
+          radius={100}
+          strokeColor={'rgba(203, 217, 238, 0.7)'}
+          fillColor={'rgba(203, 217, 238, 0.4)'}
+        />
       })
     }), err => console.error(err);
   }
@@ -178,8 +195,8 @@ export default class UsersMap extends React.Component {
           initialRegion={{
             latitude: 42.4451,
             longitude: -76.4837,
-            latitudeDelta: 0.0622,
-            longitudeDelta: 0.0421
+            latitudeDelta: 0.0081,
+            longitudeDelta: 0.0081
           }}
           region={this.state.region}
           onRegionChange={() => this.onRegionChange()}
@@ -187,6 +204,7 @@ export default class UsersMap extends React.Component {
         >
           {this.displayMarkers()}
           {this.state.userLocationMarker}
+          {this.state.userLocationCircle}
         </MapView>
       </View>
     );
