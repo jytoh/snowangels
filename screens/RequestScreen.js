@@ -89,7 +89,7 @@ export default class RequestScreen extends React.Component {
                     (<TouchableWithoutFeedback
                         onPress={() => this.al(item.request_id)}>
                         <View style={styles.row}>
-                            <Text>
+                            <Text style={{ fontSize: 15, fontFamily: 'Cabin-Bold', color: 'white', paddingTop: 20}}>
                                 {"Corner id: " + item.corner_id} {"\nStreet" +
                             " 1: " + item.street2}{"\nStreet 2: " + item.street1}
                                 {"\n" + item.time}
