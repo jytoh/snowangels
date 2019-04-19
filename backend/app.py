@@ -623,38 +623,19 @@ def get_num_users():
     users = User.query.all()
     return len(users)
 
-def get_user_with_points(id):
-    #query = db.session.query(
-    #User.id,
-    #User.user_id,
-    #User.name,
-    #User.photourl,
-    #Point.day_pts,
-    #Point.week_pts,
-    #Point.szn_pts)
-    #join = query.join(Point.user_id == User.id).filter(User.id == id)
-    query = db.session.query(User).join(User.point).filter(User.id ==id)
-    return query.all()
-
-def get_user_with_points_alt(id):
-    query = db.session.query(
-    User.id,
-    User.user_id,
-    User.name,
-    User.photourl,
-    Point.day_pts,
-    Point.week_pts,
-    Point.szn_pts)
-    join = query.join(Point.user_id == User.id).filter(User.id == id)
-    #query = db.session.query(User).join(User.point).filter(User.id ==id)
-    return query.all()
 
 
 @app.route("/get_user", methods=['GET'])
 def get_user():
     id = request.values.get('id')
-    uid= User.query.filter_by(id=id).first().id
-    return jsonify(user = get_user_with_points(uid))
+    usr= User.query.filter_by(id=id).first()
+    uid = usr.id
+    pnt = Point.query.filter_by(user_id=uid).first()
+
+    return jsonify(id = uid, google_id = usr.google_id, name = usr.name,
+                   photourl = usr.photourl, token = usr.token, day_pts =
+                   pnt.day_pts, week_pts = pnt.week_pts, szn_pts =
+                   pnt.szn_pts, after_pics = pnt.after_pics)
 
 #get specific user
 @app.route("/get_all_users", methods=['GET'])
@@ -662,7 +643,12 @@ def get_all_users():
     us = []
     users = User.query.all()
     for u in users:
-        us.append(get_user_with_points(u.id))
+        uid = u.id
+        pnt = Point.query.filter_by(user_id=uid).first()
+        us.append({"id":uid, "google_id":u.google_id, "name":u.name,
+                   "photourl":u.photourl,"token":u.token,
+                   "day_pts":pnt.day_pts, "week_pts":pnt.week_pts,
+                   "szn_pts":pnt.szn_pts, "after_pics":pnt.after_pics})
     return jsonify(users = us)
 
 # @app.before_request
