@@ -27,7 +27,6 @@ const MarkerOverlay = (props) => {
         return null;
     }
 
-<<<<<<< HEAD
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween
      * meters away
@@ -118,51 +117,12 @@ const MarkerOverlay = (props) => {
         }
     }
 
-=======
->>>>>>> cathy-getting-to-master
     return(
         <View style={styles.overlayContainer}>
             <View style={styles.intersectionTextContainer}>
                 <Text style={styles.intersectionText}>{title}</Text>
                 <Button title="Report Shovel"
-<<<<<<< HEAD
                  onPress= {reportShovel}
-=======
-                 onPress= {async () => {
-                                    try {
-                                        var details = {
-                                        'uid': 1,
-                                        'cid': 1,
-                                        'before_pic': "a",
-                                      };
-
-                                    var formBody = [];
-                                    for (var property in details) {
-                                        var encodedKey = encodeURIComponent(property);
-                                        var encodedValue = encodeURIComponent(details[property]);
-                                        formBody.push(encodedKey + "=" + encodedValue);
-                                    }
-                                    formBody = formBody.join("&");
-                                    let response2 = await fetch('http://127.0.0.1:5000/new_request', {
-                                          method: 'POST',
-                                          headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded',
-                                          },
-                                          body: formBody,
-                                        });
-                                    let responseJson2 = await response2.json();
-
-                                    console.log(responseJson2);
-                                    console.log(responseJson2.user);
-                                    console.log(responseJson2.corner);
-                                    console.log(responseJson2.username);
-                                    console.log("Report Shovel");
-                                    } catch (error) {
-                                        console.error(error);
-                                    }
-                                }
-                                    }
->>>>>>> cathy-getting-to-master
                 />
                 <Button
                     title="Start Shovel"

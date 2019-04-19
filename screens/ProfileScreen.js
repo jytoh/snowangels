@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons'
 import MenuButton from '../components/MenuButton'
 import { MailComposer } from 'expo';
 
-
 export default class ProfileScreen extends React.Component {
   state = {
         signedIn: false,
@@ -225,7 +224,8 @@ export default class ProfileScreen extends React.Component {
           {this.state.signedIn ? (
             <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
             num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} points = {this.state.points} 
-            logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} give_feedback= {this.give_feedback.bind(this)} />
+            logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} give_feedback= {this.give_feedback.bind(this)}
+            navigation = {this.props.navigation} />
           ) : (
             <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
           )}
