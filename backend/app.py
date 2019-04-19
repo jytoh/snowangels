@@ -372,7 +372,10 @@ dummy_profiles= [
     User('name3','gid3','333','token3'),
     Point(1),
     Point(2),
-    Point(3)
+    Point(3),
+    Point(4),
+    Point(5),
+    Point(6)
 ]
 for prof in dummy_profiles:
     db.session.add(prof)
