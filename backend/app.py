@@ -356,30 +356,30 @@ def validate_shovel():
         #return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
 
 
-#dummy test for user history
-dummy_profiles= [
-    Corner('Wyckoff St','Heights Court',42.4550874247821,-76.4838560729503),
-    Corner('Wyckoff St','Dearborn Pl',42.4552301688275,-76.4839151377581),
-    Corner('Woodcrest Terrace','Woodcrest Ave',42.4332223831747,-76.4747075168164),
-    Corner('Willow Ave','Pier Rd',42.4534911735782,-76.5062921053108),
-    Corner('Willet Pl','E Buffalo St',42.4414896398069,-76.4928359378613),
-    Request(1,2,'aaa'),
-    Request(2,5,'bbb'),
-    Request(3,3,'ccc'),
-    Request(1,4,'ddd'),
-    User('name1','gid1','111','token1'),
-    User('name2','gid2','222','token2'),
-    User('name3','gid3','333','token3'),
-    Point(1),
-    Point(2),
-    Point(3),
-    Point(4),
-    Point(5),
-    Point(6)
-]
-for prof in dummy_profiles:
-    db.session.add(prof)
-db.session.commit()
+# #dummy test for user history
+# dummy_profiles= [
+#     Corner('Wyckoff St','Heights Court',42.4550874247821,-76.4838560729503),
+#     Corner('Wyckoff St','Dearborn Pl',42.4552301688275,-76.4839151377581),
+#     Corner('Woodcrest Terrace','Woodcrest Ave',42.4332223831747,-76.4747075168164),
+#     Corner('Willow Ave','Pier Rd',42.4534911735782,-76.5062921053108),
+#     Corner('Willet Pl','E Buffalo St',42.4414896398069,-76.4928359378613),
+#     Request(1,2,'aaa'),
+#     Request(2,5,'bbb'),
+#     Request(3,3,'ccc'),
+#     Request(1,4,'ddd'),
+#     User('name1','gid1','111','token1'),
+#     User('name2','gid2','222','token2'),
+#     User('name3','gid3','333','token3'),
+#     Point(1),
+#     Point(2),
+#     Point(3),
+#     Point(4),
+#     Point(5),
+#     Point(6)
+# ]
+# for prof in dummy_profiles:
+#     db.session.add(prof)
+# db.session.commit()
 
 
 #get info for user history, in the form (User id, User name, Address of shovel, Time of shovel)
