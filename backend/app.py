@@ -26,7 +26,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d276
 
 #added this to not keep restarting
 # app.config['DEBUG'] = False
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # initialize the database connection
 db = SQLAlchemy(app)
 
