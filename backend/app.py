@@ -370,9 +370,9 @@ dummy_profiles= [
     User('name1','gid1','111','token1'),
     User('name2','gid2','222','token2'),
     User('name3','gid3','333','token3'),
-    Point('1'),
-    Point('2'),
-    Point('3'),
+    Point(1),
+    Point(2),
+    Point(3)
 
 ]
 
