@@ -26,7 +26,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d276
 
 #added this to not keep restarting
 # app.config['DEBUG'] = False
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # initialize the database connection
 db = SQLAlchemy(app)
 
@@ -369,18 +369,8 @@ dummy_profiles= [
     Request(1,4,'ddd'),
     User('name1','gid1','111','token1'),
     User('name2','gid2','222','token2'),
-    User('name3','gid3','333','token3'),
-    Point(1),
-    Point(2),
-    Point(3)
-
+    User('name3','gid3','333','token3')
 ]
-
-# self.day_pts = 0
-#         self.week_pts = 0
-#         self.szn_pts = 0
-#         self.after_pics = []
-#         self.user_id=id
 for prof in dummy_profiles:
     db.session.add(prof)
 db.session.commit()
@@ -623,33 +613,47 @@ def get_num_users():
     users = User.query.all()
     return len(users)
 
+def get_user_with_points(id):
+    #query = db.session.query(
+    #User.id,
+    #User.user_id,
+    #User.name,
+    #User.photourl,
+    #Point.day_pts,
+    #Point.week_pts,
+    #Point.szn_pts)
+    #join = query.join(Point.user_id == User.id).filter(User.id == id)
+    query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
+
+def get_user_with_points_alt(id):
+    query = db.session.query(
+    User.id,
+    User.user_id,
+    User.name,
+    User.photourl,
+    Point.day_pts,
+    Point.week_pts,
+    Point.szn_pts)
+    join = query.join(Point.user_id == User.id).filter(User.id == id)
+    #query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
 
 
-# @app.route("/get_user", methods=['GET'])
-# def get_user():
-#     id = request.values.get('id')
-#     usr= User.query.filter_by(id=id).first()
-#     uid = usr.id
-#     pnt = Point.query.filter_by(user_id=uid).first()
-#
-#     return jsonify(id = uid, google_id = usr.google_id, name = usr.name,
-#                    photourl = usr.photourl, token = usr.token, day_pts =
-#                    pnt.day_pts, week_pts = pnt.week_pts, szn_pts =
-#                    pnt.szn_pts, after_pics = pnt.after_pics)
-#
-# #get specific user
-# @app.route("/get_all_users", methods=['GET'])
-# def get_all_users():
-#     us = []
-#     users = User.query.all()
-#     for u in users:
-#         uid = u.id
-#         pnt = Point.query.filter_by(user_id=uid).first()
-#         us.append({"id":uid, "google_id":u.google_id, "name":u.name,
-#                    "photourl":u.photourl,"token":u.token,
-#                    "day_pts":pnt.day_pts, "week_pts":pnt.week_pts,
-#                    "szn_pts":pnt.szn_pts, "after_pics":pnt.after_pics})
-#     return jsonify(users = us)
+@app.route("/get_user", methods=['GET'])
+def get_user():
+    id = request.values.get('id')
+    uid= User.query.filter_by(id=id).first().id
+    return jsonify(user = get_user_with_points(uid))
+
+#get specific user
+@app.route("/get_all_users", methods=['GET'])
+def get_all_users():
+    us = []
+    users = User.query.all()
+    for u in users:
+        us.append(get_user_with_points(u.id))
+    return jsonify(users = us)
 
 # @app.before_request
 # def authenticate():
