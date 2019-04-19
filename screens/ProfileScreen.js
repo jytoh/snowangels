@@ -9,7 +9,7 @@ import { MailComposer } from 'expo';
 export default class ProfileScreen extends React.Component {
   state = {
         signedIn: false,
-        user_id: 0,
+        uid: 0,
         name: "",
         photoUrl: "",
         token: "",
@@ -26,13 +26,13 @@ export default class ProfileScreen extends React.Component {
     //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
     //console.log(user_id)
     let response_request = await fetch(
-      'https://snowangels-api.herokuapp.com/num_requests?uid=' + this.state.user_id
+      'https://snowangels-api.herokuapp.com/num_requests?uid=' + this.state.uid
     );
     let response_shovel = await fetch(
-      'https://snowangels-api.herokuapp.com/num_shovels?uid=' + this.state.user_id
+      'https://snowangels-api.herokuapp.com/num_shovels?uid=' + this.state.uid
     );
     let response_points = await fetch(
-      'https://snowangels-api.herokuapp.com/num_points?uid=' + this.state.user_id
+      'https://snowangels-api.herokuapp.com/num_points?uid=' + this.state.uid
     );
     let response1Json = await response_request.json();
     let response2Json = await response_shovel.json();
@@ -138,7 +138,7 @@ export default class ProfileScreen extends React.Component {
           });
 
           await SecureStore.setItemAsync('token', result.accessToken)
-          await this.setState({user_id: responseJson_for_uid.uid.toString()});
+          await this.setState({uid: responseJson_for_uid.uid.toString()});
           await this.store_state(this.state);
           this.refresh();
           // SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
@@ -159,7 +159,7 @@ export default class ProfileScreen extends React.Component {
     try {
       await AsyncStorage.setItem('lastState', json_state)
       console.log('state successfully stored, state is now', JSON.parse(json_state).signedIn)
-      console.log('user ID successfully store, it is now ',JSON.parse(json_state).user_id)
+      console.log('user ID successfully store, it is now ',JSON.parse(json_state).uid)
     }
     catch (error){
       console.log('State could not be stored.')

@@ -17,18 +17,16 @@ export default class CameraScreen extends React.Component {
         imageUri: null,
         type: Camera.Constants.Type.back,
         b64: null,
-        user_id: null,
     };
 
     async componentDidMount() {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
       this.setState({ hasPermission: status === 'granted' });
-      await this.fetch_state();
+      //await this.fetch_state();
     };
 
     
     async capturePicture() {
-      console.log('made it to capture!')
       if (this.camera){
         let pic = await this.camera.takePictureAsync({base64 : true})
         .then(pic => this.setState({imageUri : pic.uri, b64: pic.base64, bytea: pic.base64.toByteArray, hash: shorthash.unique(pic.base64)}),
@@ -45,7 +43,8 @@ export default class CameraScreen extends React.Component {
       else {console.log('doesnt enter')}
     };
 
-    async uploadPicture() {
+    async uploadPicture(uid) {
+      console.log('from upload picture', uid)
       console.log("hi1 " + this.state.imageUri);        
       console.log("hi2 " + this.state.bytea);
       console.log("hi3 " + this.state.b64);
@@ -67,7 +66,7 @@ export default class CameraScreen extends React.Component {
         console.log(this.state.hash);
         //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
         var details = {
-          'uid' : this.state.user_id,
+          'uid' : uid,
           'cid' : 1, //hardcoding for now
           'before_pic' : this.state.hash,
         };
@@ -78,7 +77,6 @@ export default class CameraScreen extends React.Component {
           formBody.push(encodedKey + "=" + encodedValue);
         } ;
         formBody = formBody.join("&");
-        console.log('made it to line 70');
         let response = await fetch('https://snowangels-api.herokuapp.com/new_request', {
             method: 'POST',
             headers: {
@@ -86,32 +84,33 @@ export default class CameraScreen extends React.Component {
             },
             body: formBody,
           });
-        console.log('made it to line 62');
       } catch(error) {
         console.log('error!');
       }
     }
 
-    async fetch_state() {
-      try {
-        const lastStateJSON = await AsyncStorage.getItem('lastState');
-        console.log(lastStateJSON)
-        const lastState = JSON.parse(lastStateJSON);
-        this.setState({
-          user_id: lastState.user_id,
-        });
-        console.log('Got last state');
-      }
-      catch (error) {
-        console.log('No last state to fetch');
-        this.setState({
-          user_id: null,
-        })
-      }
-    };
+    // async fetch_state() {
+    //   try {
+    //     const lastStateJSON = await AsyncStorage.getItem('lastState');
+    //     console.log(lastStateJSON)
+    //     const lastState = JSON.parse(lastStateJSON);
+    //     this.setState({
+    //       user_id: lastState.user_id,
+    //     });
+    //     console.log('Got last state');
+    //   }
+    //   catch (error) {
+    //     console.log('No last state to fetch');
+    //     this.setState({
+    //       user_id: null,
+    //     })
+    //   }
+    // };
     
     render() {
-        console.log('from camera: user id is', this.state.user_id)
+        const { navigation } = this.props;
+        const uid = navigation.getParam('uid', 0);
+        console.log('camera state, uid =',uid)
         const { hasPermission } = this.state;
         const { imageUri }  = this.state;
         if (hasPermission === null) {
@@ -121,7 +120,6 @@ export default class CameraScreen extends React.Component {
         } else {
             if (this.state.imageUri) {
               console.log(this.state.imageUri);
-              //console.log(this.state.b64);
               return (
               <View style={styles.container}>
                 <Image style={styles.image} 
@@ -129,7 +127,7 @@ export default class CameraScreen extends React.Component {
                 <View style={styles.bottombar}>
                 <TouchableOpacity 
                 style={styles.uploadphototouchable}
-                onPress = {() => {this.uploadPicture(); this.props.navigation.navigate('Home');} }>
+                onPress = {() => {this.uploadPicture(uid); this.props.navigation.navigate('Home');} }>
                 <Text
                   style={styles.takephoto}>
                   {' '}Upload Photo{' '}

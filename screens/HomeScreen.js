@@ -16,7 +16,9 @@ export default class HomeScreen extends React.Component {
 			markerOverlayIsVisible: false,
 			markerOverlayTitle: null,
 			markerPosition: null,
-			fontLoaded: false
+			fontLoaded: false,
+			signedIn: false,
+			uid: 0,
 		}
 	}
 
@@ -26,6 +28,10 @@ export default class HomeScreen extends React.Component {
 		  'Cabin-Bold': require('../assets/fonts/Cabin-Bold.ttf')
 		});
 		this.setState({fontLoaded : true});
+		await this.fetch_state();
+		console.log('home screen state',this.state.signedIn)
+		console.log('home screen uid',this.state.uid)
+
 	}
 
 	/**
@@ -77,6 +83,22 @@ export default class HomeScreen extends React.Component {
 		}, err => console.log(err));
 	}
 
+	async fetch_state() {
+        try {
+          const lastStateJSON = await AsyncStorage.getItem('lastState');
+		  const lastState = await JSON.parse(lastStateJSON);
+          this.setState({
+			signedIn: lastState.signedIn,
+			uid: lastState.user_id,
+		  });
+        }
+        catch (error) {
+          userState = {
+            signedIn: false,
+          }
+        }
+      };
+
 	render() {
 		if( !this.state.fontLoaded ) {
 			return (<AppLoading/>
@@ -92,7 +114,9 @@ export default class HomeScreen extends React.Component {
 					visible={this.state.markerOverlayIsVisible}
 					setModalVisibility={this.setModalVisibility}
 					userLocation={this.state.userLocation}
-					navigation={this.props.navigation}/>
+					navigation={this.props.navigation}
+					signedIn={this.state.signedIn}
+					uid={this.state.uid}/>
 				<UsersMap
 					userLocation={this.state.userLocation}
 					setModalVisibility={this.setModalVisibility}

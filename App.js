@@ -10,7 +10,7 @@ export default class App extends React.Component {
   state = {
       fontLoaded: false,
       signedIn: null,
-      user_id: null,
+      uid: null,
   }
 
   async componentDidMount() {
@@ -29,7 +29,7 @@ export default class App extends React.Component {
       const lastState = JSON.parse(lastStateJSON);
       this.setState({
         signedIn: lastState.signedIn,
-        user_id: lastState.user_id
+        uid: lastState.uid
       });
       console.log('Got last state');
     }
@@ -43,7 +43,7 @@ export default class App extends React.Component {
 
   render() {
     console.log("app.js signedIn =", this.state.signedIn)
-    console.log("app.js user id =", this.state.user_id)
+    console.log("app.js user id =", this.state.uid)
     if ( !this.state.fontLoaded ) {
       return (
       <View>

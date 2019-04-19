@@ -14,18 +14,16 @@ const MarkerOverlay = (props) => {
      * visible: visibility of the marker
      */
     const { title, visible, setModalVisibility,
-        userLocation, markerPosition, navigation } = props;
-
-    var userState = null
+        userLocation, markerPosition, navigation, signedIn, uid } = props;
 
     var isNearCorner = null;
 
     // maximum meters you are allowed to be from corner to report or start shovel
-    const maxMetersAwayFromCorner = 10;
-
+    const maxMetersAwayFromCorner = 400;
+  
     if (!visible) {
         return null;
-    }
+    };
 
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween
@@ -61,52 +59,28 @@ const MarkerOverlay = (props) => {
         return isNearThreshold(userPosition, markerPosition)
     }
 
-    async function fetch_state() {
-        try {
-          const lastStateJSON = await AsyncStorage.getItem('lastState');
-          const lastState = JSON.parse(lastStateJSON);
-          userState = {
-            signedIn: lastState.signedIn,
-            name: lastState.name,
-            photoUrl: lastState.photoUrl,
-            google_id: lastState.google_id,
-            token: lastState.token,
-            loaded: true,
-            num_requests: lastState.num_requests,
-            num_shovels: lastState.num_shovels,
-            points: lastState.points
-          }
-        }
-        catch (error) {
-          userState = {
-            signedIn: false,
-            name: '',
-            photoUrl: '',
-            google_id: '',
-            token: '',
-            loaded: true,
-            num_requests: 0,
-            num_shovels: 0,
-            points:0,
-          }
-        }
-      };
-
     /**
      * Returns whether the user is logged in
      * UNIMPLEMENTED
      * @return {boolean}
      */
-    async function checkIfUserIsLoggedIn() {
-        await fetch_state()
-        // change to userState.signedin later
-        return !userState.signedIn
-    }
+    // async function checkIfUserIsLoggedIn() {
+    //     await fetch_state()
+    //     // change to userState.signedin later
+    //     return userState.signedIn
+    // }
 
     async function reportShovel()
     {
-        if (await userIsNearCorner() && await checkIfUserIsLoggedIn()) {
-            navigation.navigate('Camera')
+        const a = await userIsNearCorner();
+        console.log('user is near corner?',a)
+        console.log('user is singed in?',signedIn)
+        console.log('user id is',uid)
+        if (await userIsNearCorner() && signedIn) {
+            navigation.navigate('Camera', {
+                uid: uid,
+              });
+            //navigation.navigate('Camera')
         }
     }
 
