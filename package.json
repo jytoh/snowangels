@@ -7,7 +7,9 @@
     "eject": "expo eject"
   },
   "rnpm": {
-    "assets": ["./assets/fonts"]
+    "assets": [
+      "./assets/fonts"
+    ]
   },
   "dependencies": {
     "base-64": "^0.1.0",
@@ -21,6 +23,7 @@
     "react-native-elements": "^1.1.0",
     "react-native-leaderboard": "^1.0.5",
     "react-native-maps": "^0.23.0",
+    "react-native-touchable-scale": "^2.0.0",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.3.2",
     "shorthash": "0.0.2",

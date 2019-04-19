@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppRegistry, FlatList, StyleSheet, Text, View } from 'react-native';
 import { Icon, ListItem } from "react-native-elements";
-
+import TouchableScale from 'react-native-touchable-scale';
 
 const list = [
   {
@@ -27,29 +27,59 @@ const list = [
   }
 ]
 
-
-// const list = [
-//   {
-//     title: 'Appointments',
-//     icon: 'av-timer'
-//   },
-//   {
-//     title: 'Trips',
-//     icon: 'flight-takeoff'
-//   },
-// ]
-
-
 export default class ListOfShovels extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [] };
+  }
+
+  // state = {
+  //   data: [],
+  //   loading: false,
+  // }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = async () => {
+    const response = await fetch("https://snowangels-api.herokuapp.com/get_user_history");
+    const json = await response.json();
+    console.log(json);
+    console.log("/////");
+    this.setState = { data: json };
+    console.log(this.setState);
+    return json
+
+  }
   keyExtractor = (item, index) => index.toString()
+
+  // getSpecificUser(arr, uid) {
+  //   user_shovels = [];
+  //   for (let userObject of arr) {
+  //     if (userObject.uid == uid) {
+
+  //     }
+  //   }
+  // }
 
   renderItem = ({ item }) => (
     <ListItem
       title={item.name}
-      titleStyle={{fontFamily: 'Cabin-Bold',}}
+      titleStyle={{ fontFamily: 'Cabin-Bold', }}
       subtitle={item.subtitle}
-      subtitleStyle={{fontFamily: 'Cabin-Regular',}}
-      // leftAvatar={{ source: { uri: item.avatar_url } }}
+      subtitleStyle={{ fontFamily: 'Cabin-Regular', }}
+      Component={TouchableScale}
+      friction={90} //
+      tension={100} // These props are passed to the parent component (TouchableScale)
+      activeScale={0.95} //
+      // chevronColor="black"
+      linearGradientProps={{
+        colors: ['#76A1EF', '#FFFFFF'],
+        start: [1, 0],
+        end: [0.2, 0],
+      }}
+      chevron
       leftIcon={{
         reverse: true,
         color: '#d1e1f8',
@@ -74,10 +104,11 @@ export default class ListOfShovels extends React.Component {
   render() {
     return (
       <FlatList
+
         keyExtractor={this.keyExtractor}
         data={list}
         renderItem={this.renderItem}
-        style={{ width: 400 }}
+        style={{ width: 375 }}
         ItemSeparatorComponent={this.renderSeparator}
       />
 
@@ -92,6 +123,8 @@ export default class ListOfShovels extends React.Component {
       //     ))
       //   }
       // </View>
+
+
     )
   }
 }
