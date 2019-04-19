@@ -10,6 +10,7 @@ import { MailComposer } from 'expo';
 export default class ProfileScreen extends React.Component {
   state = {
         signedIn: false,
+        user_id: 0,
         name: "",
         photoUrl: "",
         token: "",
@@ -23,8 +24,8 @@ export default class ProfileScreen extends React.Component {
   };
   
   async refresh() {
-    var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-    console.log(user_id)
+    //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+    //console.log(user_id)
     let response_request = await fetch(
       'https://snowangels-api.herokuapp.com/num_requests?uid=' + user_id
     );
@@ -137,9 +138,9 @@ export default class ProfileScreen extends React.Component {
             points: response3Json.points
           });
 
-          await this.store_state(this.state);
           await SecureStore.setItemAsync('token', result.accessToken)
-          await SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString())
+          await this.setState({user_id: responseJson_for_uid.uid.toString()});
+          await this.store_state(this.state);
           this.refresh();
           // SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
           console.log(this.state.name);
@@ -159,6 +160,7 @@ export default class ProfileScreen extends React.Component {
     try {
       await AsyncStorage.setItem('lastState', json_state)
       console.log('state successfully stored, state is now', JSON.parse(json_state).signedIn)
+      console.log('user ID successfully store, it is now ',JSON.parse(json_state).user_id)
     }
     catch (error){
       console.log('State could not be stored.')

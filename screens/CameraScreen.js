@@ -17,11 +17,13 @@ export default class CameraScreen extends React.Component {
         imageUri: null,
         type: Camera.Constants.Type.back,
         b64: null,
+        user_id: null,
     };
 
     async componentDidMount() {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
       this.setState({ hasPermission: status === 'granted' });
+      await this.fetch_state();
     };
 
     
@@ -62,12 +64,10 @@ export default class CameraScreen extends React.Component {
       // let match = /\.(\w+)$/.exec(filename);
       // let type = match ? `image/${match[1]}` : `image`;
       try {
-        console.log('clicked upload picture');
         console.log(this.state.hash);
-        var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-        console.log()
+        //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
         var details = {
-          'uid' : user_id,
+          'uid' : this.state.user_id,
           'cid' : 1, //hardcoding for now
           'before_pic' : this.state.hash,
         };
@@ -92,7 +92,26 @@ export default class CameraScreen extends React.Component {
       }
     }
 
+    async fetch_state() {
+      try {
+        const lastStateJSON = await AsyncStorage.getItem('lastState');
+        console.log(lastStateJSON)
+        const lastState = JSON.parse(lastStateJSON);
+        this.setState({
+          user_id: lastState.user_id,
+        });
+        console.log('Got last state');
+      }
+      catch (error) {
+        console.log('No last state to fetch');
+        this.setState({
+          user_id: null,
+        })
+      }
+    };
+    
     render() {
+        console.log('from camera: user id is', this.state.user_id)
         const { hasPermission } = this.state;
         const { imageUri }  = this.state;
         if (hasPermission === null) {
