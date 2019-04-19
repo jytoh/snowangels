@@ -2,12 +2,14 @@ import React from 'react';
 import { Image, Button, StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { SecureStore } from 'expo';
 import {AsyncStorage} from 'react-native';
-import { Ionicons } from '@expo/vector-icons'
-import MenuButton from '../components/MenuButton'
+import { Ionicons } from '@expo/vector-icons';
+import MenuButton from '../components/MenuButton';
+import App from '../App.js'
 
 export default class ProfileScreen extends React.Component {
   state = {
         signedIn: false,
+        user_id: 0,
         name: "",
         photoUrl: "",
         token: "",
@@ -21,16 +23,16 @@ export default class ProfileScreen extends React.Component {
   };
   
   async refresh() {
-    var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-    console.log(user_id)
+    //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+    //console.log(user_id)
     let response_request = await fetch(
-      'http://127.0.0.1:5000/num_requests?uid=' + user_id
+      'http://127.0.0.1:5000/num_requests?uid=' + this.state.user_id
     );
     let response_shovel = await fetch(
-      'http://127.0.0.1:5000/num_shovels?uid=' + user_id
+      'http://127.0.0.1:5000/num_shovels?uid=' + this.state.user_id
     );
     let response_points = await fetch(
-      'http://127.0.0.1:5000/num_points?uid=' + user_id
+      'http://127.0.0.1:5000/num_points?uid=' + this.sttate.user_id
     );
     let response1Json = await response_request.json();
     let response2Json = await response_shovel.json();
@@ -127,9 +129,9 @@ export default class ProfileScreen extends React.Component {
             points: response3Json.points
           });
 
-          await this.store_state(this.state);
           await SecureStore.setItemAsync('token', result.accessToken)
-          await SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString())
+          await this.setState({user_id: responseJson_for_uid.uid.toString()});
+          await this.store_state(this.state);
           this.refresh();
           // SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
           console.log(this.state.name);
@@ -149,6 +151,7 @@ export default class ProfileScreen extends React.Component {
     try {
       await AsyncStorage.setItem('lastState', json_state)
       console.log('state successfully stored, state is now', JSON.parse(json_state).signedIn)
+      console.log('user ID successfully store, it is now ',JSON.parse(json_state).user_id)
     }
     catch (error){
       console.log('State could not be stored.')

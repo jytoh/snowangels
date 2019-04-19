@@ -9,7 +9,8 @@ import {AsyncStorage} from 'react-native';
 export default class App extends React.Component {
   state = {
       fontLoaded: false,
-      signedIn: false
+      signedIn: null,
+      user_id: null,
   }
 
   async componentDidMount() {
@@ -28,6 +29,7 @@ export default class App extends React.Component {
       const lastState = JSON.parse(lastStateJSON);
       this.setState({
         signedIn: lastState.signedIn,
+        user_id: lastState.user_id
       });
       console.log('Got last state');
     }
@@ -39,28 +41,22 @@ export default class App extends React.Component {
     }
   };
 
-  // toggleSignIn() {
-  //   this.setState({
-  //     signedIn: !this.state.signedIn
-  //   });
-  // }
-
   render() {
     console.log("app.js signedIn =", this.state.signedIn)
+    console.log("app.js user id =", this.state.user_id)
     if ( !this.state.fontLoaded ) {
       return (
       <View>
         <AppLoading/>
       </View>);
     } 
-    if (!this.state.signedIn) {
-      console.log("app.js", this.props.navigation)
+    if (this.state.signedIn) {
       return (
-        <DrawerNavigator />
+        <DrawerNavigatorHome />
       );
     }
     else {
-      return <DrawerNavigatorHome />
+      return <DrawerNavigator />
     }
   }
 
