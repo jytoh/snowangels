@@ -26,13 +26,13 @@ export default class ProfileScreen extends React.Component {
     //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
     //console.log(user_id)
     let response_request = await fetch(
-      'https://snowangels-api.herokuapp.com/num_requests?uid=' + user_id
+      'https://snowangels-api.herokuapp.com/num_requests?uid=' + this.state.user_id
     );
     let response_shovel = await fetch(
-      'https://snowangels-api.herokuapp.com/num_shovels?uid=' + user_id
+      'https://snowangels-api.herokuapp.com/num_shovels?uid=' + this.state.user_id
     );
     let response_points = await fetch(
-      'https://snowangels-api.herokuapp.com/num_points?uid=' + user_id
+      'https://snowangels-api.herokuapp.com/num_points?uid=' + this.state.user_id
     );
     let response1Json = await response_request.json();
     let response2Json = await response_shovel.json();

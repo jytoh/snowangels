@@ -39,7 +39,7 @@ export default class RequestScreen extends React.Component {
 
 
     async sendRequest() {
-        var user_id = await SecureStore.getItemAsync('id');
+        var user_id = 2;
         var re = await fetch('https://snowangels-api.herokuapp.com/get_requests?uid=%d'.replace("%d", user_id),
             {
                 method: 'GET'
