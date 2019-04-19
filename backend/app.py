@@ -369,8 +369,18 @@ dummy_profiles= [
     Request(1,4,'ddd'),
     User('name1','gid1','111','token1'),
     User('name2','gid2','222','token2'),
-    User('name3','gid3','333','token3')
+    User('name3','gid3','333','token3'),
+    Point('1'),
+    Point('2'),
+    Point('3'),
+
 ]
+
+# self.day_pts = 0
+#         self.week_pts = 0
+#         self.szn_pts = 0
+#         self.after_pics = []
+#         self.user_id=id
 for prof in dummy_profiles:
     db.session.add(prof)
 db.session.commit()
