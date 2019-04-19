@@ -21,10 +21,10 @@ POSTGRES = {
     'host': 'localhost',
     'port': 5433, #the port 5000 option gave problems when testing locally
 }
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 #using this to test locally
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 # postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
@@ -574,8 +574,8 @@ def sanitize():
         if not("googleusercontent.com" in parsed.netloc):
             return 404, "photo must come from googleusercontent.com"
 
-    if tk and not(tk.isalnum()):
-        return 404, "token must be alphanumeric"
+    #if tk and not(tk.isalnum()):
+    #    return 404, "token must be alphanumeric"
 
     if cid and not(cid.isdigit()):
         return 404, "id must be a number"
