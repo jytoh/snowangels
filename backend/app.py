@@ -369,7 +369,10 @@ dummy_profiles= [
     Request(1,4,'ddd'),
     User('name1','gid1','111','token1'),
     User('name2','gid2','222','token2'),
-    User('name3','gid3','333','token3')
+    User('name3','gid3','333','token3'),
+    Point(1),
+    Point(2),
+    Point(3),
 ]
 for prof in dummy_profiles:
     db.session.add(prof)
@@ -613,47 +616,23 @@ def get_num_users():
     users = User.query.all()
     return len(users)
 
-def get_user_with_points(id):
-    #query = db.session.query(
-    #User.id,
-    #User.user_id,
-    #User.name,
-    #User.photourl,
-    #Point.day_pts,
-    #Point.week_pts,
-    #Point.szn_pts)
-    #join = query.join(Point.user_id == User.id).filter(User.id == id)
-    query = db.session.query(User).join(User.point).filter(User.id ==id)
-    return query.all()
 
-def get_user_with_points_alt(id):
-    query = db.session.query(
-    User.id,
-    User.user_id,
-    User.name,
-    User.photourl,
-    Point.day_pts,
-    Point.week_pts,
-    Point.szn_pts)
-    join = query.join(Point.user_id == User.id).filter(User.id == id)
-    #query = db.session.query(User).join(User.point).filter(User.id ==id)
-    return query.all()
-
-
-@app.route("/get_user", methods=['GET'])
-def get_user():
-    id = request.values.get('id')
-    uid= User.query.filter_by(id=id).first().id
-    return jsonify(user = get_user_with_points(uid))
-
-#get specific user
-@app.route("/get_all_users", methods=['GET'])
-def get_all_users():
-    us = []
-    users = User.query.all()
-    for u in users:
-        us.append(get_user_with_points(u.id))
-    return jsonify(users = us)
+# @app.route("/get_user", methods=['GET'])
+# def get_user():
+#     id = request.values.get('id')
+#     user= User.query.filter_by(id=id).first()
+#     uid = user.id
+#     pnt = Point.query.filter_by(user_id=uid).first()
+#     return jsonify(user = get_user_with_points(uid))
+#
+# #get specific user
+# @app.route("/get_all_users", methods=['GET'])
+# def get_all_users():
+#     us = []
+#     users = User.query.all()
+#     for u in users:
+#         us.append(get_user_with_points(u.id))
+#     return jsonify(users = us)
 
 # @app.before_request
 # def authenticate():
