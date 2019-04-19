@@ -3,6 +3,8 @@ from flask import Flask, render_template, request
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
+import re
+from urllib.parse import urlparse
 from psycopg2.extras import RealDictCursor
 #from werkzeug.utils import secure_filename
 from flask import jsonify
@@ -24,6 +26,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d276
 #using this to test locally
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+# postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
 #added this to not keep restarting
 # app.config['DEBUG'] = False
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -157,6 +161,26 @@ db.session.commit()
 # initialize database migration management
 migrate = Migrate(app, db)
 
+#importing corners locally from GIS dataset
+def import_corners(file):
+    dframe = filereading.fetchGISdata(file)
+    for index, row in dframe.iterrows():#don't change these
+        lat = row[2]
+        long = row[3]
+        st1 = row[4]
+        st2 = row[5]
+        crnr = Corner(st1, st2, lat, long)
+        db.session.add(crnr)
+    db.session.commit()
+    print("end of import_corners fn")
+
+import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
+print("added corners")
+
+#for dummy_point in dummy_points:
+#    db.session.add(dummy_point)
+#db.session.commit()
+# end of put in dummy data
 
 @app.route('/') #delet for production
 def index():
@@ -677,6 +701,93 @@ def get_all_users():
 #         return None
 #     else:
 #         return "User authentication token doesn't match id", 401
+
+@app.before_request
+def sanitize():
+    name = request.values.get("name")
+    google_id = request.values.get("google_id")
+    url = request.values.get("photourl")
+    tk = request.values.get("token")
+    cid = request.values.get("cid")
+    uid = request.values.get("uid")
+    uid_requester = request.values.get("uid_requester")
+    uid_shoveler = request.values.get("uid_shoveler")
+
+    if name: #names can have various characters so it's easier to just escape all of them than to accidently have somebody's real name not work
+        request.values.set("name",re.escape("name"))
+
+    if google_id and not(google_id.isdigit()):
+        return 404, "google id must be a number"
+
+    if url:
+        parsed = urlparse(photourl) #checking to make sure the file is coming from google
+        request.values.set("photourl", re.escape("name"))
+        if not("googleusercontent.com" in parsed.netloc):
+            return 404, "photo must come from googleusercontent.com"
+
+    #if tk and not(tk.isalnum()):
+    #    return 404, "token must be alphanumeric"
+
+    if cid and not(cid.isdigit()):
+        return 404, "id must be a number"
+
+    if uid and not(uid.isdigit()):
+        return 404, "id must be a number"
+
+    if uid_requester and not(uid_requester.isdigit()):
+        return 404, "id ust be a number"
+
+    if uid_shoveler and not(uid_shoveler.isdigit()):
+        return 404, "id ust be a number"
+
+
+#helper functions
+def get_num_users():
+    users = User.query.all()
+    return len(user)
+
+def get_user_with_points(id):
+    #query = db.session.query(
+    #User.id,
+    #User.user_id,
+    #User.name,
+    #User.photourl,
+    #Point.day_pts,
+    #Point.week_pts,
+    #Point.szn_pts)
+    #join = query.join(Point.user_id == User.id).filter(User.id == id)
+    query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
+
+def get_user_with_points_alt(id):
+    query = db.session.query(
+    User.id,
+    User.user_id,
+    User.name,
+    User.photourl,
+    Point.day_pts,
+    Point.week_pts,
+    Point.szn_pts)
+    join = query.join(Point.user_id == User.id).filter(User.id == id)
+    #query = db.session.query(User).join(User.point).filter(User.id ==id)
+    return query.all()
+
+
+#get all users
+@app.route("/get_user", methods=['GET'])
+def get_user():
+    id = request.values.get('id')
+    uid= User.query.filter_by(id=id).first().id
+    return jsonify(user = get_user_with_points(uid))
+
+#get specific user
+@app.route("/get_all_users", methods=['GET'])
+def get_all_users():
+    us = []
+    users = User.query.all()
+    for u in users:
+        us.append(get_user_with_points(u.id))
+    return jsonify(users = us)
 
 
 if __name__ == "__main__":
