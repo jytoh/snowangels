@@ -625,31 +625,31 @@ def get_num_users():
 
 
 
-@app.route("/get_user", methods=['GET'])
-def get_user():
-    id = request.values.get('id')
-    usr= User.query.filter_by(id=id).first()
-    uid = usr.id
-    pnt = Point.query.filter_by(user_id=uid).first()
-
-    return jsonify(id = uid, google_id = usr.google_id, name = usr.name,
-                   photourl = usr.photourl, token = usr.token, day_pts =
-                   pnt.day_pts, week_pts = pnt.week_pts, szn_pts =
-                   pnt.szn_pts, after_pics = pnt.after_pics)
-
-#get specific user
-@app.route("/get_all_users", methods=['GET'])
-def get_all_users():
-    us = []
-    users = User.query.all()
-    for u in users:
-        uid = u.id
-        pnt = Point.query.filter_by(user_id=uid).first()
-        us.append({"id":uid, "google_id":u.google_id, "name":u.name,
-                   "photourl":u.photourl,"token":u.token,
-                   "day_pts":pnt.day_pts, "week_pts":pnt.week_pts,
-                   "szn_pts":pnt.szn_pts, "after_pics":pnt.after_pics})
-    return jsonify(users = us)
+# @app.route("/get_user", methods=['GET'])
+# def get_user():
+#     id = request.values.get('id')
+#     usr= User.query.filter_by(id=id).first()
+#     uid = usr.id
+#     pnt = Point.query.filter_by(user_id=uid).first()
+#
+#     return jsonify(id = uid, google_id = usr.google_id, name = usr.name,
+#                    photourl = usr.photourl, token = usr.token, day_pts =
+#                    pnt.day_pts, week_pts = pnt.week_pts, szn_pts =
+#                    pnt.szn_pts, after_pics = pnt.after_pics)
+#
+# #get specific user
+# @app.route("/get_all_users", methods=['GET'])
+# def get_all_users():
+#     us = []
+#     users = User.query.all()
+#     for u in users:
+#         uid = u.id
+#         pnt = Point.query.filter_by(user_id=uid).first()
+#         us.append({"id":uid, "google_id":u.google_id, "name":u.name,
+#                    "photourl":u.photourl,"token":u.token,
+#                    "day_pts":pnt.day_pts, "week_pts":pnt.week_pts,
+#                    "szn_pts":pnt.szn_pts, "after_pics":pnt.after_pics})
+#     return jsonify(users = us)
 
 # @app.before_request
 # def authenticate():
