@@ -376,7 +376,7 @@ dummy_profiles= [
 ]
 for prof in dummy_profiles:
     db.session.add(prof)
-    db.session.commit()
+db.session.commit()
 
 
 #get info for user history, in the form (User id, User name, Address of shovel, Time of shovel)
