@@ -372,11 +372,11 @@ dummy_profiles= [
     User('name3','gid3','333','token3'),
     Point(1),
     Point(2),
-    Point(3),
+    Point(3)
 ]
 for prof in dummy_profiles:
     db.session.add(prof)
-db.session.commit()
+    db.session.commit()
 
 
 #get info for user history, in the form (User id, User name, Address of shovel, Time of shovel)
