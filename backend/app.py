@@ -617,22 +617,30 @@ def get_num_users():
     return len(users)
 
 
-# @app.route("/get_user", methods=['GET'])
-# def get_user():
-#     id = request.values.get('id')
-#     user= User.query.filter_by(id=id).first()
-#     uid = user.id
-#     pnt = Point.query.filter_by(user_id=uid).first()
-#     return jsonify(user = get_user_with_points(uid))
-#
-# #get specific user
-# @app.route("/get_all_users", methods=['GET'])
-# def get_all_users():
-#     us = []
-#     users = User.query.all()
-#     for u in users:
-#         us.append(get_user_with_points(u.id))
-#     return jsonify(users = us)
+@app.route("/get_user", methods=['GET'])
+def get_user():
+    id = request.values.get('id')
+    user= User.query.filter_by(id=id).first()
+    uid = user.id
+    pnt = Point.query.filter_by(user_id=uid).first()
+    return jsonify(user_id = uid, google_id = user.google_id, name=user.name,
+                   photourl = user.photourl, token = user.token, day_pts =
+                   pnt.day_pts, week_pts = pnt.week_pts, szn_points =
+                   pnt.szn_points, after_pics = pnt.after_pics)
+
+#get specific user
+@app.route("/get_all_users", methods=['GET'])
+def get_all_users():
+    us = []
+    users = User.query.all()
+    for u in users:
+        uid = u.id
+        pnt = Point.query.filter_by(user_id=uid).first()
+        us.append({"user_id":uid, "google_id":u.google_id, "name":u.name,
+                   "photourl":u.photourl, "token":u.token,
+                   "day_pts":pnt.day_pts, "week_pts":pnt.week_pts,
+                   "szn_pts":pnt.szn_points})
+    return jsonify(users = us)
 
 # @app.before_request
 # def authenticate():
