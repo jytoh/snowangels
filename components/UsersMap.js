@@ -170,24 +170,26 @@ export default class UsersMap extends React.Component {
   }
 
   displayMarkers() {
-    if (this.state.markers.length == 0) {
-      return <Text> </Text>
-    } else {
-      return marker_list = this.state.markers.map((marker, index) => {
-        // this.getMarkerState(marker)
-        return (
-          <MapView.Marker
-            key={index}
-            coordinate={{
-              // TODO: have to change longtitude to longitude in backend
-              "latitude": marker.coordinate.latitude,
-              "longitude": marker.coordinate.longtitude
-            }}
-            onPress = {() => {this.markerOnPress(marker)}
-            }
-          />
-        );
-      })
+    if (this.state.markers){
+      if (this.state.markers.length == 0) {
+        return <Text> </Text>
+      } else {
+        return marker_list = this.state.markers.map((marker, index) => {
+          // this.getMarkerState(marker)
+          return (
+            <MapView.Marker
+              key={index}
+              coordinate={{
+                // TODO: have to change longtitude to longitude in backend
+                "latitude": marker.coordinate.latitude,
+                "longitude": marker.coordinate.longtitude
+              }}
+              onPress = {() => {this.markerOnPress(marker)}
+              }
+            />
+          );
+        })
+      }
     }
   }
 
