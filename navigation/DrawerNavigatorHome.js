@@ -13,9 +13,8 @@ import LeaderboardScreen from '../screens/LeaderboardScreen';
 
 const WIDTH = Dimensions.get('window').width;
 
-const DrawerConfig = {
 
-    drawerLockMode: 'locked-closed',
+const DrawerConfig = {
     contentOptions: {
         activeBackgroundColor: '#e91e63',
         itemsContainerStyle: {
@@ -28,13 +27,13 @@ const DrawerConfig = {
         return (<MenuDrawer navigation={navigation} />)
     },
 }
-const DrawerNavigator = createDrawerNavigator(
+const DrawerNavigatorHome = createDrawerNavigator(
     {
-        Profile: {
-            screen: ProfileScreen
-        },
         Home: {
             screen: HomeScreen
+        },
+        Profile: {
+            screen: ProfileScreen
         },
         History: {
             screen: HistoryScreen
@@ -53,4 +52,4 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 
-export default createAppContainer(DrawerNavigator);
+export default createAppContainer(DrawerNavigatorHome);
