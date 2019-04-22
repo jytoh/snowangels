@@ -23,12 +23,12 @@ export default class LeaderboardScreen extends React.Component {
     }
 
     compare(a, b) {
-        if (a.szn_points < b.szn_points) {
-            return -1;
-        } else if (a.szn_points == b.szn_points) {
+        if (a.szn_pts < b.szn_pts) {
+            return 1;
+        } else if (a.szn_pts == b.szn_pts) {
             return 0;
         } else {
-            return 1;
+            return -1;
         }
     }
 
@@ -39,7 +39,6 @@ export default class LeaderboardScreen extends React.Component {
 //try to return whole thing with user info. Potentially make backend function that gets 5 before and 5 after 
 
     renderHeader() {
-        this.refreshData();
         return (
             <View colors={[, '#DDE8FC', '#76A1EF']}
                   style={{
