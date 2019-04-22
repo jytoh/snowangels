@@ -110,7 +110,6 @@ export default class CameraScreen extends React.Component {
     render() {
         const { navigation } = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
-        const uid = 2;
         console.log('camera state, cid =',cornerId)
         const { hasPermission } = this.state;
         const { imageUri }  = this.state;
