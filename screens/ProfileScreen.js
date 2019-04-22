@@ -141,7 +141,7 @@ export default class ProfileScreen extends React.Component {
           await this.setState({uid: responseJson_for_uid.uid.toString()});
           await this.store_state(this.state);
           this.refresh();
-          // SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
+          SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
           console.log(this.state.name);
           console.log(this.state.photoUrl);
           return result.accessToken;
@@ -172,6 +172,7 @@ export default class ProfileScreen extends React.Component {
       console.log(lastStateJSON)
       const lastState = JSON.parse(lastStateJSON);
       this.setState({
+        uid: lastState.uid,
         signedIn: lastState.signedIn,
         name: lastState.name,
         photoUrl: lastState.photoUrl,
@@ -188,6 +189,7 @@ export default class ProfileScreen extends React.Component {
       console.log('No last state to fetch');
       this.setState({
         signedIn: false,
+        uid : 0,
         name: '',
         photoUrl: '',
         google_id: '',
@@ -203,6 +205,7 @@ export default class ProfileScreen extends React.Component {
   async logout() {
     await this.setState({
       signedIn: false,
+      uid: 0,
       name: "",
       photoUrl: "",
       token: "",

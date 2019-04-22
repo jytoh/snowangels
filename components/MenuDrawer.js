@@ -18,14 +18,14 @@ export default class MenuDrawer extends React.Component {
             <View style = {styles.container}>
                 <View style = {styles.topLinks}>
                     <View style={styles.profile}>
-                        <View style ={styles.imgView}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-                            <Image style = {styles.profpic} source={require('../assets/sarah.jpeg')}/>
-                            </TouchableOpacity>
-                        </View>
+                        {/*<View style ={styles.imgView}>*/}
+                            {/*<TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>*/}
+                            {/*<Image style = {styles.profpic} source={require('../assets/sarah.jpeg')}/>*/}
+                            {/*</TouchableOpacity>*/}
+                        {/*</View>*/}
                         <View style = {styles.profileText}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-                            <Text style = {styles.name}> User </Text>
+                            <Text style = {styles.name}> Avinash </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -36,7 +36,6 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Profile', 'Profile')}
                         {this.navLink('Leaderboard', 'Leaderboard')}
                         {this.navLink('History', 'History')}
-                        {this.navLink('Camera','Camera')}
                         {this.navLink('Requests','Requests')}
                     </View>
                 </ScrollView>

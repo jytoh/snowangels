@@ -43,8 +43,8 @@ export default class CameraScreen extends React.Component {
       else {console.log('doesnt enter')}
     };
 
-    async uploadPicture(uid) {
-      console.log('from upload picture', uid)
+    async uploadPicture(cid) {
+      console.log('from upload picture', this.state.uid);
       console.log("hi1 " + this.state.imageUri);        
       console.log("hi2 " + this.state.bytea);
       console.log("hi3 " + this.state.b64);
@@ -64,10 +64,10 @@ export default class CameraScreen extends React.Component {
       // let type = match ? `image/${match[1]}` : `image`;
       try {
         console.log(this.state.hash);
-        //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+        var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
         var details = {
-          'uid' : uid,
-          'cid' : 1, //hardcoding for now
+          'uid' : user_id,
+          'cid' : cid, //hardcoding for now
           'before_pic' : this.state.hash,
         };
         var formBody = [];
@@ -89,28 +89,29 @@ export default class CameraScreen extends React.Component {
       }
     }
 
-    // async fetch_state() {
-    //   try {
-    //     const lastStateJSON = await AsyncStorage.getItem('lastState');
-    //     console.log(lastStateJSON)
-    //     const lastState = JSON.parse(lastStateJSON);
-    //     this.setState({
-    //       user_id: lastState.user_id,
-    //     });
-    //     console.log('Got last state');
-    //   }
-    //   catch (error) {
-    //     console.log('No last state to fetch');
-    //     this.setState({
-    //       user_id: null,
-    //     })
-    //   }
-    // };
+    async fetch_state() {
+      try {
+        const lastStateJSON = await AsyncStorage.getItem('lastState');
+        console.log(lastStateJSON)
+        const lastState = JSON.parse(lastStateJSON);
+        this.setState({
+          user_id: lastState.user_id,
+        });
+        console.log('Got last state');
+      }
+      catch (error) {
+        console.log('No last state to fetch');
+        this.setState({
+          user_id: null,
+        })
+      }
+    };
     
     render() {
         const { navigation } = this.props;
-        const uid = navigation.getParam('uid', 0);
-        console.log('camera state, uid =',uid)
+        const cornerId = navigation.getParam('cornerId', 0);
+        const uid = 2;
+        console.log('camera state, cid =',cornerId)
         const { hasPermission } = this.state;
         const { imageUri }  = this.state;
         if (hasPermission === null) {
@@ -127,7 +128,7 @@ export default class CameraScreen extends React.Component {
                 <View style={styles.bottombar}>
                 <TouchableOpacity 
                 style={styles.uploadphototouchable}
-                onPress = {() => {this.uploadPicture(uid); this.props.navigation.navigate('Home');} }>
+                onPress = {() => {this.uploadPicture(cornerId); this.props.navigation.navigate('Home');} }>
                 <Text
                   style={styles.takephoto}>
                   {' '}Upload Photo{' '}

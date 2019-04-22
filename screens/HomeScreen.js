@@ -15,10 +15,11 @@ export default class HomeScreen extends React.Component {
 			userLocation: null,
 			markerOverlayIsVisible: false,
 			markerOverlayTitle: null,
+			highlightedCornerId: null,
 			markerPosition: null,
 			fontLoaded: false,
 			signedIn: false,
-			uid: 0,
+			uid: 2,
 		}
 	}
 
@@ -30,7 +31,7 @@ export default class HomeScreen extends React.Component {
 		this.setState({fontLoaded : true});
 		await this.fetch_state();
 		console.log('home screen state',this.state.signedIn)
-		console.log('home screen uid',this.state.uid)
+		console.log('home screen',2)
 
 	}
 
@@ -68,6 +69,7 @@ export default class HomeScreen extends React.Component {
 		});
 		this.state.markerOverlayTitle = marker.title
 		this.state.markerPosition = marker.coordinate
+		this.state.highlightedCornerId = marker.key
 	}
 
 	getUserLocationHandler() {
@@ -89,7 +91,7 @@ export default class HomeScreen extends React.Component {
 		  const lastState = await JSON.parse(lastStateJSON);
           this.setState({
 			signedIn: lastState.signedIn,
-			uid: lastState.user_id,
+			uid: 2,
 		  });
         }
         catch (error) {
@@ -110,13 +112,14 @@ export default class HomeScreen extends React.Component {
 				<View style={styles.mapContainer}>
 				<MarkerOverlay
 					title={this.state.markerOverlayTitle}
+					cornerId={this.state.highlightedCornerId}
 					markerPosition={this.state.markerPosition}
 					visible={this.state.markerOverlayIsVisible}
 					setModalVisibility={this.setModalVisibility}
 					userLocation={this.state.userLocation}
 					navigation={this.props.navigation}
 					signedIn={this.state.signedIn}
-					uid={this.state.uid}/>
+					uid={2}/>
 				<UsersMap
 					userLocation={this.state.userLocation}
 					setModalVisibility={this.setModalVisibility}

@@ -39,13 +39,13 @@ export default class RequestScreen extends React.Component {
 
 
     async sendRequest() {
-        var user_id = 2;
+        // var user_id = 2;
+        var user_id = await SecureStore.getItemAsync('id');
         var re = await fetch('https://snowangels-api.herokuapp.com/get_requests?uid=%d'.replace("%d", user_id),
             {
                 method: 'GET'
             }).then(response => response.json())
             .then((jsonData) => {
-                console.log(jsonData);
                 return jsonData;
 
             }).catch((error) => {
@@ -55,7 +55,6 @@ export default class RequestScreen extends React.Component {
         this.setState({
             reqs: re
         });
-        console.log(this.state.reqs)
     }
 
     async removeRequest(rid) {
@@ -65,7 +64,6 @@ export default class RequestScreen extends React.Component {
                 method: 'DELETE'
             }).then(response => response.json())
             .then((jsonData) => {
-                console.log(jsonData);
                 return jsonData;
 
             }).catch((error) => {
@@ -75,13 +73,12 @@ export default class RequestScreen extends React.Component {
 
 
         this.sendRequest();
-        console.log(this.state.reqs)
     }
 
     render() {
-
+        this.sendRequest();
         return (
-
+            <View style={{flex: 1, backgroundColor: 'white',}}>
             <FlatList
                 style={styles.container}
                 data={this.state.reqs}
@@ -98,6 +95,9 @@ export default class RequestScreen extends React.Component {
                     </TouchableWithoutFeedback>)}
                 keyExtractor={item => item.request_id.toString()}
             />
+                <MenuButton navigation={this.props.navigation} />
+
+            </View>
             // <View style={styles.buttonContainer}>
             //     <Button
             //         onPress={() => {

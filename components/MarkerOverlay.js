@@ -14,7 +14,7 @@ const MarkerOverlay = (props) => {
      * visible: visibility of the marker
      */
     const { title, visible, setModalVisibility,
-        userLocation, markerPosition, navigation, signedIn, uid } = props;
+        userLocation, markerPosition, navigation, signedIn, uid, cornerId } = props;
 
     var isNearCorner = null;
 
@@ -72,6 +72,7 @@ const MarkerOverlay = (props) => {
 
     async function reportShovel()
     {
+        console.log('corner id', cornerId)
         const a = await userIsNearCorner();
         console.log('user is near corner?',a)
         console.log('user is singed in?',signedIn)
@@ -79,6 +80,7 @@ const MarkerOverlay = (props) => {
         if (await userIsNearCorner() && signedIn) {
             navigation.navigate('Camera', {
                 uid: uid,
+                cornerId: cornerId
               });
             //navigation.navigate('Camera')
         }

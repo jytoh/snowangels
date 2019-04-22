@@ -144,7 +144,7 @@ export default class UsersMap extends React.Component {
               longitude: position.coords.longitude
             }
           }
-          radius={100}
+          radius={400}
           strokeColor={'rgba(203, 217, 238, 0.7)'}
           fillColor={'rgba(203, 217, 238, 0.4)'}
         />
