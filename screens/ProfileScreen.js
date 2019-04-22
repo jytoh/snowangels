@@ -274,9 +274,9 @@ const LoggedInPage = props => {
       </View>
       <View style={styles.containerbottom}>
         <Text style={styles.header}> {"Summary"}</Text>
-        <Text style= {styles.text}> {"Total Points:" + props.points}</Text>
-        <Text style= {styles.text}> {"Total Shovels:" + props.num_shovels}</Text>
-        <Text style= {styles.text}> {"Total Reports:" + props.num_requests}</Text>
+        <Text style= {styles.text}> {"Total Points: " + props.points}</Text>
+        <Text style= {styles.text}> {"Total Shovels: " + props.num_shovels}</Text>
+        <Text style= {styles.text}> {"Total Reports: " + props.num_requests}</Text>
         {/*<Text style={styles.text}> {"Rank: 3/120"}</Text>*/}
       </View>
       <View style={styles.buttonContainer}>

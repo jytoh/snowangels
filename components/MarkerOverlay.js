@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, View, Text, Button, Modal } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
+import {StyleSheet, View, Text, Button, Modal, Alert} from 'react-native'
+import {Ionicons} from '@expo/vector-icons'
 import geolib from 'geolib'
+import {SecureStore} from "expo";
 
 /**
  * The popup that appears when you click on a marker
@@ -13,17 +14,20 @@ const MarkerOverlay = (props) => {
      * title: title of the point
      * visible: visibility of the marker
      */
-    const { title, visible, setModalVisibility,
-        userLocation, markerPosition, navigation, signedIn, uid, cornerId } = props;
+    const {
+        title, visible, setModalVisibility,
+        userLocation, markerPosition, navigation, signedIn, uid, cornerId
+    } = props;
 
     var isNearCorner = null;
 
     // maximum meters you are allowed to be from corner to report or start shovel
     const maxMetersAwayFromCorner = 500;
-  
+
     if (!visible) {
         return null;
-    };
+    }
+    ;
 
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween
@@ -43,8 +47,14 @@ const MarkerOverlay = (props) => {
          */
         function isNearThreshold(pos, markerPosition) {
             var distanceBetween = geolib.getDistance(
-                {latitude: pos.coords.latitude, longitude: pos.coords.longitude},
-                {latitude: markerPosition.latitude, longitude: markerPosition.longtitude}
+                {
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                },
+                {
+                    latitude: markerPosition.latitude,
+                    longitude: markerPosition.longtitude
+                }
             )
             return distanceBetween <= maxMetersAwayFromCorner
         }
@@ -70,46 +80,89 @@ const MarkerOverlay = (props) => {
     //     return userState.signedIn
     // }
 
-    async function reportShovel()
-    {
+    async function reportShovel() {
         console.log('corner id', cornerId)
         const a = await userIsNearCorner();
-        console.log('user is near corner?',a)
-        console.log('user is singed in?',signedIn)
-        console.log('user id is',uid)
+        console.log('user is near corner?', a)
+        console.log('user is singed in?', signedIn)
+        console.log('user id is', uid)
         if (await userIsNearCorner() && signedIn) {
             navigation.navigate('Camera', {
                 uid: uid,
                 cornerId: cornerId
-              });
+            });
             //navigation.navigate('Camera')
         }
     }
 
-    async function startShovel()
-    {
-        if(await userIsNearCorner() && await checkIfUserIsLoggedIn()) {
-            navigation.navigate('Camera')
+    function al() {
+        Alert.alert(
+            'Invalid Corner',
+            "You can't validate a shoveling for this corner, likely because" +
+            " a shoveling has not been requested yet.",
+            [
+
+                {text: 'OK', onPress: () => {}},
+            ],
+            {cancelable: false},
+        );
+    }
+
+    async function startShovel() {
+        if (await userIsNearCorner() && signedIn) {
+            var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+            var params = {
+                uid: uid,
+                cid: cornerId, //hardcoding for now
+                after_pic: "d",
+            };
+            var formData = new FormData();
+
+            for (var k in params) {
+                formData.append(k, params[k]);
+            }
+
+            // var formBody = [];
+            // for (var property in details) {
+            //   var encodedKey = encodeURIComponent(property);
+            //   var encodedValue = encodeURIComponent(details[property]);
+            //   formBody.push(encodedKey + "=" + encodedValue);
+            // }
+            // formBody = formBody.join("&");
+            // navigation.navigate('Camera')
+            var sh = await fetch("https://snowangels-api.herokuapp.com/new_shovel", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                },
+                body: formData
+
+            }).then(response => response.json()).then(responseJson => {
+                    return responseJson;
+                }
+            ).catch((error) => {
+                // handle your errors here
+                al();
+            });
         }
     }
 
-    return(
+    return (
         <View style={styles.overlayContainer}>
             <View style={styles.intersectionTextContainer}>
                 <Text style={styles.intersectionText}>{title}</Text>
-                <Button title="Report Shovel"
-                 onPress= {reportShovel}
+                <Button title="Make a Request"
+                        onPress={reportShovel}
                 />
                 <Button
-                    title="Start Shovel"
-                    onPress= {startShovel}
+                    title="Validate a Shoveling"
+                    onPress={startShovel}
                 />
                 <Button title="Hide" onPress={() => setModalVisibility(false)}/>
             </View>
         </View>
-        )
+    )
 }
-
 
 
 const styles = StyleSheet.create({
