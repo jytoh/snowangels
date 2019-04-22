@@ -15,24 +15,25 @@ export default class LeaderboardScreen extends React.Component {
 //get all users from DB; should adjust references to states 
         this.state = {
             profs: [],
-            user: {}
+            user: {},
+            rank: 0
 
         };
         this.refreshData();
     }
 
-    compare(a, b){
-        if (a.szn_pts < b.szn_pts){
+    compare(a, b) {
+        if (a.szn_points < b.szn_points) {
             return -1;
-        } else if (a.szn_pts == b.szn_pts){
+        } else if (a.szn_points == b.szn_points) {
             return 0;
-        } else{
+        } else {
             return 1;
         }
     }
 
-    sortedProfs(){
-       return 1 + this.state.profs.sort(this.compare).findIndex(item => item.name == this.state.user.name);
+    sortedProfs() {
+        return 1 + this.state.profs.sort(this.compare).findIndex(item => item.name == this.state.user.name);
     }
 
 //try to return whole thing with user info. Potentially make backend function that gets 5 before and 5 after 
@@ -68,7 +69,7 @@ export default class LeaderboardScreen extends React.Component {
                         textAlign: 'right',
                         marginRight: 40
                     }}>
-                        {ordinal_suffix_of(this.sortedProfs())}
+                        {ordinal_suffix_of(this.state.rank)}
                     </Text>
                     <Image style={{
                         flex: .66,
@@ -110,6 +111,10 @@ export default class LeaderboardScreen extends React.Component {
         this.setState({
             profs: data.users,
             user: usrdata
+        });
+
+        this.setState({
+            rank: this.sortedProfs()
         });
         // console.log(this.state);
     }
