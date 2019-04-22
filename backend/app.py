@@ -332,11 +332,11 @@ def validate_shovel():
     uid_requester = request.form["uid_requester"]
     uid_shoveler = request.form["uid_shoveler"]
     cid = request.form["cid"]
-    validate_bit = request.form["cid"]
+    validate_bit = request.form["vb"]
     shoveler = User.query.get(uid_shoveler)
     corner = Corner.query.get(cid)
     #if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
-    if validate_bit=='0':
+    if validate_bit==0:
         points_entry = Point.query.filter_by(user_id=uid_shoveler).first()
         points_entry.day_pts -= 5 #TODO: figure out good # of points/ weights later
         points_entry.week_pts -= 5
@@ -348,7 +348,7 @@ def validate_shovel():
         return jsonify(requester = uid_requester, shoveler=uid_shoveler, corner=cid, validate_bit=validate_bit)
         #return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
     #if requester says shoveling claim is valid, set state of request to steady state, 2
-    elif validate_bit=='1':
+    elif validate_bit==1:
         req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
         req.state = 2
         db.session.commit()

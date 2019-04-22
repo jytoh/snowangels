@@ -151,11 +151,11 @@ const MarkerOverlay = (props) => {
         <View style={styles.overlayContainer}>
             <View style={styles.intersectionTextContainer}>
                 <Text style={styles.intersectionText}>{title}</Text>
-                <Button title="Make a Request"
+                <Button title="Request a Snow Angel"
                         onPress={reportShovel}
                 />
                 <Button
-                    title="Validate a Shoveling"
+                    title="Record a Shoveling Job"
                     onPress={startShovel}
                 />
                 <Button title="Hide" onPress={() => setModalVisibility(false)}/>
