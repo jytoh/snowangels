@@ -332,11 +332,11 @@ def validate_shovel():
     uid_requester = request.form["uid_requester"]
     uid_shoveler = request.form["uid_shoveler"]
     cid = request.form["cid"]
-    validate_bit = request.form["vb"]
+    validate_bit = request.form["cid"]
     shoveler = User.query.get(uid_shoveler)
     corner = Corner.query.get(cid)
     #if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
-    if validate_bit==0:
+    if validate_bit=='0':
         points_entry = Point.query.filter_by(user_id=uid_shoveler).first()
         points_entry.day_pts -= 5 #TODO: figure out good # of points/ weights later
         points_entry.week_pts -= 5
@@ -348,7 +348,7 @@ def validate_shovel():
         return jsonify(requester = uid_requester, shoveler=uid_shoveler, corner=cid, validate_bit=validate_bit)
         #return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
     #if requester says shoveling claim is valid, set state of request to steady state, 2
-    elif validate_bit==1:
+    elif validate_bit=='1':
         req = Request.query.filter_by(corner_id=cid, state=1, user_id=uid_requester).order_by(Request.time.desc()).first()
         req.state = 2
         db.session.commit()
@@ -433,17 +433,6 @@ def unsubscribe_corner():
     #return "User %s has unsubscribed from corner %s" % (uid, cid)
 #get state of a corner request
 
-@app.route("/states", methods=['GET'])
-def get_state():
-    statequery = Request.query.order_by(Request.time.desc()).all()
-    if statequery is not None:
-        state = statequery
-    else:
-        state = 0
-    return jsonify(states = statequery)
-    # return "Corner %s has  %s" % (cid, state)
-#get user id who last requested a corner
-
 @app.route("/state", methods=['GET'])
 def get_state():
     cid = request.args.get('cid')
@@ -473,6 +462,17 @@ def get_latest_requester_name():
     return jsonify(corner = cid, user=uid, name = name)
     #return "%s was the last person to make a request on corner %s" % (name, cid)
 #get corner info: street names
+
+@app.route("/states", methods=['GET'])
+def get_state():
+    statequery = Request.query.order_by(Request.time.desc()).all()
+    if statequery is not None:
+        state = statequery
+    else:
+        state = 0
+    return jsonify(states = statequery)
+    # return "Corner %s has  %s" % (cid, state)
+#get user id who last requested a corner
 
 @app.route("/get_requests", methods=['GET'])
 def get_requests():
