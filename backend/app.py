@@ -470,7 +470,7 @@ def get_state():
         state = statequery
     else:
         state = 0
-    return jsonify(states = statequery)
+    return jsonify(states = state)
     # return "Corner %s has  %s" % (cid, state)
 #get user id who last requested a corner
 
