@@ -45,7 +45,8 @@ export default class LeaderboardScreen extends React.Component {
                       backgroundColor: '#76A1EF',
                       padding: 15,
                       paddingTop: 35,
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      height: '19%'
                   }}>
                 <Text style={{
                     fontSize: 25,
@@ -57,8 +58,7 @@ export default class LeaderboardScreen extends React.Component {
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginBottom: 15,
-                    marginTop: 20
+                    marginTop: 12
                 }}>
                     <Text style={{
                         color: 'white',
@@ -119,15 +119,13 @@ export default class LeaderboardScreen extends React.Component {
     }
 
     render() {
-
-
         const props = {
             labelBy: "name",
             sortBy: "szn_pts",
             data: this.state.profs,
             icon: "photourl",
             evenRowColor: '#F5F6FE',
-            labelStyle: {fontFamily: 'Cabin-Regular'},
+            labelStyle: {fontFamily: 'Cabin-Bold'},
             scoreStyle: {fontFamily: 'Cabin-Bold'}
             //labelStyle: this.state.user.rank % 2 > 0 ? {color: 'white'} : {color: 'red'}
         }

@@ -13,20 +13,6 @@ import LeaderboardScreen from '../screens/LeaderboardScreen';
 
 const WIDTH = Dimensions.get('window').width;
 
-
-const DrawerConfig = {
-    contentOptions: {
-        activeBackgroundColor: '#e91e63',
-        itemsContainerStyle: {
-            marginTop: 50,
-        },
-        itemStyle: {fontFamily: 'Cabin-Regular'}
-    },
-    drawerWidth: WIDTH * 0.83,
-    contentComponent: ({ navigation }) => {
-        return (<MenuDrawer navigation={navigation} />)
-    },
-}
 const DrawerNavigatorHome = createDrawerNavigator(
     {
         Home: {
@@ -48,7 +34,20 @@ const DrawerNavigatorHome = createDrawerNavigator(
             screen: RequestScreen
         }
     },
-    DrawerConfig
+
+    {
+        contentOptions: {
+            activeBackgroundColor: '#e91e63',
+            itemsContainerStyle: {
+                marginTop: 50,
+            },
+            labelStyle: {fontFamily: 'Cabin-Regular'}
+        },
+        drawerWidth: WIDTH * 0.83,
+        contentComponent: ({ navigation, screenProps}) => {
+            return (<MenuDrawer navigation={navigation} name={screenProps.name} photoUrl={screenProps.photoUrl}/>)
+        }
+    }
 );
 
 

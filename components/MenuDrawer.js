@@ -13,19 +13,20 @@ export default class MenuDrawer extends React.Component {
         )
     }
     render() {
+        console.log('memnudrawer name is', this.props.name)
         return(
             <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} >
             <View style = {styles.container}>
                 <View style = {styles.topLinks}>
                     <View style={styles.profile}>
-                        {/*<View style ={styles.imgView}>*/}
-                            {/*<TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>*/}
-                            {/*<Image style = {styles.profpic} source={require('../assets/sarah.jpeg')}/>*/}
-                            {/*</TouchableOpacity>*/}
-                        {/*</View>*/}
+                        <View style ={styles.imgView}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+                            <Image style = {styles.profpic} source={{ uri: this.props.photoUrl }}/>
+                            </TouchableOpacity>
+                        </View>
                         <View style = {styles.profileText}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-                            <Text style = {styles.name}> Avinash </Text>
+                            <Text style = {styles.name}> {this.props.name} </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -76,9 +77,8 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     imgView:{
-        flex: 3,
+        flex: 2,
         paddingLeft: 20,
-        paddingRight: 20,
     },
     profileText:{
         flex: 3,

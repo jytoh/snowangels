@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, View, Text, Button, Modal, Alert} from 'react-native'
+import { Dimensions, StyleSheet, View, Text, Button, Modal, Alert, TouchableOpacity } from 'react-native'
 import {Ionicons} from '@expo/vector-icons'
 import geolib from 'geolib'
 import {SecureStore} from "expo";
@@ -149,43 +149,72 @@ const MarkerOverlay = (props) => {
 
     return (
         <View style={styles.overlayContainer}>
-            <View style={styles.intersectionTextContainer}>
+                <Ionicons 
+                name = "ios-close-circle-outline"
+                color = "#000000"
+                size = {25}
+                style = {styles.xButton}
+                onPress={() => setModalVisibility(false)}
+                />
                 <Text style={styles.intersectionText}>{title}</Text>
-                <Button title="Request a Snow Angel"
-                        onPress={reportShovel}
-                />
-                <Button
-                    title="Record a Shoveling Job"
-                    onPress={startShovel}
-                />
-                <Button title="Hide" onPress={() => setModalVisibility(false)}/>
-            </View>
+                <TouchableOpacity onPress = {reportShovel} style ={styles.buttonStyle}>
+                    <View style = {styles.request}>
+                        <Text style = {styles.buttonText}>Request a Snow Angel</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress = {startShovel} style ={styles.buttonStyle}>
+                    <View style = {styles.request}>
+                        <Text style = {styles.buttonText}>Record a Shoveling Job</Text>
+                    </View>
+                </TouchableOpacity>
         </View>
     )
 }
 
 
 const styles = StyleSheet.create({
-    topContainer: {
-        height: '33.333%',
-        width: '100%',
-        position: 'absolute',
-        bottom: 0,
-    },
     overlayContainer: {
-        height: '33.33%',
+        height: '30%',
         width: '100%',
         position: 'absolute',
         bottom: 0,
-        backgroundColor: 'powderblue',
-        flex: 1
+        backgroundColor: '#D1E1F8B3',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 20
+    },
+    xButton:{
+        position: 'absolute',
+        top: 10,
+        left: 10
     },
     intersectionText: {
         textAlign: 'center',
         fontSize: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontFamily: 'Cabin-Bold',
+        paddingTop: 15
     },
-    intersectionTextContainer: {
-        marginTop: '10%'
+    request: {
+        flex: 1,
+        backgroundColor: '#76A1EF',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: Dimensions.get('window').width*0.5,
+        opacity: 1,
+    },
+    buttonStyle:{
+        flex: 1,
+        marginBottom: 7,
+        marginTop: 7
+    },
+    buttonText:{
+        color: 'white',
+        fontFamily: 'Cabin-Bold',
+        textAlign: 'center',
+        fontSize: 16
     }
 })
 

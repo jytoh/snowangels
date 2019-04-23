@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingTop: 35,
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
+    height: '18%'
   },
   h1: {
     fontSize: 24,

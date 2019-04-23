@@ -14,7 +14,6 @@ import LeaderboardScreen from '../screens/LeaderboardScreen';
 const WIDTH = Dimensions.get('window').width;
 
 const DrawerConfig = {
-
     drawerLockMode: 'locked-closed',
     contentOptions: {
         activeBackgroundColor: '#e91e63',

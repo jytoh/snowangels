@@ -126,12 +126,6 @@ export default class HomeScreen extends React.Component {
 					setUserLocation={this.setUserLocation}
 					setModalMetaData={this.setModalMetaData}/>
 				</View>
-				<View style={styles.container2}>
-					{/*<Button title="Get Location"
-					onPress={() => this.getUserLocationHandler()} />*/}
-					<Button title="Go to Camera"
-					onPress={() => this.props.navigation.navigate('Camera')} />
-				</View>
 			</View>
 		);
 	}
@@ -159,7 +153,7 @@ const styles = StyleSheet.create({
 		zIndex: 20,
 		position: "absolute",
 		top: 80,
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	mapContainer: {
 		width: '100%',

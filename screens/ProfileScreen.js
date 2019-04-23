@@ -245,9 +245,15 @@ const LoginPage = props => {
   return (
     <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
     <View style={styles.container}>
-      <View style ={styles.imgView}>
+      {/* <View style ={styles.imgView}>
         <Image style = {styles.loginpic} source={require('../assets/snowflake.jpg')}/>
-      </View>
+      </View> */}
+      <Ionicons
+        name = "md-snow"
+        color = "white"
+        size = {100}
+        style = {styles.loginPic}
+      />
       <View style={styles.loginButton}>
         <TouchableOpacity
           onPress={props.signInWithGoogleAsync}>
@@ -263,7 +269,7 @@ const LoginPage = props => {
 }
 
 const LoggedInPage = props => {
-  return (
+  return ( 
     <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
     <View style={styles.container}>
       <Ionicons name = "md-refresh" color = "#000000" size = {32} style = {styles.refreshicon}
@@ -296,7 +302,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    resizeMode: 'contain'
+    resizeMode: 'cover',
+    marginTop: 0,
   },
   container: {
     flex: 1,
@@ -365,7 +372,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     borderRadius: 40,
-    marginBottom: 40,
+    paddingBottom: 50,
     backgroundColor: '#D1E1F8',
   },
   signintext: {

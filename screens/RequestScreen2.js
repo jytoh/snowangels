@@ -21,66 +21,6 @@ export default class RequestScreen extends React.Component {
 
     }
 
-    keyExtractor = (item, index) => index.toString()
-
-    renderItem = ({ item }) => (
-      <ListItem
-        title={item.time}
-        titleStyle={{fontFamily: 'Cabin-Bold',}}
-        subtitle={item.street2 + ' & ' + item.street1 + ', ID: ' + item.request_id}
-        subtitleStyle={{fontFamily: 'Cabin-Regular',}}
-        // leftAvatar={{ source: { uri: item.avatar_url } }}
-        leftIcon={{
-          reverse: true,
-          color: '#d1e1f8',
-          name: 'snowflake-o',
-          type: 'font-awesome'
-        }}
-        onPress={() => this.al(item.request_id)}
-      />
-    )
-    renderSeparator = () => {
-      return (
-        <View
-          style={{
-            height: 1,
-            width: "80%",
-            backgroundColor: "#CED0CE",
-            marginLeft: "20%"
-          }}
-        />
-      );
-    };
-  
-    render() {
-        this.sendRequest();
-        return (
-        <View style={styles.container}>
-            {this.renderHeader()}
-            <MenuButton navigation={this.props.navigation} />
-            <FlatList
-            keyExtractor={this.keyExtractor}
-            data={this.state.reqs}
-            renderItem={this.renderItem}
-            style={{ width: 400 }}
-            ItemSeparatorComponent={this.renderSeparator}
-            />
-        </View>
-  
-        // <View>
-        //   {
-        //     list.map((item, i) => (
-        //       <ListItem
-        //         key={i}
-        //         title={item.title}
-        //         leftIcon={{ name: item.icon }}
-        //       />
-        //     ))
-        //   }
-        // </View>
-      )
-    }
-
     al(rid) {
         Alert.alert(
             'Sure?',
@@ -152,40 +92,40 @@ export default class RequestScreen extends React.Component {
         this.sendRequest();
     }
 
-    // render() {
-    //     this.sendRequest();
-    //     return (
-    //         <View style={{flex: 1, backgroundColor: 'white',}}>
-    //         {this.renderHeader()}
-    //         <FlatList
-    //             style={styles.container}
-    //             data={this.state.reqs}
-    //             renderItem={({item}) =>
-    //                 (<TouchableWithoutFeedback
-    //                     onPress={() => this.al(item.request_id)}>
-    //                     <View style={styles.row}>
-    //                         <Text style={{ fontSize: 15, fontFamily: 'Cabin-Bold', color: 'black'}}>
-    //                             {"Corner id: " + item.corner_id} {"\nStreet" +
-    //                         " 1: " + item.street2}{"\nStreet 2: " + item.street1}
-    //                             {"\n" + item.time}
-    //                         </Text>
-    //                     </View>
-    //                 </TouchableWithoutFeedback>)}
-    //             keyExtractor={item => item.request_id.toString()}
-    //         />
-    //         <MenuButton navigation={this.props.navigation} />
-    //         </View>
-    //         // <View style={styles.buttonContainer}>
-    //         //     <Button
-    //         //         onPress={() => {
-    //         //             this.removeRequest();
-    //         //         }}
-    //         //         title="Remove Most Recent Request"
-    //         //     />
-    //         // </View>
+    render() {
+        this.sendRequest();
+        return (
+            <View style={{flex: 1, backgroundColor: 'white',}}>
+            {this.renderHeader()}
+            <FlatList
+                style={styles.container}
+                data={this.state.reqs}
+                renderItem={({item}) =>
+                    (<TouchableWithoutFeedback
+                        onPress={() => this.al(item.request_id)}>
+                        <View style={styles.row}>
+                            <Text style={{ fontSize: 15, fontFamily: 'Cabin-Bold', color: 'black'}}>
+                                {"Corner id: " + item.corner_id} {"\nStreet" +
+                            " 1: " + item.street2}{"\nStreet 2: " + item.street1}
+                                {"\n" + item.time}
+                            </Text>
+                        </View>
+                    </TouchableWithoutFeedback>)}
+                keyExtractor={item => item.request_id.toString()}
+            />
+            <MenuButton navigation={this.props.navigation} />
+            </View>
+            // <View style={styles.buttonContainer}>
+            //     <Button
+            //         onPress={() => {
+            //             this.removeRequest();
+            //         }}
+            //         title="Remove Most Recent Request"
+            //     />
+            // </View>
 
-    //     );
-    // }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -207,11 +147,10 @@ const styles = StyleSheet.create({
         top: 80,
     },
     container: {
+        marginTop: 50,
         flex: 1,
-        backgroundColor: 'white',
-        alignItems: 'center',
-        width: '100%'
-      },
+
+    }, 
     h1: {
         fontSize: 24,
         color: 'white',

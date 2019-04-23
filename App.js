@@ -11,6 +11,8 @@ export default class App extends React.Component {
       fontLoaded: false,
       signedIn: null,
       uid: null,
+      name: "",
+      photoUrl:""
   }
 
   async componentDidMount() {
@@ -29,7 +31,9 @@ export default class App extends React.Component {
       const lastState = JSON.parse(lastStateJSON);
       this.setState({
         signedIn: lastState.signedIn,
-        uid: lastState.uid
+        uid: lastState.uid,
+        name: lastState.name,
+        photoUrl: lastState.photoUrl
       });
       console.log('Got last state');
     }
@@ -52,7 +56,7 @@ export default class App extends React.Component {
     } 
     if (this.state.signedIn) {
       return (
-        <DrawerNavigatorHome />
+        <DrawerNavigatorHome screenProps={{name: this.state.name, photoUrl: this.state.photoUrl}}/>
       );
     }
     else {
