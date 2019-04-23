@@ -434,7 +434,7 @@ def unsubscribe_corner():
 #get state of a corner request
 
 @app.route("/state", methods=['GET'])
-def get_state():
+def get_states():
     cid = request.args.get('cid')
     statequery = Request.query.filter_by(corner_id=cid).order_by(
         Request.time.desc()).first()
