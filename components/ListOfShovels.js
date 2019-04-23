@@ -27,6 +27,42 @@ const list = [
   }
 ]
 
+const list2 = [
+  {
+    "address": "Willow Ave & Pier Rd",
+    "name": "name1",
+    "time": "2019-04-18 23:48:24.846858",
+    "uid": 1,
+  },
+  {
+    "address": "Wyckoff St & Dearborn Pl",
+    "name": "name1",
+    "time": "2019-04-18 23:48:24.846771",
+    "uid": 1,
+  },
+  {
+    "address": "Willet Pl & E Buffalo St",
+    "name": "name2",
+    "time": "2019-04-18 23:48:24.846810",
+    "uid": 2,
+  },
+  {
+    "address": "Woodcrest Terrace & Woodcrest Ave",
+    "name": "name3",
+    "time": "2019-04-18 23:48:24.846835",
+    "uid": 3,
+  },
+]
+
+// Array [
+//   Object {
+//     "address": "Wyckoff St & Heights Court",
+//     "name": "Avinash Thangali",
+//     "time": "2019-04-19 14:38:59.868978",
+//     "uid": 2,
+//   },
+// ]
+
 export default class ListOfShovels extends React.Component {
   constructor(props) {
     super(props);
@@ -38,6 +74,7 @@ export default class ListOfShovels extends React.Component {
   //   loading: false,
   // }
 
+  keyExtractor = (item, index) => index.toString()
   componentDidMount() {
     this.fetchData();
   }
@@ -47,12 +84,11 @@ export default class ListOfShovels extends React.Component {
     const json = await response.json();
     console.log(json);
     console.log("/////");
-    this.setState = { data: json };
-    console.log(this.setState);
-    return json
-
+    this.setState({ data: json });
+    //console.log(this.setState);
   }
-  keyExtractor = (item, index) => index.toString()
+
+
 
   // getSpecificUser(arr, uid) {
   //   user_shovels = [];
@@ -64,10 +100,10 @@ export default class ListOfShovels extends React.Component {
   // }
 
   renderItem = ({ item }) => (
-    <ListItem
-      title={item.name}
+    < ListItem
+      title={item.time}
       titleStyle={{ fontFamily: 'Cabin-Bold', }}
-      subtitle={item.subtitle}
+      subtitle={item.address}
       subtitleStyle={{ fontFamily: 'Cabin-Regular', }}
       Component={TouchableScale}
       friction={90} //
@@ -83,7 +119,7 @@ export default class ListOfShovels extends React.Component {
       leftIcon={{
         reverse: true,
         color: '#d1e1f8',
-        name: item.icon,
+        name: 'snowflake-o',
         type: 'font-awesome'
       }}
     />
@@ -103,10 +139,11 @@ export default class ListOfShovels extends React.Component {
 
   render() {
     return (
+
       <FlatList
 
         keyExtractor={this.keyExtractor}
-        data={list}
+        data={this.state.data}
         renderItem={this.renderItem}
         style={{ width: 375 }}
         ItemSeparatorComponent={this.renderSeparator}
