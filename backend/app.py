@@ -144,8 +144,8 @@ class Corner(db.Model):
 class Shoveling(db.Model):
     __tablename__ = 'shovelings'
     id = db.Column(db.Integer, primary_key=True)
-    before_pic = db.Column(db.String(80))
-    after_pic = db.Column(db.String(80))
+    before_pic = db.Column(db.String(255))
+    after_pic = db.Column(db.String(255))
     start = db.Column(db.DateTime)
     end = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
