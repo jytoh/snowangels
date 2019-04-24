@@ -10,6 +10,9 @@ import {Feather} from '@expo/vector-icons';
 import shorthash from 'shorthash';
 import {FileSystem} from 'expo';
 
+import Environment from "../config/environment";
+import firebase from "../utils/firebase.js";
+
 export default class CameraScreen extends React.Component {
 
     state = {
@@ -50,25 +53,47 @@ export default class CameraScreen extends React.Component {
       console.log("hi3 " + this.state.b64);
       console.log("hi4 " + this.state.hash);
 
-      const name = this.state.hash;
-      const path = FileSystem.documentDirectory + name;
+      try {
+        const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function(e) {
+          console.log(e);
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', this.state.imageUri, true);
+        xhr.send(null);
+        });
+        console.log("b");
+        const ref = firebase
+        .storage()
+        .ref()
+        .child('images/' + this.state.hash + '.jpg');
+        const snapshot = await ref.put(blob);
+        const remoteUri = await snapshot.ref.getDownloadURL();
+        console.log("c");
+        // We're done with the blob, close and release it
+        blob.close();
 
-
-      FileSystem.downloadAsync(this.state.imageUri, path);
-
+        console.log(remoteUri)
 
       // console.log("hi3 " + decode(this.state.b64, 'escape' ));
 
       // let filename = this.state.imageUri.split('/').pop();
       // let match = /\.(\w+)$/.exec(filename);
       // let type = match ? `image/${match[1]}` : `image`;
-      try {
+
         console.log(this.state.hash);
         var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+        console.log(user_id)
+        console.log(cid)
         var details = {
           'uid' : user_id,
           'cid' : cid, //hardcoding for now
-          'before_pic' : this.state.hash,
+          'before_pic' : remoteUri,
         };
         var formBody = [];
         for (var property in details) {
