@@ -47,7 +47,7 @@ class Request(db.Model):
     corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
     time = db.Column(db.DateTime)
     state = db.Column(db.Integer)
-    before_pic = db.Column(db.String(80))
+    before_pic = db.Column(db.String(255))
 
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
