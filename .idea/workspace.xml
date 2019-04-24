@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/utils/firebase.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/CameraScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/CameraScreen.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,7 +23,7 @@
         <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="922">
-              <caret line="112" column="20" lean-forward="true" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
+              <caret line="112" column="20" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -31,7 +35,7 @@
         <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-302">
-              <caret line="103" lean-forward="true" selection-start-line="103" selection-end-line="103" />
+              <caret line="103" selection-start-line="103" selection-end-line="103" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -75,8 +79,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+            <state relative-caret-position="367">
+              <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
                 <element signature="e#236#271#0" expanded="true" />
@@ -84,6 +88,11 @@
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/environment.js">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -133,8 +142,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>onPre</find>
-      <find>markeroverlay</find>
       <find>uid</find>
       <find>secureS</find>
       <find>sortby</find>
@@ -163,6 +170,8 @@
       <find>register</find>
       <find>80</find>
       <find>pic</find>
+      <find>firebase</find>
+      <find>ref</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -194,19 +203,19 @@
         <option value="$PROJECT_DIR$/screens/HomeScreen.js" />
         <option value="$PROJECT_DIR$/components/MenuDrawer.js" />
         <option value="$PROJECT_DIR$/components/UsersMap.js" />
-        <option value="$PROJECT_DIR$/screens/CameraScreen.js" />
         <option value="$PROJECT_DIR$/screens/ProfileScreen.js" />
         <option value="$PROJECT_DIR$/screens/LeaderboardScreen.js" />
         <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
         <option value="$PROJECT_DIR$/components/MarkerOverlay.js" />
         <option value="$PROJECT_DIR$/backend/app.py" />
+        <option value="$PROJECT_DIR$/screens/CameraScreen.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="721" />
+    <option name="height" value="837" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -226,22 +235,7 @@
             <path>
               <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
               <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="GIS_data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="navigation" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
@@ -265,6 +259,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/utils" />
+      <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/backend/src" />
     </key>
   </component>
@@ -380,12 +376,12 @@
       <workItem from="1556018186137" duration="164000" />
       <workItem from="1556048550477" duration="3366000" />
       <workItem from="1556065156390" duration="941000" />
-      <workItem from="1556077031571" duration="4549000" />
+      <workItem from="1556077031571" duration="6215000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112024000" />
+    <option name="totallyTimeSpent" value="113690000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -397,11 +393,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="721" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1280" height="721" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4976852" visible="true" weight="0.31663975" />
-      <window_info id="Structure" order="1" sideWeight="0.5011655" side_tool="true" weight="0.31825525" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4976852" visible="true" weight="0.31663975" />
+      <window_info id="Structure" order="1" sideWeight="0.5023148" side_tool="true" weight="0.31663975" />
       <window_info id="Favorites" order="2" sideWeight="0.5023148" side_tool="true" weight="0.31663975" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Image Layers" order="4" />
@@ -417,7 +412,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.31319556" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.31319556" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="bottom" id="Bucklescript" order="13" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -621,7 +616,7 @@
     <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="922">
-          <caret line="112" column="20" lean-forward="true" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
+          <caret line="112" column="20" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -631,7 +626,7 @@
     <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-302">
-          <caret line="103" lean-forward="true" selection-start-line="103" selection-end-line="103" />
+          <caret line="103" selection-start-line="103" selection-end-line="103" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -655,10 +650,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config/environment.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+        <state relative-caret-position="367">
+          <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
             <element signature="e#236#271#0" expanded="true" />

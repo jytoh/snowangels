@@ -20,13 +20,13 @@ export default class CameraScreen extends React.Component {
         imageUri: null,
         type: Camera.Constants.Type.back,
         b64: null,
-    };
+    }
 
     async componentDidMount() {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
       this.setState({ hasPermission: status === 'granted' });
       //await this.fetch_state();
-    };
+    }
 
     
     async capturePicture() {
