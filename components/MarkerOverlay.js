@@ -112,30 +112,24 @@ const MarkerOverlay = (props) => {
         if (await userIsNearCorner() && signedIn) {
             var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
             var params = {
-                uid: uid,
+                uid: user_id,
                 cid: cornerId, //hardcoding for now
                 after_pic: "d",
             };
-            var formData = new FormData();
 
-            for (var k in params) {
-                formData.append(k, params[k]);
-            }
-
-            // var formBody = [];
-            // for (var property in details) {
-            //   var encodedKey = encodeURIComponent(property);
-            //   var encodedValue = encodeURIComponent(details[property]);
-            //   formBody.push(encodedKey + "=" + encodedValue);
-            // }
-            // formBody = formBody.join("&");
-            // navigation.navigate('Camera')
+            var formBody = [];
+          for (var property in params) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(params[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+          }
+          formBody = formBody.join("&");
             var sh = await fetch("https://snowangels-api.herokuapp.com/new_shovel", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 },
-                body: formData
+                body: formBody
 
             }).then(response => response.json()).then(responseJson => {
                     return responseJson;

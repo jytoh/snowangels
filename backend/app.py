@@ -306,8 +306,12 @@ def new_shovel():
     cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    before_pic = Request.query.filter_by(corner_id=cid).order_by(
-        Request.time.desc()).first().before_pic
+    before_pic_req = Request.query.filter_by(corner_id=cid).order_by(
+        Request.time.desc()).first()
+    if before_pic_req is None:
+        return
+    else:
+        before_pic = before_pic_req.before_pic
     after_pic = request.form["after_pic"]
     start = datetime.datetime.now()  # TODO
     end = datetime.datetime.now()  # TODO
@@ -518,14 +522,15 @@ def get_state():
     st = []
     reqids = []
     for req in reqs:
-        st.append({"cid": req.corner_id, "state":req.state})
+        st.append({"cid": req.corner_id, "state": req.state})
         reqids.append(req.corner_id)
     corners = Corner.query.all()
     for corner in corners:
         if corner.id not in reqids:
-            st.append({"cid":corner.id, "state":0})
+            st.append({"cid": corner.id, "state": 0})
 
     return json.dumps(st, indent=2)
+
 
 # return "Corner %s has  %s" % (cid, state)
 # get user id who last requested a corner
