@@ -516,8 +516,14 @@ def get_latest_requester_name():
 def get_state():
     reqs = Request.query.order_by(Request.time.desc()).all()
     st = []
+    reqids = []
     for req in reqs:
         st.append({"cid": req.corner_id, "state":req.state})
+        reqids.append(req.corner_id)
+    corners = Corner.query.all()
+    for corner in corners:
+        if corner.id not in reqids:
+            st.append({"cid":corner.id, "state":0})
 
     return json.dumps(st, indent=2)
 
