@@ -86,7 +86,7 @@ const MarkerOverlay = (props) => {
         console.log('user is near corner?', a)
         console.log('user is singed in?', signedIn)
         console.log('user id is', uid)
-        if (await userIsNearCorner() && signedIn) {
+        if (await signedIn) { //userIsNearCorner() && 
             navigation.navigate('Camera', {
                 uid: uid,
                 cornerId: cornerId
@@ -109,35 +109,46 @@ const MarkerOverlay = (props) => {
     }
 
     async function startShovel() {
-        if (await userIsNearCorner() && signedIn) {
-            var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-            var params = {
-                uid: user_id,
-                cid: cornerId, //hardcoding for now
-                after_pic: "d",
-            };
-
-            var formBody = [];
-          for (var property in params) {
-            var encodedKey = encodeURIComponent(property);
-            var encodedValue = encodeURIComponent(params[property]);
-            formBody.push(encodedKey + "=" + encodedValue);
-          }
-          formBody = formBody.join("&");
-            var sh = await fetch("https://snowangels-api.herokuapp.com/new_shovel", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                },
-                body: formBody
-
-            }).then(response => response.json()).then(responseJson => {
-                    return responseJson;
+        if (await signedIn) { //userIsNearCorner() &&
+            try{
+                if (await signedIn) { //userIsNearCorner() && 
+                    navigation.navigate('ShovelCamera', {
+                    uid: uid,
+                    cornerId: cornerId
+                });
+            //navigation.navigate('Camera')
                 }
-            ).catch((error) => {
-                // handle your errors here
+            } catch{
                 al();
-            });
+            }
+          //   var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+          //   var params = {
+          //       uid: user_id,
+          //       cid: cornerId, //hardcoding for now
+          //       after_pic: "d",
+          //   };
+
+          //   var formBody = [];
+          // for (var property in params) {
+          //   var encodedKey = encodeURIComponent(property);
+          //   var encodedValue = encodeURIComponent(params[property]);
+          //   formBody.push(encodedKey + "=" + encodedValue);
+          // }
+          // formBody = formBody.join("&");
+          //   var sh = await fetch("https://snowangels-api.herokuapp.com/new_shovel", {
+          //       method: 'POST',
+          //       headers: {
+          //           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          //       },
+          //       body: formBody
+
+          //   }).then(response => response.json()).then(responseJson => {
+          //           return responseJson;
+          //       }
+          //   ).catch((error) => {
+          //       // handle your errors here
+          //       al();
+          //   });
         }
     }
 

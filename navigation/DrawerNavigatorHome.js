@@ -7,7 +7,7 @@ import HistoryScreen from '../screens/HistoryScreen';
 import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RequestScreen from '../screens/RequestScreen';
-
+import ShovelCameraScreen from '../screens/ShovelCameraScreen';
 import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 
@@ -26,6 +26,9 @@ const DrawerNavigatorHome = createDrawerNavigator(
         },
         Camera: {
             screen: CameraScreen
+        }, 
+        ShovelCamera: {
+            screen: ShovelCameraScreen
         }, 
         Leaderboard: { 
             screen: LeaderboardScreen
