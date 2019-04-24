@@ -309,7 +309,7 @@ def new_shovel():
     before_pic_req = Request.query.filter_by(corner_id=cid).order_by(
         Request.time.desc()).first()
     if before_pic_req is None:
-        return {}
+        return json.dumps({})
     else:
         before_pic = before_pic_req.before_pic
     after_pic = request.form["after_pic"]

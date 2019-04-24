@@ -136,7 +136,6 @@ const MarkerOverlay = (props) => {
                 }
             ).catch((error) => {
                 // handle your errors here
-                console.error(error);
                 al();
             });
         }
