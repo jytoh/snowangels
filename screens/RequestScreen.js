@@ -87,19 +87,37 @@ export default class RequestScreen extends React.Component {
     }
 
     al(rid) {
-        Alert.alert(
+        if (this.state.tab == 0 || this.state.tab == 2) {
+            Alert.alert(
+                'Sure?',
+                'Do you want to remove this Request?',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {text: 'OK', onPress: () => this.removeRequest(rid)},
+                ],
+                {cancelable: true},
+            );
+        }
+        else if (this.state.tab == 1){
+            Alert.alert(
             'Sure?',
-            'Do you want to remove this Request?',
+            'Do you want to validate this Request?',
             [
                 {
                     text: 'Cancel',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: () => this.removeRequest(rid)},
+                {text: 'Invalid Shovel', onPress: () => this.validateShovel(rid, 0)},
+                {text: 'Valid Shovel', onPress: () => this.validateShovel(rid, 1)},
             ],
             {cancelable: true},
         );
+        }
     }
 
     renderHeader() {
@@ -151,23 +169,6 @@ export default class RequestScreen extends React.Component {
         this.setState({
             reqs: re
         });
-    }
-
-    al_val(rid) {
-        Alert.alert(
-            'Sure?',
-            'Do you want to remove this Request?',
-            [
-                {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                },
-                {text: 'Invalid Shovel', onPress: () => this.validateShovel(rid, 0)},
-                {text: 'Valid Shovel', onPress: () => this.validateShovel(rid, 1)},
-            ],
-            {cancelable: true},
-        );
     }
 
     async validateShovel(rid, vb) {
