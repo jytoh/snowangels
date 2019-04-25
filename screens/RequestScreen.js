@@ -23,6 +23,8 @@ export default class RequestScreen extends React.Component {
 
     change_tab(tab) {
         this.setState({tab: tab});
+        this.sendRequest();
+        this.render()
     }
 
 
@@ -58,7 +60,6 @@ export default class RequestScreen extends React.Component {
     };
 
     render() {
-        this.sendRequest();
         return (
             <View style={styles.container}>
                 {this.renderHeader()}

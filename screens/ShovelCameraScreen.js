@@ -1,5 +1,15 @@
 import React from 'react';
-import { Image, TouchableOpacity, SafeAreaView, Button, StyleSheet, Text, View, Dimensions } from 'react-native';
+import {
+    Image,
+    TouchableOpacity,
+    SafeAreaView,
+    Button,
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    Alert
+} from 'react-native';
 import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
 import { SecureStore } from 'expo';
@@ -114,7 +124,21 @@ export default class ShovelCameraScreen extends React.Component {
           });
       } catch(error) {
         console.log('error!');
+        this.al();
       }
+    }
+
+    al(){
+        Alert.alert(
+            'Invalid Corner',
+            "You can't validate a shoveling for this corner, likely because" +
+            " a shoveling has not been requested yet.",
+            [
+
+                {text: 'OK', onPress: () => {}},
+            ],
+            {cancelable: false},
+        );
     }
 
     async fetch_state() {
