@@ -16,69 +16,78 @@ import {SecureStore} from "expo";
 export default class RequestScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {reqs: []};
+        this.state = {reqs:[], tab: 0};
         this.sendRequest()
 
     }
 
+    req_state_match(st) {
+        this.setState({tab: st});
+        if (st == 2) {
+            return "Pending Confirmation"
+        } else {
+            return "Confirmed"
+        }
+    }
+
     keyExtractor = (item, index) => index.toString()
 
-    renderItem = ({ item }) => (
-      <ListItem
-        title={item.time}
-        titleStyle={{fontFamily: 'Cabin-Bold',}}
-        subtitle={item.street2 + ' & ' + item.street1 + ', ID: ' + item.request_id}
-        subtitleStyle={{fontFamily: 'Cabin-Regular',}}
-        // leftAvatar={{ source: { uri: item.avatar_url } }}
-        leftIcon={{
-          reverse: true,
-          color: '#d1e1f8',
-          name: 'snowflake-o',
-          type: 'font-awesome'
-        }}
-        onPress={() => this.al(item.request_id)}
-      />
+    renderItem = ({item}) => (
+        <ListItem
+            title={item.time}
+            titleStyle={{fontFamily: 'Cabin-Bold',}}
+            subtitle={item.street2 + ' & ' + item.street1 + ', State: ' + item.state}
+            subtitleStyle={{fontFamily: 'Cabin-Regular',}}
+            // leftAvatar={{ source: { uri: item.avatar_url } }}
+            leftIcon={{
+                reverse: true,
+                color: '#d1e1f8',
+                name: 'snowflake-o',
+                type: 'font-awesome'
+            }}
+            onPress={() => this.al(item.request_id)}
+        />
     )
     renderSeparator = () => {
-      return (
-        <View
-          style={{
-            height: 1,
-            width: "80%",
-            backgroundColor: "#CED0CE",
-            marginLeft: "20%"
-          }}
-        />
-      );
+        return (
+            <View
+                style={{
+                    height: 1,
+                    width: "80%",
+                    backgroundColor: "#CED0CE",
+                    marginLeft: "20%"
+                }}
+            />
+        );
     };
-  
+
     render() {
         this.sendRequest();
         return (
-        <View style={styles.container}>
-            {this.renderHeader()}
-            <MenuButton navigation={this.props.navigation} />
-            <FlatList
-            keyExtractor={this.keyExtractor}
-            data={this.state.reqs}
-            renderItem={this.renderItem}
-            style={{ width: 400 }}
-            ItemSeparatorComponent={this.renderSeparator}
-            />
-        </View>
-  
-        // <View>
-        //   {
-        //     list.map((item, i) => (
-        //       <ListItem
-        //         key={i}
-        //         title={item.title}
-        //         leftIcon={{ name: item.icon }}
-        //       />
-        //     ))
-        //   }
-        // </View>
-      )
+            <View style={styles.container}>
+                {this.renderHeader()}
+                <MenuButton navigation={this.props.navigation}/>
+                <FlatList
+                    keyExtractor={this.keyExtractor}
+                    data={this.state.reqs}
+                    renderItem={this.renderItem}
+                    style={{width: 400}}
+                    ItemSeparatorComponent={this.renderSeparator}
+                />
+            </View>
+
+            // <View>
+            //   {
+            //     list.map((item, i) => (
+            //       <ListItem
+            //         key={i}
+            //         title={item.title}
+            //         leftIcon={{ name: item.icon }}
+            //       />
+            //     ))
+            //   }
+            // </View>
+        )
     }
 
     al(rid) {
@@ -100,24 +109,33 @@ export default class RequestScreen extends React.Component {
     renderHeader() {
         return (
             <View colors={[, '#DDE8FC', '#76A1EF']}
-               style={styles.header}>
-                <Text style={{ fontSize: 25, fontFamily: 'Cabin-Bold', color: 'white', paddingTop: 20}}>My Requests</Text>
+                  style={styles.header}>
+                <Text style={{
+                    fontSize: 25,
+                    fontFamily: 'Cabin-Bold',
+                    color: 'white',
+                    paddingTop: 20
+                }}>My Requests</Text>
                 <View style={{
-                   flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
-                   marginBottom: 15, marginTop: 20
-                 }}>
-               <Text style={styles.h1}>All</Text>
-               <Text style={styles.h1}>  |  </Text>
-               <Text style={styles.h1}>Pending</Text>
-               </View>
-             </View>
-          )
-       }
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 15,
+                    marginTop: 20
+                }}>
+                    <Text style={styles.h1}>All</Text>
+                    <Text style={styles.h1}> | </Text>
+                    <Text style={styles.h1}>Pending</Text>
+                </View>
+            </View>
+        )
+    }
 
 
     async sendRequest() {
         // var user_id = 2;
         var user_id = await SecureStore.getItemAsync('id');
+        var st = this.state.tab;
         var re = await fetch('https://snowangels-api.herokuapp.com/get_requests?uid=%d'.replace("%d", user_id),
             {
                 method: 'GET'
@@ -211,7 +229,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         width: '100%'
-      },
+    },
     h1: {
         fontSize: 24,
         color: 'white',
