@@ -17,14 +17,17 @@ export default class RequestScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {reqs: [], tab: 1};
-        this.sendRequest()
 
     }
 
     change_tab(tab) {
         this.setState({tab: tab});
-        this.sendRequest();
-        this.render()
+        try {
+            this.sendRequest();
+            this.render()
+        } catch (error){
+
+        }
     }
 
 
@@ -60,6 +63,7 @@ export default class RequestScreen extends React.Component {
     };
 
     render() {
+        this.sendRequest();
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
