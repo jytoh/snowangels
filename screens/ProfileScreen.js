@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Button, StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { Image, Button, StyleSheet, Text, View, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { SecureStore } from 'expo';
 import {AsyncStorage} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
@@ -248,6 +248,7 @@ const LoginPage = props => {
       {/* <View style ={styles.imgView}>
         <Image style = {styles.loginpic} source={require('../assets/snowflake.jpg')}/>
       </View> */}
+      <Image style={styles.logo} source={require('../assets/logo.png')} />
       <Ionicons
         name = "md-snow"
         color = "white"
@@ -365,14 +366,15 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     borderWidth: 0.5,
     width: "90%", 
-    margin: 10, 
-    backgroundColor: "#76A1EF"
+    backgroundColor: "#76A1EF",
+    position: 'absolute',
+    bottom: Dimensions.get('window').height*0.3
   },
   loginpic: {
     height: 120,
     width: 120,
     borderRadius: 40,
-    paddingBottom: 50,
+    marginBottom: 60,
     backgroundColor: '#D1E1F8',
   },
   signintext: {
@@ -383,6 +385,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'Cabin-Bold',
     paddingTop: 24
+  },
+  logo: {
+    position: 'absolute',
+    top: Dimensions.get('window').height*0.2,
+    height: "14%"
   }
 });
 
