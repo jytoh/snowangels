@@ -17,7 +17,7 @@ export default class RequestScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {reqs: [], tab: 1};
-
+        this.sendRequest();
     }
 
     change_tab(tab) {
