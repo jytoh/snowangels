@@ -16,21 +16,17 @@ import {SecureStore} from "expo";
 export default class RequestScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {reqs:[], tab: 0};
+        this.state = {reqs: [], tab: 1};
         this.sendRequest()
 
     }
 
-    req_state_match(st) {
-        this.setState({tab: st});
-        if (st == 2) {
-            return "Pending Confirmation"
-        } else {
-            return "Confirmed"
-        }
+    change_tab(tab) {
+        this.setState({tab: tab});
     }
 
-    keyExtractor = (item, index) => index.toString()
+
+    keyExtractor = (item, index) => index.toString();
 
     renderItem = ({item}) => (
         <ListItem
@@ -123,9 +119,14 @@ export default class RequestScreen extends React.Component {
                     marginBottom: 15,
                     marginTop: 20
                 }}>
-                    <Text style={styles.h1}>All</Text>
+                    <Text onPress={() => this.change_tab(0)}
+                          style={styles.h1}>Pending</Text>
                     <Text style={styles.h1}> | </Text>
-                    <Text style={styles.h1}>Pending</Text>
+                    <Text onPress={() => this.change_tab(1)}
+                          style={styles.h1}>Claimed</Text>
+                    <Text style={styles.h1}> | </Text>
+                    <Text onPress={() => this.change_tab(2)}
+                          style={styles.h1}>Confirmed</Text>
                 </View>
             </View>
         )
@@ -136,9 +137,58 @@ export default class RequestScreen extends React.Component {
         // var user_id = 2;
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
-        var re = await fetch('https://snowangels-api.herokuapp.com/get_requests?uid=%d'.replace("%d", user_id),
+        var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=%d2'.replace("%d1", user_id).replace("%d2", st),
             {
                 method: 'GET'
+            }).then(response => response.json())
+            .then((jsonData) => {
+                return jsonData;
+
+            }).catch((error) => {
+                // handle your errors here
+                console.error(error)
+            })
+        this.setState({
+            reqs: re
+        });
+    }
+
+    al_val(rid) {
+        Alert.alert(
+            'Sure?',
+            'Do you want to remove this Request?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'Invalid Shovel', onPress: () => this.validateShovel(rid, 0)},
+                {text: 'Valid Shovel', onPress: () => this.validateShovel(rid, 1)},
+            ],
+            {cancelable: true},
+        );
+    }
+
+    async validateShovel(rid, vb) {
+        var details = {
+                'request_id': rid,
+                'vb': vb
+              };
+        var formBody = [];
+        for (var property in details) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
+        var re = await fetch('https://snowangels-api.herokuapp.com/validate_shovel',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formBody,
             }).then(response => response.json())
             .then((jsonData) => {
                 return jsonData;

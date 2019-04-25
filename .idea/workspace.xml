@@ -16,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="148" column="23" lean-forward="true" selection-start-line="148" selection-start-column="23" selection-end-line="148" selection-end-column="23" />
+            <state relative-caret-position="-5">
+              <caret line="175" column="21" selection-start-line="175" selection-start-column="21" selection-end-line="175" selection-end-column="21" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -29,24 +29,24 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+        <entry file="file://$PROJECT_DIR$/backend/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-305">
-              <caret line="103" selection-start-line="103" selection-end-line="103" />
+            <state relative-caret-position="59">
+              <caret line="361" column="27" selection-start-line="361" selection-start-column="13" selection-end-line="361" selection-end-column="27" />
               <folding>
-                <element signature="e#0#25#0" expanded="true" />
+                <element signature="e#0#40#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/backend/app.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="559" column="38" lean-forward="true" selection-start-line="559" selection-start-column="38" selection-end-line="559" selection-end-column="38" />
+            <state relative-caret-position="139">
+              <caret line="169" selection-start-line="169" selection-end-line="173" selection-end-column="35" />
               <folding>
-                <element signature="e#0#40#0" expanded="true" />
+                <element signature="e#0#25#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,8 +66,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/ProfileScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37">
-              <caret line="84" column="10" selection-start-line="84" selection-start-column="10" selection-end-line="90" selection-end-column="40" />
+            <state relative-caret-position="4">
+              <caret line="77" column="10" lean-forward="true" selection-start-line="77" selection-start-column="10" selection-end-line="82" selection-end-column="16" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -78,8 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
+            <state relative-caret-position="308">
+              <caret line="113" column="7" lean-forward="true" selection-start-line="92" selection-start-column="8" selection-end-line="113" selection-end-column="7" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
                 <element signature="e#236#271#0" expanded="true" />
@@ -133,14 +133,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sort</find>
-      <find>shove</find>
-      <find>photoUr</find>
-      <find>refresh</find>
-      <find>this.al</find>
       <find>history</find>
       <find>componentdidm</find>
-      <find>state</find>
       <find>get_states</find>
       <find>get_state</find>
       <find>new_shove</find>
@@ -154,15 +148,21 @@
       <find>pic</find>
       <find>firebase</find>
       <find>requests</find>
-      <find>ref</find>
       <find>shovel(</find>
-      <find>register</find>
       <find>shovel</find>
       <find>id</find>
       <find>request</find>
-      <find>pending</find>
       <find>filter_</find>
       <find>this.state.req</find>
+      <find>remove</find>
+      <find>al</find>
+      <find>pending</find>
+      <find>validate</find>
+      <find>state</find>
+      <find>ref</find>
+      <find>onPress</find>
+      <find>register</find>
+      <find>validate_shove</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -195,11 +195,11 @@
         <option value="$PROJECT_DIR$/components/UsersMap.js" />
         <option value="$PROJECT_DIR$/screens/ProfileScreen.js" />
         <option value="$PROJECT_DIR$/screens/LeaderboardScreen.js" />
-        <option value="$PROJECT_DIR$/components/MarkerOverlay.js" />
         <option value="$PROJECT_DIR$/screens/CameraScreen.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
+        <option value="$PROJECT_DIR$/components/MarkerOverlay.js" />
         <option value="$PROJECT_DIR$/backend/app.py" />
+        <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
       </list>
     </option>
   </component>
@@ -222,11 +222,6 @@
             <path>
               <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
               <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -362,12 +357,12 @@
       <workItem from="1556018186137" duration="164000" />
       <workItem from="1556048550477" duration="3366000" />
       <workItem from="1556065156390" duration="941000" />
-      <workItem from="1556077031571" duration="11592000" />
+      <workItem from="1556077031571" duration="14748000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="119067000" />
+    <option name="totallyTimeSpent" value="122223000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -587,28 +582,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-305">
-          <caret line="103" selection-start-line="103" selection-end-line="103" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-            <element signature="e#236#271#0" expanded="true" />
-            <element signature="e#431#465#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/LeaderboardScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="341">
@@ -619,12 +592,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/ProfileScreen.js">
+    <entry file="file://$PROJECT_DIR$/config/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="37">
-          <caret line="84" column="10" selection-start-line="84" selection-start-column="10" selection-end-line="90" selection-end-column="40" />
+        <state relative-caret-position="225">
+          <caret line="14" column="62" lean-forward="true" selection-start-line="14" selection-start-column="62" selection-end-line="14" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="113" column="7" lean-forward="true" selection-start-line="92" selection-start-column="8" selection-end-line="113" selection-end-column="7" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#236#271#0" expanded="true" />
+            <element signature="e#431#465#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="169" selection-start-line="169" selection-end-line="173" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -638,17 +630,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/environment.js">
+    <entry file="file://$PROJECT_DIR$/screens/ProfileScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="14" column="62" lean-forward="true" selection-start-line="14" selection-start-column="62" selection-end-line="14" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="148" column="23" lean-forward="true" selection-start-line="148" selection-start-column="23" selection-end-line="148" selection-end-column="23" />
+        <state relative-caret-position="4">
+          <caret line="77" column="10" lean-forward="true" selection-start-line="77" selection-start-column="10" selection-end-line="82" selection-end-column="16" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -657,10 +642,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="559" column="38" lean-forward="true" selection-start-line="559" selection-start-column="38" selection-end-line="559" selection-end-column="38" />
+        <state relative-caret-position="59">
+          <caret line="361" column="27" selection-start-line="361" selection-start-column="13" selection-end-line="361" selection-end-column="27" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5">
+          <caret line="175" column="21" selection-start-line="175" selection-start-column="21" selection-end-line="175" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>

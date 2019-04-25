@@ -51,7 +51,7 @@ class Request(db.Model):
 
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
-        self.state = 1
+        self.state = 0
         self.user_id = user_id
         self.corner_id = corner_id
         self.before_pic = before_pic
@@ -361,32 +361,30 @@ def num_points():
 # validate shoveling
 @app.route("/validate_shovel", methods=['POST'])
 def validate_shovel():
-    uid_requester = request.form["uid_requester"]
-    uid_shoveler = request.form["uid_shoveler"]
-    cid = request.form["cid"]
-    validate_bit = request.form["cid"]
-    shoveler = User.query.get(uid_shoveler)
-    corner = Corner.query.get(cid)
+    request_id = request.form["request_id"]
+    validate_bit = request.form["vb"]
+    req = Request.query.filter_by(id=request_id).first()
+    cid = req.corner_id
+    shoveling = Shoveling.query.filter_by(corner_id = cid).order_by(
+        Shoveling.start.asc()).first()
+    uid_shoveler = shoveling.user_id
     # if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
+
+    uid_requester = req.user_id
     if validate_bit == '0':
         points_entry = Point.query.filter_by(user_id=uid_shoveler).first()
         points_entry.day_pts -= 5  # TODO: figure out good # of points/ weights later
         points_entry.week_pts -= 5
         points_entry.szn_pts -= 5
         db.session.commit()
-        req = Request.query.filter_by(corner_id=cid, state=1,
-                                      user_id=uid_requester).order_by(
-            Request.time.desc()).first()
         req.state = 0  # TODO: need to re-notify ppl that this corner needs to be cleared
         db.session.commit()
+
         return jsonify(requester=uid_requester, shoveler=uid_shoveler,
                        corner=cid, validate_bit=validate_bit)
         # return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
     # if requester says shoveling claim is valid, set state of request to steady state, 2
     elif validate_bit == '1':
-        req = Request.query.filter_by(corner_id=cid, state=1,
-                                      user_id=uid_requester).order_by(
-            Request.time.desc()).first()
         req.state = 2
         db.session.commit()
         return jsonify(requester=uid_requester, shoveler=uid_shoveler,
