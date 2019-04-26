@@ -277,10 +277,11 @@ def new_request():
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
-    reqs = Request.query.filter_by(corner_id=cid).first()
-    if reqs is not None:
-        return jsonify(user=uid, corner=cid, username=user.name, before_pic=
-        before_pic)
+    reqs = Request.query.filter_by(corner_id=cid)
+    if len(reqs) == 0:
+        return None
+    elif any([req.state < 2 for req in reqs]):
+        return None
 
     req = Request(uid, cid, before_pic)
     db.session.add(req)

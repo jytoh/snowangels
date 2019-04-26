@@ -124,7 +124,7 @@ const MarkerOverlay = (props) => {
         if (await signedIn) { //userIsNearCorner() &&
             try {
                 var user_id = await SecureStore.getItemAsync('id');
-                var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=1'.replace("%d1", user_id),
+                var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=0'.replace("%d1", user_id),
                     {
                         method: 'GET'
                     }).then(response => response.json())
@@ -137,6 +137,7 @@ const MarkerOverlay = (props) => {
                     });
                 if (re.length == 0){
                     al();
+                    return;
                 }
                 if (await signedIn) { //userIsNearCorner() && 
                     navigation.navigate('ShovelCamera', {
