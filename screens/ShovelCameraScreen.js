@@ -7,7 +7,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Dimensions
+    Dimensions,
+    Alert
 } from 'react-native';
 import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
@@ -22,20 +23,21 @@ import {FileSystem} from 'expo';
 import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 
-export default class CameraScreen extends React.Component {
+export default class ShovelCameraScreen extends React.Component {
 
     state = {
         hasPermission: null,
         imageUri: null,
         type: Camera.Constants.Type.back,
         b64: null,
-    }
+    };
 
     async componentDidMount() {
         const {status} = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({hasPermission: status === 'granted'});
         //await this.fetch_state();
-    }
+    };
+
 
 
     async capturePicture() {
@@ -64,11 +66,11 @@ export default class CameraScreen extends React.Component {
     };
 
     async uploadPicture(cid) {
-        // console.log('from upload picture', this.state.uid);
-        // console.log("hi1 " + this.state.imageUri);
-        // console.log("hi2 " + this.state.bytea);
-        // console.log("hi3 " + this.state.b64);
-        // console.log("hi4 " + this.state.hash);
+        console.log('from upload picture', this.state.uid);
+        console.log("hi1 " + this.state.imageUri);
+        console.log("hi2 " + this.state.bytea);
+        console.log("hi3 " + this.state.b64);
+        console.log("hi4 " + this.state.hash);
 
         try {
             const blob = await new Promise((resolve, reject) => {
@@ -77,36 +79,24 @@ export default class CameraScreen extends React.Component {
                     resolve(xhr.response);
                 };
                 xhr.onerror = function (e) {
-                    // console.log(e);
+                    console.log(e);
                     reject(new TypeError('Network request failed'));
                 };
                 xhr.responseType = 'blob';
                 xhr.open('GET', this.state.imageUri, true);
                 xhr.send(null);
             });
-            // console.log("b");
+            console.log("b");
             const ref = firebase
                 .storage()
                 .ref()
                 .child('images/' + this.state.hash + '.jpg');
             const snapshot = await ref.put(blob);
-            var user_id = await SecureStore.getItemAsync('id');
             const remoteUri = await snapshot.ref.getDownloadURL();
-            var details = {
-                'uid': user_id,
-                'cid': cid, //hardcoding for now
-                'before_pic': remoteUri,
-            };
-            console.log("sdf");
-            console.log(details);
-            // console.log("c");
+            console.log("c");
             // We're done with the blob, close and release it
             blob.close();
-               } catch (error) {
-            console.log('error!');
-        }
 
-            // console.log(remoteUri)
 
             // console.log("hi3 " + decode(this.state.b64, 'escape' ));
 
@@ -114,11 +104,18 @@ export default class CameraScreen extends React.Component {
             // let match = /\.(\w+)$/.exec(filename);
             // let type = match ? `image/${match[1]}` : `image`;
 
-            // console.log(this.state.hash);
-            //user_id instead of google_id
-            // console.log(user_id)
-            // console.log(cid)
+            console.log(this.state.hash);
+            var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+            console.log(user_id)
+            console.log(cid)
+            console.log(remoteUri)
 
+            console.log(remoteUri.toString())
+            var details = {
+                'uid': user_id,
+                'cid': cid, //hardcoding for now
+                'after_pic': remoteUri,
+            };
             var formBody = [];
             for (var property in details) {
                 var encodedKey = encodeURIComponent(property);
@@ -126,18 +123,35 @@ export default class CameraScreen extends React.Component {
                 formBody.push(encodedKey + "=" + encodedValue);
             }
 
-            formBody = formBody.join("&");
-            await fetch('https://snowangels-api.herokuapp.com/new_request', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+        } catch (error) {
+
+        }
+        formBody = formBody.join("&");
+        let response = await fetch('https://snowangels-api.herokuapp.com/new_shovel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formBody,
+        }).catch(error => {
+            console.log(error);
+            Alert.alert(
+            'Invalid Corner',
+            "You can't validate a shoveling for this corner, likely because" +
+            " a shoveling has not been requested yet.",
+            [
+
+                {
+                    text: 'OK', onPress: () => {
+                    }
                 },
-                body: formBody,
-            }).catch((error) => {
-                console.error(error);
-            });
+            ],
+            {cancelable: false},
+        );
+        });
 
     }
+
 
     async fetch_state() {
         try {
@@ -159,7 +173,7 @@ export default class CameraScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
-        console.log('camera state, cid =', cornerId);
+        console.log('camera state, cid =', cornerId)
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
         if (hasPermission === null) {
@@ -169,7 +183,7 @@ export default class CameraScreen extends React.Component {
                 <SafeAreaVew><Text>No access to camera</Text></SafeAreaVew>);
         } else {
             if (this.state.imageUri) {
-                // console.log(this.state.imageUri);
+                console.log(this.state.imageUri);
                 return (
                     <View style={styles.container}>
                         <Image style={styles.image}
