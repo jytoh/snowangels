@@ -377,7 +377,7 @@ def validate_shovel():
         points_entry.week_pts -= 5
         points_entry.szn_pts -= 5
         db.session.commit()
-        db.delete(shoveling)
+        db.session.delete(shoveling)
         db.session.commit()
         req.state = 0  # TODO: need to re-notify ppl that this corner needs to be cleared
         db.session.commit()

@@ -25,7 +25,7 @@ export default class RequestScreen extends React.Component {
         try {
             this.sendRequest();
             this.render()
-        } catch (error){
+        } catch (error) {
 
         }
     }
@@ -63,7 +63,7 @@ export default class RequestScreen extends React.Component {
     };
 
     render() {
-        this.sendRequest();
+        // this.sendRequest();
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
@@ -106,22 +106,27 @@ export default class RequestScreen extends React.Component {
                 ],
                 {cancelable: true},
             );
-        }
-        else if (this.state.tab == 1){
+        } else if (this.state.tab == 1) {
             Alert.alert(
-            'Sure?',
-            'Do you want to validate this Request?',
-            [
-                {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                },
-                {text: 'Invalid Shovel', onPress: () => this.validateShovel(rid, 0)},
-                {text: 'Valid Shovel', onPress: () => this.validateShovel(rid, 1)},
-            ],
-            {cancelable: true},
-        );
+                'Sure?',
+                'Do you want to validate this Request?',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Invalid Shovel',
+                        onPress: () => this.validateShovel(rid, 0)
+                    },
+                    {
+                        text: 'Valid Shovel',
+                        onPress: () => this.validateShovel(rid, 1)
+                    },
+                ],
+                {cancelable: true},
+            );
         }
     }
 
@@ -165,22 +170,22 @@ export default class RequestScreen extends React.Component {
                 method: 'GET'
             }).then(response => response.json())
             .then((jsonData) => {
-                return jsonData;
+
+                this.setState({
+                    reqs: jsonData
+                });
 
             }).catch((error) => {
                 // handle your errors here
-                console.error(error)
             })
-        this.setState({
-            reqs: re
-        });
+
     }
 
     async validateShovel(rid, vb) {
         var details = {
-                'request_id': rid,
-                'vb': vb
-              };
+            'request_id': rid,
+            'vb': vb
+        };
         var formBody = [];
         for (var property in details) {
             var encodedKey = encodeURIComponent(property);
