@@ -129,7 +129,7 @@ const MarkerOverlay = (props) => {
                     console.error(error)
                 });
 
-            if(any_recs_not_compl(re)){
+            if(re.len > 0 &&any_recs_not_compl(re)){
                 alreadyReq();
             }
             else {

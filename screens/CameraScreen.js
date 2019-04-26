@@ -97,6 +97,8 @@ export default class CameraScreen extends React.Component {
                 'cid': cid, //hardcoding for now
                 'before_pic': remoteUri,
             };
+            console.log("sdf");
+            console.log(details);
             // console.log("c");
             // We're done with the blob, close and release it
             blob.close();
@@ -157,7 +159,7 @@ export default class CameraScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
-        console.log('camera state, cid =', cornerId)
+        console.log('camera state, cid =', cornerId);
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
         if (hasPermission === null) {

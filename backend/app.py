@@ -278,9 +278,7 @@ def new_request():
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
     reqs = Request.query.filter_by(corner_id=cid).all()
-    if len(reqs) == 0:
-        return None
-    elif any([req.state < 2 for req in reqs]):
+    if any([req.state < 2 for req in reqs]):
         return None
 
     req = Request(uid, cid, before_pic)
