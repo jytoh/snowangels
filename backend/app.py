@@ -525,8 +525,9 @@ def get_state():
     st = []
     reqids = []
     for req in reqs:
-        st.append({"cid": req.corner_id, "state": req.state})
-        reqids.append(req.corner_id)
+        if req.corner_id not in reqids:
+            st.append({"cid": req.corner_id, "state": req.state})
+            reqids.append(req.corner_id)
     corners = Corner.query.all()
     for corner in corners:
         if corner.id not in reqids:
