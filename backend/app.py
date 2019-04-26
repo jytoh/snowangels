@@ -310,7 +310,7 @@ def new_shovel():
     cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    before_pic_req = Request.query.filter_by(corner_id=cid).order_by(
+    before_pic_req = Request.query.filter_by(corner_id=cid, state=0).order_by(
         Request.time.desc()).first()
     if before_pic_req is None:
         return None
@@ -363,7 +363,7 @@ def num_points():
 def validate_shovel():
     request_id = request.form["request_id"]
     validate_bit = request.form["vb"]
-    req = Request.query.filter_by(id=request_id).first()
+    req = Request.query.filter_by(id=request_id, state=1).first()
     cid = req.corner_id
     shoveling = Shoveling.query.filter_by(corner_id = cid).order_by(
         Shoveling.start.asc()).first()
