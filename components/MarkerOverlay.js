@@ -164,7 +164,7 @@ const MarkerOverlay = (props) => {
         if (await signedIn) { //userIsNearCorner() &&
             try {
                 var user_id = await SecureStore.getItemAsync('id');
-                var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?cid=%d1&state=0'.replace("%d1", cornerId),
+                var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state_cid?cid=%d1&state=0'.replace("%d1", cornerId),
                     {
                         method: 'GET'
                     }).then(response => response.json())

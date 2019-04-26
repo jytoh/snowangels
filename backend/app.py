@@ -569,13 +569,30 @@ def get_requests():
                        'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
     return json.dumps(result)
 
+@app.route("/get_requests_filter_state_cid", methods=['GET'])
+def get_requests_filter_state_cid():
+    cid = request.args.get('cid')
+    state = request.args.get('state')
+    reqs = Request.query.filter_by(corner_id=cid, state = state).order_by(
+        Request.time.desc(
+
+    )).all()
+    result = []
+    for req in reqs:
+        corner = Corner.query.filter_by(id=req.corner_id).first()
+        result.append({'request_id': req.id,
+                       'state': req.state,
+                       'street1': corner.street1,
+                       'street2': corner.street2,
+                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
+    return json.dumps(result)
 
 
 @app.route("/get_requests_filter_state", methods=['GET'])
 def get_requests_filter_state():
-    cid = request.args.get('cid')
+    uid = request.args.get('uid')
     state = request.args.get('state')
-    reqs = Request.query.filter_by(corner_id=cid, state = state).order_by(
+    reqs = Request.query.filter_by(user_id=uid, state = state).order_by(
         Request.time.desc(
 
     )).all()
