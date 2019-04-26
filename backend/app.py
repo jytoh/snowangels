@@ -573,9 +573,9 @@ def get_requests():
 
 @app.route("/get_requests_filter_state", methods=['GET'])
 def get_requests_filter_state():
-    uid = request.args.get('uid')
+    cid = request.args.get('cid')
     state = request.args.get('state')
-    reqs = Request.query.filter_by(user_id=uid, state = state).order_by(
+    reqs = Request.query.filter_by(corner_id=cid, state = state).order_by(
         Request.time.desc(
 
     )).all()

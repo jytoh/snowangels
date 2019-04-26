@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/components/MarkerOverlay.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/MarkerOverlay.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/CameraScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/CameraScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/ShovelCameraScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/ShovelCameraScreen.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +19,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-527">
-              <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+            <state relative-caret-position="15">
+              <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -28,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backend/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="282" lean-forward="true" selection-start-line="282" selection-end-line="282" />
+            <state relative-caret-position="51">
+              <caret line="572" lean-forward="true" selection-start-line="572" selection-end-line="572" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -40,8 +43,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="138" column="42" lean-forward="true" selection-start-line="138" selection-start-column="42" selection-end-line="138" selection-end-column="42" />
+            <state relative-caret-position="2338">
+              <caret line="166" column="141" selection-start-line="166" selection-start-column="141" selection-end-line="166" selection-end-column="141" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -52,8 +55,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="106" column="9" lean-forward="true" selection-start-line="106" selection-start-column="9" selection-end-line="106" selection-end-column="9" />
+            <state relative-caret-position="140">
+              <caret line="99" column="31" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/screens/ShovelCameraScreen.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="103">
+              <caret line="136" column="31" selection-start-line="136" selection-start-column="31" selection-end-line="136" selection-end-column="31" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -72,9 +87,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>shovelcam</find>
-      <find>catch</find>
-      <find>register</find>
       <find>shovel</find>
       <find>validate_</find>
       <find>request</find>
@@ -101,7 +113,10 @@
       <find>shoveling</find>
       <find>navigation</find>
       <find>new_reques</find>
+      <find>uploadpic</find>
       <find>upload</find>
+      <find>get_corners_</find>
+      <find>get_core</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -134,10 +149,10 @@
         <option value="$PROJECT_DIR$/components/UsersMap.js" />
         <option value="$PROJECT_DIR$/screens/ProfileScreen.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
-        <option value="$PROJECT_DIR$/screens/ShovelCameraScreen.js" />
         <option value="$PROJECT_DIR$/screens/LeaderboardScreen.js" />
+        <option value="$PROJECT_DIR$/screens/ShovelCameraScreen.js" />
         <option value="$PROJECT_DIR$/screens/CameraScreen.js" />
+        <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
         <option value="$PROJECT_DIR$/components/MarkerOverlay.js" />
         <option value="$PROJECT_DIR$/backend/app.py" />
       </list>
@@ -312,7 +327,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141695000" />
+    <option name="totallyTimeSpent" value="143178000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -344,7 +359,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.38314787" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.3799682" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="bottom" id="Bucklescript" order="13" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -567,16 +582,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/ShovelCameraScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="123" column="27" selection-start-line="123" selection-start-column="24" selection-end-line="123" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/navigation/StackNavigator.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -587,27 +592,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
+    <entry file="file://$PROJECT_DIR$/screens/ShovelCameraScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-527">
-          <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="138" column="42" lean-forward="true" selection-start-line="138" selection-start-column="42" selection-end-line="138" selection-end-column="42" />
+        <state relative-caret-position="103">
+          <caret line="136" column="31" selection-start-line="136" selection-start-column="31" selection-end-line="136" selection-end-column="31" />
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="106" column="9" lean-forward="true" selection-start-line="106" selection-start-column="9" selection-end-line="106" selection-end-column="9" />
+        <state relative-caret-position="140">
+          <caret line="99" column="31" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2338">
+          <caret line="166" column="141" selection-start-line="166" selection-start-column="141" selection-end-line="166" selection-end-column="141" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -616,8 +634,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="282" lean-forward="true" selection-start-line="282" selection-end-line="282" />
+        <state relative-caret-position="51">
+          <caret line="572" lean-forward="true" selection-start-line="572" selection-end-line="572" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>

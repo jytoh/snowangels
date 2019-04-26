@@ -38,21 +38,7 @@ export default class ShovelCameraScreen extends React.Component {
         //await this.fetch_state();
     };
 
-    static al() {
-        Alert.alert(
-            'Invalid Corner',
-            "You can't validate a shoveling for this corner, likely because" +
-            " a shoveling has not been requested yet.",
-            [
 
-                {
-                    text: 'OK', onPress: () => {
-                    }
-                },
-            ],
-            {cancelable: false},
-        );
-    }
 
     async capturePicture() {
         if (this.camera) {
@@ -136,23 +122,35 @@ export default class ShovelCameraScreen extends React.Component {
                 var encodedValue = encodeURIComponent(details[property]);
                 formBody.push(encodedKey + "=" + encodedValue);
             }
-            ;
-            formBody = formBody.join("&");
-            let response = await fetch('https://snowangels-api.herokuapp.com/new_shovel', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: formBody,
-            }).catch(error => {
-                console.log('error!');
-                al();
-            });
+
         } catch (error) {
 
         }
-    }
+        formBody = formBody.join("&");
+        let response = await fetch('https://snowangels-api.herokuapp.com/new_shovel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formBody,
+        }).catch(error => {
+            console.log(error);
+            Alert.alert(
+            'Invalid Corner',
+            "You can't validate a shoveling for this corner, likely because" +
+            " a shoveling has not been requested yet.",
+            [
 
+                {
+                    text: 'OK', onPress: () => {
+                    }
+                },
+            ],
+            {cancelable: false},
+        );
+        });
+
+    }
 
 
     async fetch_state() {

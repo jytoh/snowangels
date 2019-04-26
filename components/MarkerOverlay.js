@@ -128,8 +128,9 @@ const MarkerOverlay = (props) => {
                     // handle your errors here
                     console.error(error)
                 });
-
-            if(re.len > 0 &&any_recs_not_compl(re)){
+            console.log(re);
+            console.log(any_recs_not_compl(re).toString());
+            if(re.length > 0 &&any_recs_not_compl(re)){
                 alreadyReq();
             }
             else {
@@ -163,7 +164,7 @@ const MarkerOverlay = (props) => {
         if (await signedIn) { //userIsNearCorner() &&
             try {
                 var user_id = await SecureStore.getItemAsync('id');
-                var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=0'.replace("%d1", user_id),
+                var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?cid=%d1&state=0'.replace("%d1", cornerId),
                     {
                         method: 'GET'
                     }).then(response => response.json())
@@ -174,6 +175,7 @@ const MarkerOverlay = (props) => {
                         // handle your errors here
                         console.error(error)
                     });
+                console.log(re);
                 if (re.length == 0){
                     al();
                     return;
