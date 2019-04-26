@@ -16,7 +16,7 @@ import {SecureStore} from "expo";
 export default class RequestScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {reqs: [], tab: 1};
+        this.state = {reqs: [], tab: 0};
         this.sendRequest();
     }
 
@@ -31,7 +31,7 @@ export default class RequestScreen extends React.Component {
     }
 
 
-    keyExtractor = (item, index) => index.toString();
+    keyExtractor = (item) => item.request_id.toString();
 
     renderItem = ({item}) => (
         <ListItem
@@ -207,10 +207,8 @@ export default class RequestScreen extends React.Component {
             }).catch((error) => {
                 // handle your errors here
                 console.error(error)
-            })
-        this.setState({
-            reqs: re
-        });
+            });
+        this.sendRequest();
     }
 
     async removeRequest(rid) {

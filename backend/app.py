@@ -536,6 +536,21 @@ def get_state():
 
     return json.dumps(st, indent=2)
 
+@app.route("/get_corners_requests", methods=['GET'])
+def get_c_requests():
+    cid = request.args.get('cid')
+    reqs = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc(
+
+    )).all()
+    result = []
+    for req in reqs:
+        corner = Corner.query.filter_by(id=req.corner_id).first()
+        result.append({'request_id': req.id,
+                       'state': req.state,
+                       'street1': corner.street1,
+                       'street2': corner.street2,
+                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
+    return json.dumps(result)
 
 # return "Corner %s has  %s" % (cid, state)
 # get user id who last requested a corner

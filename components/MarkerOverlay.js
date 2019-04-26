@@ -78,6 +78,10 @@ const MarkerOverlay = (props) => {
         return isNearThreshold(userPosition, markerPosition)
     }
 
+    function any_recs_not_compl(reqs){
+        return reqs.some(req => (req.state < 2))
+    }
+
     /**
      * Returns whether the user is logged in
      * UNIMPLEMENTED
@@ -89,19 +93,54 @@ const MarkerOverlay = (props) => {
     //     return userState.signedIn
     // }
 
+    function alreadyReq() {
+        Alert.alert(
+            'Corner Reqed',
+            "You can't make a request for a shoveling of this corner, likely" +
+            " because" +
+            " a request has already been made by someone else.",
+            [
+
+                {
+                    text: 'OK', onPress: () => {
+                    }
+                },
+            ],
+            {cancelable: false},
+        );
+    }
+
     async function sendRequest() {
-        console.log('corner id', cornerId)
+        // console.log('corner id', cornerId)
         const a = await userIsNearCorner();
-        console.log('user is near corner?', a)
-        console.log('user is singed in?', signedIn)
-        console.log('user id is', uid)
-        if (await signedIn) { //userIsNearCorner() && 
-            navigation.navigate('Camera', {
-                uid: uid,
-                cornerId: cornerId
-            });
-            //navigation.navigate('Camera')
-        }
+        // console.log('user is near corner?', a)
+        // console.log('user is singed in?', signedIn)
+        // console.log('user id is', uid);
+            var user_id = await SecureStore.getItemAsync('id');
+            var re = await fetch('https://snowangels-api.herokuapp.com/get_corners_requests?cid=%d1'.replace("%d1", cornerId),
+                {
+                    method: 'GET'
+                }).then(response => response.json())
+                .then((jsonData) => {
+                    return jsonData;
+
+                }).catch((error) => {
+                    // handle your errors here
+                    console.error(error)
+                });
+
+            if(any_recs_not_compl(re)){
+                alreadyReq();
+            }
+            else {
+                if (await signedIn && a) { //userIsNearCorner() &&
+                    navigation.navigate('Camera', {
+                        uid: uid,
+                        cornerId: cornerId
+                    });
+                    //navigation.navigate('Camera')
+                }
+            }
     }
 
     function al() {
