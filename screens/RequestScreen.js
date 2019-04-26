@@ -24,7 +24,6 @@ export default class RequestScreen extends React.Component {
         this.setState({tab: tab});
         try {
             this.sendRequest();
-            this.render()
         } catch (error) {
 
         }
