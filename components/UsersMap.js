@@ -25,6 +25,8 @@ export default class UsersMap extends React.Component {
 
       region: props.userLocation,
       markers: [],
+      corner_states: [],
+      joined_list: [],
 
       // The marker for the user's location
       userLocationMarker: null,
@@ -32,8 +34,9 @@ export default class UsersMap extends React.Component {
       // circle around user location marker
       userLocationCircle: null
     }
-    this.getAllCorners()
-    this.getUserLocationHandler()
+    // this.getAllCorners()
+    // this.getAllStates()
+    // this.getUserLocationHandler()
 
     // below: FOR LATER JUST IN CASE
 /*    if (this.state.userLocation) {
@@ -42,9 +45,12 @@ export default class UsersMap extends React.Component {
     }*/
   }
 
-  comopnentDidMount() {
-    this.getAllCorners()
+  async componentDidMount() {
+    await this.getAllCorners()
+    await this.getAllStates()
     this.getUserLocationHandler()
+    this.innerJoin(this.state.markers, this.state.corner_states)
+
   }
 
   getFakeCornerDataIfNoCornersAreRetrieved() {
@@ -91,12 +97,47 @@ export default class UsersMap extends React.Component {
         corner_data = getFakeCornerDataIfNoCornersAreRetrieved();
       }
 
-      this.setState({
+      await this.setState({
         markers: corner_data
+      })
+
+      //console.log(this.state.markers)
+    }
+  }
+
+  async getAllStates() {
+    AsyncStorage.setItem('pulledFromMarkersOnce', "true")
+    if (await AsyncStorage.getItem('pulledFromMarkersOnce') == "true") {
+      var corner_states = await fetch('https://snowangels-api.herokuapp.com/states')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      await this.setState({
+        corner_states: corner_states
       })
     }
   }
 
+  innerJoin(x,y) {
+    console.log('starting inner join');
+    joined_list = [];
+    x.map((marker,idx) => {
+      y.map((m2,idx2) => {
+        if (marker.key == m2.cid) {
+          joined_list.push({...marker, ...m2})
+        }
+      })
+    })
+    this.setState({
+      joined_list: joined_list
+    });
+    console.log(this.state.joined_list);
+
+  }
   /**
    * changes the region for this components state and the state of HomeScreen
    * @param  {region} region (object with latitude, longitude, latitudeDelta, and longitudeDelta)
@@ -174,7 +215,7 @@ export default class UsersMap extends React.Component {
       if (this.state.markers.length == 0) {
         return <Text> </Text>
       } else {
-        return marker_list = this.state.markers.map((marker, index) => {
+        return marker_list = this.state.joined_list.map((marker, index) => {
           // this.getMarkerState(marker)
           return (
             <MapView.Marker
@@ -186,6 +227,7 @@ export default class UsersMap extends React.Component {
               }}
               onPress = {() => {this.markerOnPress(marker)}
               }
+              pinColor = {(marker.state == 0) ? 'black' : 'red'}
             />
           );
         })
