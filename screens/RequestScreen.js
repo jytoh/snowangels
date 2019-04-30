@@ -139,22 +139,6 @@ export default class RequestScreen extends React.Component {
                     color: 'white',
                     paddingTop: 20
                 }}>My Requests</Text>
-                {/*<View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: 15,
-                    marginTop: 20
-                }}>
-                    <Text onPress={() => this.change_tab(0)}
-                          style={styles.h1}>Pending</Text>
-                    <Text style={styles.h1}> | </Text>
-                    <Text onPress={() => this.change_tab(1)}
-                          style={styles.h1}>Claimed</Text>
-                    <Text style={styles.h1}> | </Text>
-                    <Text onPress={() => this.change_tab(2)}
-                          style={styles.h1}>Confirmed</Text>
-                </View>*/}
             </View>
         )
     }

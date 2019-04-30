@@ -124,7 +124,8 @@ export default class HomeScreen extends React.Component {
 					userLocation={this.state.userLocation}
 					setModalVisibility={this.setModalVisibility}
 					setUserLocation={this.setUserLocation}
-					setModalMetaData={this.setModalMetaData}/>
+					setModalMetaData={this.setModalMetaData}
+				/>
 				</View>
 			</View>
 		);
