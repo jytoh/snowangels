@@ -139,7 +139,7 @@ export default class RequestScreen extends React.Component {
                     color: 'white',
                     paddingTop: 20
                 }}>My Requests</Text>
-                <View style={{
+                {/*<View style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -154,7 +154,7 @@ export default class RequestScreen extends React.Component {
                     <Text style={styles.h1}> | </Text>
                     <Text onPress={() => this.change_tab(2)}
                           style={styles.h1}>Confirmed</Text>
-                </View>
+                </View>*/}
             </View>
         )
     }
