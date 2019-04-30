@@ -4,88 +4,64 @@ import { Icon, ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
 import { SecureStore } from 'expo';
 
-const list2 = [
-  {
-    "address": "Willow Ave & Pier Rd",
-    "name": "name1",
-    "time": "2019-04-18 23:48:24.846858",
-    "uid": 1,
-  },
-  {
-    "address": "Wyckoff St & Dearborn Pl",
-    "name": "name1",
-    "time": "2019-04-18 23:48:24.846771",
-    "uid": 1,
-  },
-  {
-    "address": "Willet Pl & E Buffalo St",
-    "name": "name2",
-    "time": "2019-04-18 23:48:24.846810",
-    "uid": 2,
-  },
-  {
-    "address": "Woodcrest Terrace & Woodcrest Ave",
-    "name": "name3",
-    "time": "2019-04-18 23:48:24.846835",
-    "uid": 3,
-  },
-]
-
-// Array [
-//   Object {
-//     "address": "Wyckoff St & Heights Court",
-//     "name": "Avinash Thangali",
-//     "time": "2019-04-19 14:38:59.868978",
-//     "uid": 2,
-//   },
-// ]
-
 export default class ListOfShovels extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [] };
   }
 
-  // state = {
-  //   data: [],
-  //   loading: false,
-  // }
+  keyExtractor(item, index) {
+    return index.toString()
+  }
 
-  keyExtractor = (item, index) => index.toString()
   componentDidMount() {
     this.fetchData();
   }
- 
+
+ getSpecificUserShovels(arr, user_id) {
+
+    user_shovels = [];
+    for (let userObject of arr) {
+      if (userObject.uid == user_id) {
+        user_shovels.push(userObject);
+      }
+    }
+    return user_shovels;
+  }
+
   fetchData = async () => {
     const response = await fetch("https://snowangels-api.herokuapp.com/get_user_history");
     const json = await response.json();
-    console.log(json);
-    console.log("/////");
     var user_id = await SecureStore.getItemAsync('id');
-    console.log("USER ID");
-    console.log(user_id);
     var userShovels = this.getSpecificUserShovels(json, 2);
     this.setState({ data: userShovels });
-    //console.log(this.setState);
+  }
+
+  getFormattedDate(itemTime) {
+    var dateString = (new Date(itemTime)).toDateString()
+    return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
+  }
+
+  getFormattedTime(itemTime) {
+    return (new Date(itemTime)).toLocaleTimeString('en-US')
   }
 
   renderItem = ({ item }) => (
-    < ListItem
-      title={item.time}
+    <ListItem
+      title={this.getFormattedDate(item.time)}
       titleStyle={{ fontFamily: 'Cabin-Bold', }}
-      subtitle={item.address}
+      subtitle={this.getFormattedTime(item.time) + '\n' + item.address}
       subtitleStyle={{ fontFamily: 'Cabin-Regular', }}
       Component={TouchableScale}
       friction={90} //
       tension={100} // These props are passed to the parent component (TouchableScale)
       activeScale={0.95} //
       // chevronColor="black"
-      linearGradientProps={{
+      linearGradientProps = {{
         colors: ['#76A1EF', '#FFFFFF'],
         start: [1, 0],
         end: [0.2, 0],
       }}
-      chevron
       leftIcon={{
         reverse: true,
         color: '#d1e1f8',
@@ -94,6 +70,7 @@ export default class ListOfShovels extends React.Component {
       }}
     />
   )
+
   renderSeparator = () => {
     return (
       <View
@@ -109,13 +86,11 @@ export default class ListOfShovels extends React.Component {
 
   render() {
     return (
-
       <FlatList
-
         keyExtractor={this.keyExtractor}
         data={this.state.data}
         renderItem={this.renderItem}
-        style={{ width: 375 }}
+        style={{ width: '100%' }}
         ItemSeparatorComponent={this.renderSeparator}
       />
 
