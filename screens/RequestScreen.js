@@ -41,6 +41,10 @@ export default class RequestScreen extends React.Component {
             return 'Corner Shoveled'
         }
     }
+
+    /**
+     * @return {string}      ex: Tue, Apr 30 2019
+     */
     getHumanReadableDate(item) {
         var dateString = (new Date(item.time + ' UTC')).toDateString()
         return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
@@ -54,6 +58,9 @@ export default class RequestScreen extends React.Component {
             this.getHumanReadableState(item);
     }
 
+    /**
+     * @return {string}      ex: 4:02:32 PM
+     */
     getHumanReadableTime(item) {
         var jsDateTime = new Date(item.time + ' UTC')
         return jsDateTime.toLocaleTimeString('en-US')

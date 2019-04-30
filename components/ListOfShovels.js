@@ -37,20 +37,36 @@ export default class ListOfShovels extends React.Component {
     this.setState({ data: userShovels });
   }
 
-  getFormattedDate(itemTime) {
-    var dateString = (new Date(itemTime)).toDateString()
+  /**
+   * @return {string}      ex: Tue, Apr 30 2019
+   */
+  getHumanReadableDate(item) {
+    var onlyDate = item.time.substring(0, 10)
+    var dateString = (new Date(onlyDate)).toDateString()
     return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
   }
 
-  getFormattedTime(itemTime) {
-    return (new Date(itemTime)).toLocaleTimeString('en-US')
+  /**
+   * item.time : ex: 2019-04-14 14:02:55.955310
+   * wantTime: ex: 2019/04/14, 14:02:55
+   * @return {string}      ex: 4:02:32 PM
+   */
+  getHumanReadableTime(item) {
+    var itemTime = item.time
+    var year = itemTime.substring(0, 4)
+    var month = itemTime.substring(5, 7)
+    var day = itemTime.substring(8, 10)
+    var time = itemTime.substring(11, 19)
+    var wantTime = year + "/" + month + "/" + day + ", " + time
+    var jsDateTime = new Date(wantTime + "UTC")
+    return jsDateTime.toLocaleTimeString('en-US')
   }
 
   renderItem = ({ item }) => (
     <ListItem
-      title={this.getFormattedDate(item.time)}
+      title={this.getHumanReadableDate(item)}
       titleStyle={{ fontFamily: 'Cabin-Bold', }}
-      subtitle={this.getFormattedTime(item.time) + '\n' + item.address}
+      subtitle={this.getHumanReadableTime(item) + '\n' + item.address}
       subtitleStyle={{ fontFamily: 'Cabin-Regular', }}
       Component={TouchableScale}
       friction={90} //
