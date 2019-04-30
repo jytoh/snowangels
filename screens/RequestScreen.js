@@ -32,13 +32,39 @@ export default class RequestScreen extends React.Component {
 
     keyExtractor = (item) => item.request_id.toString();
 
+    getHumanReadableState(item) {
+        if (item.state == 0) {
+            return 'Request Fulfilled'
+        } else if (item.state == 1) {
+            return 'Corner Requested'
+        } else if (item.state == 2) {
+            return 'Corner Shoveled'
+        }
+    }
+    getHumanReadableDate(item) {
+        var dateString = (new Date(item.time + ' UTC')).toDateString()
+        return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
+    }
+
+    getHumanReadableSubtitle(item) {
+        return this.getHumanReadableTime(item) +
+            '\n' +
+            item.street2 + ' & ' + item.street1 +
+            '\n' +
+            this.getHumanReadableState(item);
+    }
+
+    getHumanReadableTime(item) {
+        var jsDateTime = new Date(item.time + ' UTC')
+        return jsDateTime.toLocaleTimeString('en-US')
+    }
+
     renderItem = ({item}) => (
         <ListItem
-            title={item.time}
+            title={this.getHumanReadableDate(item)}
             titleStyle={{fontFamily: 'Cabin-Bold',}}
-            subtitle={item.street2 + ' & ' + item.street1 + ', State: ' + item.state}
+            subtitle={this.getHumanReadableSubtitle(item)}
             subtitleStyle={{fontFamily: 'Cabin-Regular',}}
-            // leftAvatar={{ source: { uri: item.avatar_url } }}
             leftIcon={{
                 reverse: true,
                 color: '#d1e1f8',
@@ -62,7 +88,6 @@ export default class RequestScreen extends React.Component {
     };
 
     render() {
-        // this.sendRequest();
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
@@ -75,18 +100,6 @@ export default class RequestScreen extends React.Component {
                     ItemSeparatorComponent={this.renderSeparator}
                 />
             </View>
-
-            // <View>
-            //   {
-            //     list.map((item, i) => (
-            //       <ListItem
-            //         key={i}
-            //         title={item.title}
-            //         leftIcon={{ name: item.icon }}
-            //       />
-            //     ))
-            //   }
-            // </View>
         )
     }
 
@@ -211,41 +224,6 @@ export default class RequestScreen extends React.Component {
 
         this.sendRequest();
     }
-
-    // render() {
-    //     this.sendRequest();
-    //     return (
-    //         <View style={{flex: 1, backgroundColor: 'white',}}>
-    //         {this.renderHeader()}
-    //         <FlatList
-    //             style={styles.container}
-    //             data={this.state.reqs}
-    //             renderItem={({item}) =>
-    //                 (<TouchableWithoutFeedback
-    //                     onPress={() => this.al(item.request_id)}>
-    //                     <View style={styles.row}>
-    //                         <Text style={{ fontSize: 15, fontFamily: 'Cabin-Bold', color: 'black'}}>
-    //                             {"Corner id: " + item.corner_id} {"\nStreet" +
-    //                         " 1: " + item.street2}{"\nStreet 2: " + item.street1}
-    //                             {"\n" + item.time}
-    //                         </Text>
-    //                     </View>
-    //                 </TouchableWithoutFeedback>)}
-    //             keyExtractor={item => item.request_id.toString()}
-    //         />
-    //         <MenuButton navigation={this.props.navigation} />
-    //         </View>
-    //         // <View style={styles.buttonContainer}>
-    //         //     <Button
-    //         //         onPress={() => {
-    //         //             this.removeRequest();
-    //         //         }}
-    //         //         title="Remove Most Recent Request"
-    //         //     />
-    //         // </View>
-
-    //     );
-    // }
 }
 
 const styles = StyleSheet.create({
