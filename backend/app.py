@@ -360,7 +360,7 @@ def num_points():
 @app.route("/corner_pictures", methods=['GET'])
 def corner_pictures():
     request_id = request.form["request_id"]
-    req = Request.query.filter_by(id=request_id, state=1).first()
+    req = Request.query.filter_by(id=request_id, state=2).first()
     cid = req.corner_id
     shoveling = Shoveling.query.filter_by(corner_id = cid).order_by(
         Shoveling.start.asc()).first()
