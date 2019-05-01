@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/RequestScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/RequestScreen.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1527">
-              <caret line="66" column="43" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
+            <state relative-caret-position="397">
+              <caret line="54" column="18" lean-forward="true" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="18" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -28,11 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backend/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="530" column="32" selection-start-line="530" selection-start-column="32" selection-end-line="530" selection-end-column="32" />
+            <state relative-caret-position="248">
+              <caret line="535" lean-forward="true" selection-start-line="535" selection-end-line="535" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -43,7 +42,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
+            <state relative-caret-position="2295">
               <caret line="166" column="104" selection-start-line="166" selection-start-column="104" selection-end-line="166" selection-end-column="104" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
@@ -87,7 +86,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>validate_</find>
       <find>request</find>
       <find>get_req</find>
       <find>db.delete</find>
@@ -117,6 +115,7 @@
       <find>get_core</find>
       <find>get_corners_</find>
       <find>states</find>
+      <find>state</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -153,8 +152,8 @@
         <option value="$PROJECT_DIR$/screens/ShovelCameraScreen.js" />
         <option value="$PROJECT_DIR$/screens/CameraScreen.js" />
         <option value="$PROJECT_DIR$/components/MarkerOverlay.js" />
-        <option value="$PROJECT_DIR$/backend/app.py" />
         <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
+        <option value="$PROJECT_DIR$/backend/app.py" />
       </list>
     </option>
   </component>
@@ -324,12 +323,15 @@
       <workItem from="1556065156390" duration="941000" />
       <workItem from="1556077031571" duration="22332000" />
       <workItem from="1556286176472" duration="1649000" />
-      <workItem from="1556287943558" duration="883000" />
+      <workItem from="1556287943558" duration="3037000" />
+      <workItem from="1556389446192" duration="626000" />
+      <workItem from="1556656786876" duration="589000" />
+      <workItem from="1556672539717" duration="846000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145988000" />
+    <option name="totallyTimeSpent" value="150203000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -342,9 +344,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="721" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49302325" weight="0.32148626" />
-      <window_info id="Structure" order="1" sideWeight="0.5069767" side_tool="true" visible="true" weight="0.3263328" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49302325" visible="true" weight="0.33602583" />
+      <window_info id="Structure" order="1" sideWeight="0.5069767" side_tool="true" weight="0.3263328" />
       <window_info id="Favorites" order="2" sideWeight="0.5023148" side_tool="true" weight="0.31663975" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Image Layers" order="4" />
@@ -593,6 +596,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2295">
+          <caret line="166" column="104" selection-start-line="166" selection-start-column="104" selection-end-line="166" selection-end-column="104" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1215">
@@ -613,32 +626,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="166" column="104" selection-start-line="166" selection-start-column="104" selection-end-line="166" selection-end-column="104" />
+        <state relative-caret-position="397">
+          <caret line="54" column="18" lean-forward="true" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="18" />
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="530" column="32" selection-start-line="530" selection-start-column="32" selection-end-line="530" selection-end-column="32" />
+        <state relative-caret-position="248">
+          <caret line="535" lean-forward="true" selection-start-line="535" selection-end-line="535" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1527">
-          <caret line="66" column="43" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -51,7 +51,7 @@ class Request(db.Model):
 
     def __init__(self, user_id=None, corner_id=None, before_pic=None):
         self.time = datetime.datetime.now()
-        self.state = 0
+        self.state = 1
         self.user_id = user_id
         self.corner_id = corner_id
         self.before_pic = before_pic
@@ -278,7 +278,7 @@ def new_request():
     corner = Corner.query.get(cid)
     # req = Request(uid, cid, before_pic)
     reqs = Request.query.filter_by(corner_id=cid).all()
-    if any([req.state < 2 for req in reqs]):
+    if any([req.state > 0 for req in reqs]):
         return None
 
     req = Request(uid, cid, before_pic)
@@ -309,7 +309,7 @@ def new_shovel():
     cid = request.form["cid"]
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    before_pic_req = Request.query.filter_by(corner_id=cid, state=0).order_by(
+    before_pic_req = Request.query.filter_by(corner_id=cid, state=1).order_by(
         Request.time.desc()).first()
     if before_pic_req is None:
         return None
@@ -327,7 +327,7 @@ def new_shovel():
     # change state to 1 in requests table
     req = Request.query.filter_by(corner_id=cid).order_by(
         Request.time.desc()).first()
-    req.state = 1
+    req.state = 2
     db.session.commit()
     # add to point table
     points_entry = Point.query.filter_by(user_id=uid).first()
@@ -364,7 +364,7 @@ def validate_shovel():
     validate_bit = request.form["vb"]
     req = Request.query.filter_by(id=request_id, state=1).first()
     cid = req.corner_id
-    shoveling = Shoveling.query.filter_by(corner_id = cid).order_by(
+    shoveling = Shoveling.query.filter_by(corner_id=cid).order_by(
         Shoveling.start.asc()).first()
     uid_shoveler = shoveling.user_id
     # if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
@@ -378,15 +378,14 @@ def validate_shovel():
         db.session.commit()
         db.session.delete(shoveling)
         db.session.commit()
-        req.state = 0  # TODO: need to re-notify ppl that this corner needs to be cleared
-        db.session.commit()
+        # TODO: need to re-notify ppl that this corner needs to be cleared
 
         return jsonify(requester=uid_requester, shoveler=uid_shoveler,
                        corner=cid, validate_bit=validate_bit)
         # return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
     # if requester says shoveling claim is valid, set state of request to steady state, 2
     elif validate_bit == '1':
-        req.state = 2
+        req.state = 0
         db.session.commit()
         return jsonify(requester=uid_requester, shoveler=uid_shoveler,
                        corner=cid, validate_bit=validate_bit)
@@ -535,6 +534,7 @@ def get_state():
 
     return json.dumps(st, indent=2)
 
+
 @app.route("/get_corners_requests", methods=['GET'])
 def get_c_requests():
     cid = request.args.get('cid')
@@ -550,6 +550,7 @@ def get_c_requests():
                        'street2': corner.street2,
                        'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
     return json.dumps(result)
+
 
 # return "Corner %s has  %s" % (cid, state)
 # get user id who last requested a corner
@@ -570,14 +571,15 @@ def get_requests():
                        'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
     return json.dumps(result)
 
+
 @app.route("/get_requests_filter_state_cid", methods=['GET'])
 def get_requests_filter_state_cid():
     cid = request.args.get('cid')
     state = request.args.get('state')
-    reqs = Request.query.filter_by(corner_id=cid, state = state).order_by(
+    reqs = Request.query.filter_by(corner_id=cid, state=state).order_by(
         Request.time.desc(
 
-    )).all()
+        )).all()
     result = []
     for req in reqs:
         corner = Corner.query.filter_by(id=req.corner_id).first()
@@ -593,10 +595,10 @@ def get_requests_filter_state_cid():
 def get_requests_filter_state():
     uid = request.args.get('uid')
     state = request.args.get('state')
-    reqs = Request.query.filter_by(user_id=uid, state = state).order_by(
+    reqs = Request.query.filter_by(user_id=uid, state=state).order_by(
         Request.time.desc(
 
-    )).all()
+        )).all()
     result = []
     for req in reqs:
         corner = Corner.query.filter_by(id=req.corner_id).first()
@@ -606,7 +608,6 @@ def get_requests_filter_state():
                        'street2': corner.street2,
                        'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
     return json.dumps(result)
-
 
 
 @app.route("/remove_request", methods=['DELETE'])
