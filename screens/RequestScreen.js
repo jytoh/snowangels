@@ -78,7 +78,7 @@ export default class RequestScreen extends React.Component {
                 name: 'snowflake-o',
                 type: 'font-awesome'
             }}
-            onPress={() => this.al(item.request_id)}
+            onPress={() => this.al(item.request_id, item.state)}
         />
     )
     renderSeparator = () => {
@@ -110,8 +110,8 @@ export default class RequestScreen extends React.Component {
         )
     }
 
-    al(rid) {
-        if (this.state.tab == 0 || this.state.tab == 2) {
+    al(rid, st) {
+        if (st == 0 || st == 1) {
             Alert.alert(
                 'Sure?',
                 'Do you want to remove this Request?',
@@ -125,7 +125,7 @@ export default class RequestScreen extends React.Component {
                 ],
                 {cancelable: true},
             );
-        } else if (this.state.tab == 1) {
+        } else if (st == 2) {
             Alert.alert(
                 'Sure?',
                 'Do you want to validate this Request?',
@@ -168,7 +168,7 @@ export default class RequestScreen extends React.Component {
         // var user_id = 2;
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
-        var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=%d2'.replace("%d1", user_id).replace("%d2", st),
+        var re = await fetch('https://snowangels-api.herokuapp.com/get_requests?uid=%d1'.replace("%d1", user_id),
             {
                 method: 'GET'
             }).then(response => response.json())

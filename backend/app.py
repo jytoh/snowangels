@@ -362,7 +362,7 @@ def num_points():
 def validate_shovel():
     request_id = request.form["request_id"]
     validate_bit = request.form["vb"]
-    req = Request.query.filter_by(id=request_id, state=1).first()
+    req = Request.query.filter_by(id=request_id, state=2).first()
     cid = req.corner_id
     shoveling = Shoveling.query.filter_by(corner_id=cid).order_by(
         Shoveling.start.asc()).first()
@@ -377,6 +377,8 @@ def validate_shovel():
         points_entry.szn_pts -= 5
         db.session.commit()
         db.session.delete(shoveling)
+        db.session.commit()
+        req.state = 1
         db.session.commit()
         # TODO: need to re-notify ppl that this corner needs to be cleared
 
