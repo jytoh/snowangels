@@ -95,6 +95,7 @@ export default class RequestScreen extends React.Component {
     };
 
     render() {
+        this.sendRequest();
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
