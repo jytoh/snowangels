@@ -34,7 +34,6 @@ export default class RequestScreen extends React.Component {
         }
     }
 
-
     keyExtractor = (item) => item.request_id.toString();
 
     getHumanReadableState(item) {
