@@ -3,13 +3,22 @@ import { Dimensions } from 'react-native';
 import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
-import HistoryScreen from '../screens/HistoryScreen';
+import ShovelScreen from '../screens/ShovelScreen';
 import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RequestScreen from '../screens/RequestScreen';
 import ShovelCameraScreen from '../screens/ShovelCameraScreen';
 import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
+
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
+
+
+/*
+* This loads the drawer navigator when the user starts the
+* app logged-in. It renders home first. 
+*/
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -21,8 +30,8 @@ const DrawerNavigatorHome = createDrawerNavigator(
         Profile: {
             screen: ProfileScreen
         },
-        History: {
-            screen: HistoryScreen
+        Shovel: {
+            screen: ShovelScreen
         },
         Camera: {
             screen: CameraScreen
@@ -42,7 +51,7 @@ const DrawerNavigatorHome = createDrawerNavigator(
         contentOptions: {
             activeBackgroundColor: '#e91e63',
             itemsContainerStyle: {
-                marginTop: 50,
+                marginTop: scale(50),
             },
             labelStyle: {fontFamily: 'Cabin-Regular'}
         },

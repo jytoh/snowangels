@@ -10,7 +10,11 @@ import {
 } from 'react-native';
 import {List, ListItem} from 'react-native-elements';
 import MenuButton from '../components/MenuButton'
+import TouchableScale from 'react-native-touchable-scale';
 import {SecureStore} from "expo";
+
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
 
 
 export default class RequestScreen extends React.Component {
@@ -69,9 +73,19 @@ export default class RequestScreen extends React.Component {
     renderItem = ({item}) => (
         <ListItem
             title={this.getHumanReadableDate(item)}
-            titleStyle={{fontFamily: 'Cabin-Bold',}}
+            titleStyle={{fontFamily: txt.bold, fontSize: txt.small}}
             subtitle={this.getHumanReadableSubtitle(item)}
-            subtitleStyle={{fontFamily: 'Cabin-Regular',}}
+            subtitleStyle={{fontFamily: txt.reg, fontSize: (txt.small - scale(2))}}
+            Component={TouchableScale}
+            friction={90} //
+            tension={100} // These props are passed to the parent component (TouchableScale)
+            activeScale={0.95} //
+            // chevronColor="black"
+            linearGradientProps = {{
+              colors: ['#76A1EF', '#FFFFFF'],
+              start: [1, 0],
+              end: [0.2, 0],
+            }}
             leftIcon={{
                 reverse: true,
                 color: '#d1e1f8',
@@ -104,7 +118,7 @@ export default class RequestScreen extends React.Component {
                     keyExtractor={this.keyExtractor}
                     data={this.state.reqs}
                     renderItem={this.renderItem}
-                    style={{width: 400}}
+                    style={{width: '100%'}}
                     ItemSeparatorComponent={this.renderSeparator}
                 />
             </View>
@@ -155,10 +169,9 @@ export default class RequestScreen extends React.Component {
             <View colors={[, '#DDE8FC', '#76A1EF']}
                   style={styles.header}>
                 <Text style={{
-                    fontSize: 25,
-                    fontFamily: 'Cabin-Bold',
+                    fontSize: txt.header,
+                    fontFamily: txt.bold,
                     color: 'white',
-                    paddingTop: 20
                 }}>My Requests</Text>
             </View>
         )
@@ -236,21 +249,22 @@ export default class RequestScreen extends React.Component {
 
 const styles = StyleSheet.create({
     text: {
-        fontSize: 30,
-        fontFamily: 'Cabin-Regular'
+        fontSize: txt.header,
+        fontFamily: txt.reg
     },
     header: {
         backgroundColor: '#76A1EF',
-        padding: 15,
-        paddingTop: 35,
+        padding: scale(15),
+        paddingTop: scale(35),
         alignItems: 'center',
+        justifyContent: 'center',
         width: '100%',
         height: '18%'
     },
     button: {
         zIndex: 9,
         alignItems: 'center',
-        top: 80,
+        top: scale(80),
     },
     container: {
         flex: 1,
@@ -258,17 +272,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%'
     },
-    h1: {
-        fontSize: 24,
-        color: 'white',
-        fontFamily: 'Cabin-Bold',
-    },
     row: {
-        padding: 15,
-        marginBottom: 5,
+        padding: scale(15),
+        marginBottom: scale(5),
         backgroundColor: '#D1E1F8',
     },
     buttonContainer: {
-        margin: 20
+        margin: scale(20)
     }
 });

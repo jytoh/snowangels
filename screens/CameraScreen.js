@@ -22,6 +22,9 @@ import {FileSystem} from 'expo';
 import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
+
 export default class CameraScreen extends React.Component {
 
     state = {
@@ -47,10 +50,6 @@ export default class CameraScreen extends React.Component {
                         bytea: pic.base64.toByteArray,
                         hash: shorthash.unique(pic.base64)
                     }),
-                    console.log("hi1 " + this.state.imageUri),
-                    console.log("hi2 " + this.state.bytea),
-                    console.log("hi3 " + this.state.b64),
-                    console.log("hi4 " + this.state.hash),
                 )
                 .catch(err => {
                     throw err;
@@ -64,11 +63,6 @@ export default class CameraScreen extends React.Component {
     };
 
     async uploadPicture(cid) {
-        // console.log('from upload picture', this.state.uid);
-        // console.log("hi1 " + this.state.imageUri);
-        // console.log("hi2 " + this.state.bytea);
-        // console.log("hi3 " + this.state.b64);
-        // console.log("hi4 " + this.state.hash);
 
         try {
             const blob = await new Promise((resolve, reject) => {
@@ -77,7 +71,6 @@ export default class CameraScreen extends React.Component {
                     resolve(xhr.response);
                 };
                 xhr.onerror = function (e) {
-                    // console.log(e);
                     reject(new TypeError('Network request failed'));
                 };
                 xhr.responseType = 'blob';
@@ -97,13 +90,10 @@ export default class CameraScreen extends React.Component {
                 'cid': cid, //hardcoding for now
                 'before_pic': remoteUri,
             };
-            console.log("sdf");
-            console.log(details);
             // console.log("c");
             // We're done with the blob, close and release it
             blob.close();
                } catch (error) {
-            console.log('error!');
         }
 
             // console.log(remoteUri)
@@ -263,24 +253,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1EAFB'
     },
     takephoto: {
-        fontSize: 24,
-        marginBottom: 20,
+        fontSize: txt.button,
+        marginBottom: scale(20),
         color: '#76A1EF',
         textAlign: 'center',
         alignItems: 'center',
-        paddingTop: 24,
-        fontFamily: 'Cabin-Bold'
+        paddingTop: scale(24),
+        fontFamily: txt.bold
     },
     fliptouchable: {
         flex: 2,
     },
     flip: {
-        fontSize: 16,
+        fontSize: txt.small,
         color: '#76A1EF',
         textAlign: 'center',
-        paddingBottom: 24,
-        marginTop: 10,
-        fontFamily: 'Cabin-Bold'
+        paddingBottom: scale(24),
+        marginTop: scale(10),
+        fontFamily: txt.bold
     },
     image: {
         zIndex: 100,

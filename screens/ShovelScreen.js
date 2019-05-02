@@ -5,18 +5,17 @@ import MenuButton from '../components/MenuButton';
 
 import ListOfShovels from '../components/ListOfShovels';
 
-export default class HistoryScreen extends React.Component {
+import txt from '../UI_logistics/TextStyles'
+import { scale } from '../UI_logistics/ScaleRatios'
+
+
+export default class ShovelScreen extends React.Component {
 
   renderHeader() {
     return (
       <View colors={[, '#DDE8FC', '#76A1EF']}
         style={styles.header}>
-        <Text style={{ fontSize: 25, fontFamily: 'Cabin-Bold', color: 'white', paddingTop: 20 }}>My Shovels</Text>
-        <View style={{
-          flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
-          marginBottom: 15, marginTop: 20
-        }}>
-        </View>
+        <Text style={{ fontSize: txt.header, fontFamily: txt.bold, color: 'white' }}>My Shovels</Text>
       </View>
     )
   }
@@ -32,6 +31,7 @@ export default class HistoryScreen extends React.Component {
       />
     );
   };
+
   render() {
     const allShoves = false;
     const favShoves = true;
@@ -54,25 +54,21 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   categories: {
-    paddingTop: 20,
+    paddingTop: scale(20),
     flexDirection: 'row',
   },
   text: {
-    fontSize: 30,
-    paddingTop: 20
+    fontSize: txt.header,
+    paddingTop: scale(20)
   },
   header: {
     backgroundColor: '#76A1EF',
-    padding: 15,
-    paddingTop: 35,
+    padding: scale(15),
+    paddingTop: scale(35),
     alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
     height: '18%'
   },
-  h1: {
-    fontSize: 24,
-    color: 'white',
-    fontFamily: 'Cabin-Bold',
-  }
 
 });
