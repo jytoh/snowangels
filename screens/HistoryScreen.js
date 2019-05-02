@@ -7,21 +7,18 @@ import ListOfShovels from '../components/ListOfShovels';
 
 export default class HistoryScreen extends React.Component {
 
-renderHeader() {
-   return (
-       <View colors={[, '#DDE8FC', '#76A1EF']}
-          style={styles.header}>
-           <Text style={{ fontSize: 25, fontFamily: 'Cabin-Bold', color: 'white', paddingTop: 20}}>My Shovels</Text>
-           <View style={{
-              flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
-              marginBottom: 15, marginTop: 20
-            }}>
-          <Text style={styles.h1}>All</Text>
-          <Text style={styles.h1}>  |  </Text>
-          <Text style={styles.h1}>My Favorites</Text>
-          </View>
+  renderHeader() {
+    return (
+      <View colors={[, '#DDE8FC', '#76A1EF']}
+        style={styles.header}>
+        <Text style={{ fontSize: 25, fontFamily: 'Cabin-Bold', color: 'white', paddingTop: 20 }}>My Shovels</Text>
+        <View style={{
+          flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
+          marginBottom: 15, marginTop: 20
+        }}>
         </View>
-     )
+      </View>
+    )
   }
   renderSeparator = () => {
     return (
@@ -69,7 +66,8 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingTop: 35,
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
+    height: '18%'
   },
   h1: {
     fontSize: 24,

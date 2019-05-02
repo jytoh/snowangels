@@ -15,8 +15,11 @@ export default class HomeScreen extends React.Component {
 			userLocation: null,
 			markerOverlayIsVisible: false,
 			markerOverlayTitle: null,
+			highlightedCornerId: null,
 			markerPosition: null,
-			fontLoaded: false
+			fontLoaded: false,
+			signedIn: false,
+			uid: 2,
 		}
 	}
 
@@ -25,8 +28,11 @@ export default class HomeScreen extends React.Component {
 		  'Cabin-Regular': require('../assets/fonts/Cabin-Regular.ttf'),
 		  'Cabin-Bold': require('../assets/fonts/Cabin-Bold.ttf')
 		});
-		console.log('font loaded home!');
 		this.setState({fontLoaded : true});
+		await this.fetch_state();
+		console.log('home screen state',this.state.signedIn)
+		console.log('home screen',2)
+
 	}
 
 	/**
@@ -63,6 +69,7 @@ export default class HomeScreen extends React.Component {
 		});
 		this.state.markerOverlayTitle = marker.title
 		this.state.markerPosition = marker.coordinate
+		this.state.highlightedCornerId = marker.key
 	}
 
 	getUserLocationHandler() {
@@ -78,6 +85,22 @@ export default class HomeScreen extends React.Component {
 		}, err => console.log(err));
 	}
 
+	async fetch_state() {
+        try {
+          const lastStateJSON = await AsyncStorage.getItem('lastState');
+		  const lastState = await JSON.parse(lastStateJSON);
+          this.setState({
+			signedIn: lastState.signedIn,
+			uid: 2,
+		  });
+        }
+        catch (error) {
+          userState = {
+            signedIn: false,
+          }
+        }
+      };
+
 	render() {
 		if( !this.state.fontLoaded ) {
 			return (<AppLoading/>
@@ -89,22 +112,20 @@ export default class HomeScreen extends React.Component {
 				<View style={styles.mapContainer}>
 				<MarkerOverlay
 					title={this.state.markerOverlayTitle}
+					cornerId={this.state.highlightedCornerId}
 					markerPosition={this.state.markerPosition}
 					visible={this.state.markerOverlayIsVisible}
 					setModalVisibility={this.setModalVisibility}
 					userLocation={this.state.userLocation}
-					navigation={this.props.navigation}/>
+					navigation={this.props.navigation}
+					signedIn={this.state.signedIn}
+					uid={2}/>
 				<UsersMap
 					userLocation={this.state.userLocation}
 					setModalVisibility={this.setModalVisibility}
 					setUserLocation={this.setUserLocation}
-					setModalMetaData={this.setModalMetaData}/>
-				</View>
-				<View style={styles.container2}>
-					{/*<Button title="Get Location"
-					onPress={() => this.getUserLocationHandler()} />*/}
-					<Button title="Go to Camera"
-					onPress={() => this.props.navigation.navigate('Camera')} />
+					setModalMetaData={this.setModalMetaData}
+				/>
 				</View>
 			</View>
 		);
@@ -133,7 +154,7 @@ const styles = StyleSheet.create({
 		zIndex: 20,
 		position: "absolute",
 		top: 80,
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	mapContainer: {
 		width: '100%',

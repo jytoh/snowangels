@@ -1,63 +1,92 @@
 import React from 'react';
 import { AppRegistry, FlatList, StyleSheet, Text, View } from 'react-native';
 import { Icon, ListItem } from "react-native-elements";
-
-
-const list = [
-  {
-    name: 'March 20th, 2019 4:25 PM',
-    subtitle: "N Aurora St & E Court Street",
-    icon: 'snowflake-o'
-  },
-  {
-    name: 'Febuary 4th, 2019 1:36 PM',
-
-    subtitle: "N Aurora St & E Court Street",
-    icon: 'snowflake-o'
-  },
-  {
-    name: 'January 12th, 2019 9:25 AM',
-    subtitle: "Stewart Ave & University Ave",
-    icon: 'snowflake-o'
-  },
-  {
-    name: 'December 19th, 2018 11:15 AM',
-    subtitle: "Stewart Ave & University Ave",
-    icon: 'snowflake-o'
-  }
-]
-
-
-// const list = [
-//   {
-//     title: 'Appointments',
-//     icon: 'av-timer'
-//   },
-//   {
-//     title: 'Trips',
-//     icon: 'flight-takeoff'
-//   },
-// ]
-
+import TouchableScale from 'react-native-touchable-scale';
+import { SecureStore } from 'expo';
 
 export default class ListOfShovels extends React.Component {
-  keyExtractor = (item, index) => index.toString()
+  constructor(props) {
+    super(props);
+    this.state = { data: [] };
+  }
+
+  keyExtractor(item, index) {
+    return index.toString()
+  }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+ getSpecificUserShovels(arr, user_id) {
+
+    user_shovels = [];
+    for (let userObject of arr) {
+      if (userObject.uid == user_id) {
+        user_shovels.push(userObject);
+      }
+    }
+    return user_shovels;
+  }
+
+  fetchData = async () => {
+    const response = await fetch("https://snowangels-api.herokuapp.com/get_user_history");
+    const json = await response.json();
+    var user_id = await SecureStore.getItemAsync('id');
+    var userShovels = this.getSpecificUserShovels(json, 2);
+    this.setState({ data: userShovels });
+  }
+
+  /**
+   * @return {string}      ex: Tue, Apr 30 2019
+   */
+  getHumanReadableDate(item) {
+    var onlyDate = item.time.substring(0, 10)
+    var dateString = (new Date(onlyDate)).toDateString()
+    return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
+  }
+
+  /**
+   * item.time : ex: 2019-04-14 14:02:55.955310
+   * wantTime: ex: 2019/04/14, 14:02:55
+   * @return {string}      ex: 4:02:32 PM
+   */
+  getHumanReadableTime(item) {
+    var itemTime = item.time
+    var year = itemTime.substring(0, 4)
+    var month = itemTime.substring(5, 7)
+    var day = itemTime.substring(8, 10)
+    var time = itemTime.substring(11, 19)
+    var wantTime = year + "/" + month + "/" + day + ", " + time
+    var jsDateTime = new Date(wantTime + "UTC")
+    return jsDateTime.toLocaleTimeString('en-US')
+  }
 
   renderItem = ({ item }) => (
     <ListItem
-      title={item.name}
-      titleStyle={{fontFamily: 'Cabin-Bold',}}
-      subtitle={item.subtitle}
-      subtitleStyle={{fontFamily: 'Cabin-Regular',}}
-      // leftAvatar={{ source: { uri: item.avatar_url } }}
+      title={this.getHumanReadableDate(item)}
+      titleStyle={{ fontFamily: 'Cabin-Bold', }}
+      subtitle={this.getHumanReadableTime(item) + '\n' + item.address}
+      subtitleStyle={{ fontFamily: 'Cabin-Regular', }}
+      Component={TouchableScale}
+      friction={90} //
+      tension={100} // These props are passed to the parent component (TouchableScale)
+      activeScale={0.95} //
+      // chevronColor="black"
+      linearGradientProps = {{
+        colors: ['#76A1EF', '#FFFFFF'],
+        start: [1, 0],
+        end: [0.2, 0],
+      }}
       leftIcon={{
         reverse: true,
         color: '#d1e1f8',
-        name: item.icon,
+        name: 'snowflake-o',
         type: 'font-awesome'
       }}
     />
   )
+
   renderSeparator = () => {
     return (
       <View
@@ -75,23 +104,12 @@ export default class ListOfShovels extends React.Component {
     return (
       <FlatList
         keyExtractor={this.keyExtractor}
-        data={list}
+        data={this.state.data}
         renderItem={this.renderItem}
-        style={{ width: 400 }}
+        style={{ width: '100%' }}
         ItemSeparatorComponent={this.renderSeparator}
       />
 
-      // <View>
-      //   {
-      //     list.map((item, i) => (
-      //       <ListItem
-      //         key={i}
-      //         title={item.title}
-      //         leftIcon={{ name: item.icon }}
-      //       />
-      //     ))
-      //   }
-      // </View>
     )
   }
 }
