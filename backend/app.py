@@ -545,19 +545,6 @@ def get_state():
 
     return json.dumps(st, indent=2)
 
-#get all requests
-@app.route("/get_all_requests", methods=['GET'])
-def get_all_requests():
-    reqs = Request.query.all()
-    result = []
-    for req in reqs:
-        corner = Corner.query.filter_by(id=req.corner_id).first()
-        result.append({'request_id': req.id,
-                       'state': req.state,
-                       'street1': corner.street1,
-                       'street2': corner.street2,
-                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
-    return json.dumps(result)
 
 @app.route("/get_corners_requests", methods=['GET'])
 def get_c_requests():
@@ -601,6 +588,51 @@ def get_requests_filter_state_cid():
     cid = request.args.get('cid')
     state = request.args.get('state')
     reqs = Request.query.filter_by(corner_id=cid, state=state).order_by(
+        Request.time.desc(
+
+        )).all()
+    result = []
+    for req in reqs:
+        corner = Corner.query.filter_by(id=req.corner_id).first()
+        result.append({'request_id': req.id,
+                       'state': req.state,
+                       'street1': corner.street1,
+                       'street2': corner.street2,
+                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
+    return json.dumps(result)
+
+
+#get all requests
+@app.route("/get_all_requests_not_shoveled", methods=['GET'])
+def get_all_requests_not_shoveled():
+    reqs = Request.query.filter_by(state=0).order_by(
+        Request.time.desc(
+
+        )).all()
+    result = []
+    for req in reqs:
+        corner = Corner.query.filter_by(id=req.corner_id).first()
+        result.append({'request_id': req.id,
+                       'state': req.state,
+                       'street1': corner.street1,
+                       'street2': corner.street2,
+                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
+    reqs2 = Request.query.filter_by(state=1).order_by(
+        Request.time.desc(
+
+        )).all()
+    for req in reqs2:
+        corner = Corner.query.filter_by(id=req.corner_id).first()
+        result.append({'request_id': req.id,
+                       'state': req.state,
+                       'street1': corner.street1,
+                       'street2': corner.street2,
+                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
+    return json.dumps(result)
+
+@app.route("/get_requests_shoveled", methods=['GET'])
+def get_requests_shoveled():
+    reqs = Request.query.filter_by(state=2).order_by(
         Request.time.desc(
 
         )).all()
