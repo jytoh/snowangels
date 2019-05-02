@@ -545,6 +545,19 @@ def get_state():
 
     return json.dumps(st, indent=2)
 
+#get all requests
+@app.route("/get_all_requests", methods=['GET'])
+def get_all_requests():
+    reqs = Request.query.all()
+    result = []
+    for req in reqs:
+        corner = Corner.query.filter_by(id=req.corner_id).first()
+        result.append({'request_id': req.id,
+                       'state': req.state,
+                       'street1': corner.street1,
+                       'street2': corner.street2,
+                       'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
+    return json.dumps(result)
 
 @app.route("/get_corners_requests", methods=['GET'])
 def get_c_requests():
