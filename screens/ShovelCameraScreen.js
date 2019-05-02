@@ -23,6 +23,9 @@ import {FileSystem} from 'expo';
 import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
+
 export default class ShovelCameraScreen extends React.Component {
 
     state = {
@@ -277,24 +280,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1EAFB'
     },
     takephoto: {
-        fontSize: 24,
-        marginBottom: 20,
+        fontSize: txt.button,
+        marginBottom: scale(20),
         color: '#76A1EF',
         textAlign: 'center',
         alignItems: 'center',
-        paddingTop: 24,
-        fontFamily: 'Cabin-Bold'
+        paddingTop: scale(24),
+        fontFamily: txt.bold
     },
     fliptouchable: {
         flex: 2,
     },
     flip: {
-        fontSize: 16,
+        fontSize: txt.small,
         color: '#76A1EF',
         textAlign: 'center',
-        paddingBottom: 24,
-        marginTop: 10,
-        fontFamily: 'Cabin-Bold'
+        paddingBottom: scale(24),
+        marginTop: scale(10),
+        fontFamily: txt.bold
     },
     image: {
         zIndex: 100,

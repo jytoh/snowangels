@@ -1,0 +1,15 @@
+import { Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+
+const xrWidth = 414;
+const xrHeight = 896;
+
+const scaleWidth = width/xrWidth;
+const scaleHeight = height/xrHeight
+
+const scaleToUse = Math.min(scaleWidth, scaleHeight);
+
+export const scale =
+    (size) => Math.ceil((size * scaleToUse));
+    

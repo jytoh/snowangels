@@ -5,8 +5,14 @@ import {AsyncStorage} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 import MenuButton from '../components/MenuButton'
 import { MailComposer } from 'expo';
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
 
+const HEIGHT = Dimensions.get('window').height;
+
+const WIDTH = Dimensions.get('window').width;
 export default class ProfileScreen extends React.Component {
+
   state = {
         signedIn: false,
         uid: 0,
@@ -23,8 +29,6 @@ export default class ProfileScreen extends React.Component {
   };
   
   async refresh() {
-    //var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-    //console.log(user_id)
     let response_request = await fetch(
       'https://snowangels-api.herokuapp.com/num_requests?uid=' + this.state.uid
     );
@@ -42,8 +46,6 @@ export default class ProfileScreen extends React.Component {
       num_requests: response1Json.num_requests,
       num_shovels: response2Json.num_shovels,
       points: response3Json.points,
-
-
     });
     await this.store_state(this.state);
   };
@@ -114,9 +116,6 @@ export default class ProfileScreen extends React.Component {
               body: formBody_for_uid,
           });
           let responseJson_for_uid = await response_for_uid.json();
-          console.log(responseJson_for_uid);
-          console.log(responseJson_for_uid.uid);
-
 
           let response_request = await fetch(
             'https://snowangels-api.herokuapp.com/num_requests?uid=' + responseJson_for_uid.uid.toString()
@@ -142,8 +141,6 @@ export default class ProfileScreen extends React.Component {
           await this.store_state(this.state);
           this.refresh();
           SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
-          console.log(this.state.name);
-          console.log(this.state.photoUrl);
           return result.accessToken;
         } else {
           return {cancelled: true};
@@ -155,11 +152,8 @@ export default class ProfileScreen extends React.Component {
   
   async store_state(state) {
     const json_state = JSON.stringify(state);
-    console.log(json_state)
     try {
       await AsyncStorage.setItem('lastState', json_state)
-      console.log('state successfully stored, state is now', JSON.parse(json_state).signedIn)
-      console.log('user ID successfully store, it is now ',JSON.parse(json_state).uid)
     }
     catch (error){
       console.log('State could not be stored.')
@@ -169,7 +163,6 @@ export default class ProfileScreen extends React.Component {
   async fetch_state() {
     try {
       const lastStateJSON = await AsyncStorage.getItem('lastState');
-      console.log(lastStateJSON)
       const lastState = JSON.parse(lastStateJSON);
       this.setState({
         uid: lastState.uid,
@@ -183,7 +176,6 @@ export default class ProfileScreen extends React.Component {
         num_shovels: lastState.num_shovels,
         points: lastState.points
       });
-      console.log('Got last state');
     }
     catch (error) {
       console.log('No last state to fetch');
@@ -216,24 +208,43 @@ export default class ProfileScreen extends React.Component {
       points:0
     });
     await this.store_state(this.state);
-    console.log(this.state)
-    console.log('successfully logged out')
+  };
+
+  renderHeader(name, uri) {
+    return (
+        <View colors={[, '#6D9AED', '#6D9AED']}
+              style={styles.header}>
+          <View style={styles.containertop}>
+            <Image style={styles.image} source={{ uri: uri }} />
+            <Text style={styles.name}>{name}</Text>
+          </View>
+        </View>
+    )
   };
 
   render() {
-    if (this.state.loaded = true){
-      return (
+    if (this.state.loaded == true) {
+      if (this.state.signedIn == true) {
+        return (
         <View style={styles.container}>
-          {this.state.signedIn ? (
+            {this.renderHeader(this.state.name, this.state.photoUrl)}
             <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
             num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} points = {this.state.points} 
             logout={this.logout.bind(this)} refresh={this.refresh.bind(this)} give_feedback= {this.give_feedback.bind(this)}
             navigation = {this.props.navigation} />
-          ) : (
-            <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
-          )}
+            <MenuButton navigation={this.props.navigation} />
+            <Ionicons name = "md-refresh" color = "#000000" size = {32} style = {styles.refreshicon}
+            onPress={() => this.refresh()}/>
         </View>
-      );
+        )
+      }
+      else {
+        return (
+        <View style={styles.container}>
+            <LoginPage signInWithGoogleAsync={this.signInWithGoogleAsync.bind(this)} />
+        </View>
+        )
+      }
     }
     else {
       return (null)
@@ -244,17 +255,8 @@ export default class ProfileScreen extends React.Component {
 const LoginPage = props => {
   return (
     <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
-    <View style={styles.container}>
-      {/* <View style ={styles.imgView}>
-        <Image style = {styles.loginpic} source={require('../assets/snowflake.jpg')}/>
-      </View> */}
+    <View style={styles.container3}>
       <Image style={styles.logo} source={require('../assets/logo.png')} />
-      <Ionicons
-        name = "md-snow"
-        color = "white"
-        size = {100}
-        style = {styles.loginPic}
-      />
       <View style={styles.loginButton}>
         <TouchableOpacity
           onPress={props.signInWithGoogleAsync}>
@@ -265,22 +267,16 @@ const LoginPage = props => {
         </TouchableOpacity>
       </View>
     </View>
-    </ImageBackground>
+   </ImageBackground>
   )
 }
 
 const LoggedInPage = props => {
   return ( 
     <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
-    <View style={styles.container}>
-      <Ionicons name = "md-refresh" color = "#000000" size = {32} style = {styles.refreshicon}
-            onPress={() => props.refresh()}/>
-      <View style={styles.containertop}>
-        <Image style={styles.image} source={{ uri: props.photoUrl }} />
-        <Text style={styles.name}>{props.name}</Text>
-      </View>
+    <View style={styles.container2}>
       <View style={styles.containerbottom}>
-        <Text style={styles.header}> {"Summary"}</Text>
+        <Text style={styles.textHeader}> {"Summary"}</Text>
         <Text style= {styles.text}> {"Total Points: " + props.points}</Text>
         <Text style= {styles.text}> {"Total Shovels: " + props.num_shovels}</Text>
         <Text style= {styles.text}> {"Total Reports: " + props.num_requests}</Text>
@@ -293,53 +289,76 @@ const LoggedInPage = props => {
         <Button title="Logout" size='30' color="#FF0000" onPress={() => props.logout()}/>
       </View>
     </View>
-    <MenuButton navigation={props.navigation} />
     </ImageBackground>
   )
 }
 
 const styles = StyleSheet.create({
   img: {
-    flex: 1,
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    marginTop: 0,
   },
   container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    width: '100%'
+  },
+  container2: {
+    //flex: 1,
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    //paddingTop: 20,
+    height: '72%',
+    width: '100%'
+  },
+  container3: {
     flex: 1,
     backgroundColor: 'transparent',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 24,
-    height: '100%'
+    height: '100%',
+    width: '100%'
   },
   containertop:{
-    flex: 8,
+    //flex: 8,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%'
   },
   name: {
-    fontSize: 40,
-    fontFamily: 'Cabin-Bold'
+    fontSize: scale(40),
+    fontFamily: txt.bold
   },
   text: {
-    fontSize: 20,
+    fontSize: scale(20),
     paddingTop: 20,
-    fontFamily: 'Cabin-Regular'
+    fontFamily: txt.reg
   },
+  textHeader: {
+    paddingTop: 20,
+    fontSize: scale(30),
+    fontFamily: txt.bold
+  },
+  // Actual Header
   header: {
-    paddingTop: 20,
-    fontSize: 30,
-    fontFamily: 'Cabin-Bold'
-  },
+    backgroundColor: '#6D9AED',
+    padding: scale(15),
+    paddingTop: scale(35),
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '28%'
+},
   image: {
-    width: 100, 
-    height: 100,
+    width: scale(100),
+    height: scale(100),
     marginBottom: 20,
-    borderRadius: 40,
+    borderRadius: scale(40),
   },
   containerbottom:{
     flex: 16,
@@ -367,28 +386,23 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     width: "90%", 
     backgroundColor: "#76A1EF",
-    position: 'absolute',
-    bottom: Dimensions.get('window').height*0.3
-  },
-  loginpic: {
-    height: 120,
-    width: 120,
-    borderRadius: 40,
-    marginBottom: 60,
-    backgroundColor: '#D1E1F8',
+    marginTop: scale(100)
+    // position: 'absolute',
+    // bottom: HEIGHT*0.4
   },
   signintext: {
-    fontSize: 24,
     marginBottom: 20,
     color: 'white',
     textAlign: 'center',
     alignItems: 'center',
-    fontFamily: 'Cabin-Bold',
+    fontFamily: txt.bold,
+    fontSize: txt.small,
     paddingTop: 24
   },
   logo: {
     position: 'absolute',
-    top: Dimensions.get('window').height*0.2,
+    top: HEIGHT*0.25,
+    minHeight: 121,
     height: "14%"
   }
 });

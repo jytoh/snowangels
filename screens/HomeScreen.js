@@ -5,6 +5,9 @@ import MarkerOverlay from '../components/MarkerOverlay';
 import UsersMap from '../components/UsersMap';
 import {AppLoading, Font} from 'expo';
 
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
+
 export default class HomeScreen extends React.Component {
 	constructor(props) {
 		super(props)
@@ -30,9 +33,6 @@ export default class HomeScreen extends React.Component {
 		});
 		this.setState({fontLoaded : true});
 		await this.fetch_state();
-		console.log('home screen state',this.state.signedIn)
-		console.log('home screen',2)
-
 	}
 
 	/**
@@ -62,7 +62,6 @@ export default class HomeScreen extends React.Component {
 	 * @param {[type]} marker [description]
 	 */
 	setModalMetaData(marker) {
-		console.log("setModalMetaData", marker)
 		this.setState({
 			markerOverlayTitle: marker.title,
 			markerPosition: marker.coordinate
@@ -144,16 +143,16 @@ const styles = StyleSheet.create({
 	container2: {
 		flex: 1,
 		zIndex: 2,
-		top: 40,
+		top: scale(40),
 		alignItems: 'center',
 		justifyContent: 'center',
 		position: "absolute",
 	},
 	text: {
-		fontSize: 20,
+		fontSize: txt.small,
 		zIndex: 20,
 		position: "absolute",
-		top: 80,
+		top: scale(80),
 		alignItems: 'center',
 	},
 	mapContainer: {

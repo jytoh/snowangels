@@ -12,6 +12,8 @@ import {
 import {Ionicons} from '@expo/vector-icons'
 import geolib from 'geolib'
 import {SecureStore} from "expo";
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
 
 /**
  * The popup that appears when you click on a marker
@@ -79,8 +81,8 @@ const MarkerOverlay = (props) => {
     }
 
     function any_recs_not_compl(reqs){
-        return reqs.some(req => (req.state > 0))
-    }
+
+        return reqs.some(req => (req.state > 0))    }
 
     /**
      * Returns whether the user is logged in
@@ -95,10 +97,27 @@ const MarkerOverlay = (props) => {
 
     function alreadyReq() {
         Alert.alert(
-            'Corner Reqed',
+            'Corner Already Requested',
             "You can't make a request for a shoveling of this corner, likely" +
             " because" +
             " a request has already been made by someone else.",
+            [
+
+                {
+                    text: 'OK', onPress: () => {
+                    }
+                },
+            ],
+            {cancelable: false},
+        );
+    }
+
+    function outsideRadius() {
+        Alert.alert(
+            'Out of Range',
+            "You can't make a request for a shoveling of this corner, likely" +
+            " because" +
+            " you are outside the geofence of this corner.",
             [
 
                 {
@@ -130,7 +149,10 @@ const MarkerOverlay = (props) => {
                 });
             console.log(re);
             console.log(any_recs_not_compl(re).toString());
-            if(re.length > 0 &&any_recs_not_compl(re)){
+            if( a == false ){
+                outsideRadius();
+            }
+            else if(re.length > 0 &&any_recs_not_compl(re)){
                 alreadyReq();
             }
             else {
@@ -139,7 +161,6 @@ const MarkerOverlay = (props) => {
                         uid: uid,
                         cornerId: cornerId
                     });
-                    //navigation.navigate('Camera')
                 }
             }
     }
@@ -256,20 +277,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#D1E1F8B3',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20
+        paddingBottom: scale(20)
     },
     xButton: {
         position: 'absolute',
-        top: 10,
-        left: 10
+        top: scale(10),
+        left: scale(10)
     },
     intersectionText: {
         textAlign: 'center',
-        fontSize: 30,
+        fontSize: txt.header,
         justifyContent: 'center',
         alignItems: 'center',
-        fontFamily: 'Cabin-Bold',
-        paddingTop: 15
+        fontFamily: txt.bold,
+        paddingTop: scale(15)
     },
     request: {
         flex: 1,
@@ -282,14 +303,14 @@ const styles = StyleSheet.create({
     },
     buttonStyle: {
         flex: 1,
-        marginBottom: 7,
-        marginTop: 7
+        marginBottom: scale(7),
+        marginTop: scale(7)
     },
     buttonText: {
         color: 'white',
-        fontFamily: 'Cabin-Bold',
+        fontFamily: txt.bold,
         textAlign: 'center',
-        fontSize: 16
+        fontSize: txt.button - 2
     }
 })
 

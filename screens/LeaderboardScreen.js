@@ -4,6 +4,8 @@ import {ButtonGroup} from 'react-native-elements';
 import MenuButton from '../components/MenuButton';
 import {Text, View, Image} from 'react-native';
 import {SecureStore} from "expo";
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
 
 //SOURCES:https://github.com/JoeRoddy/react-native-leaderboard/blob/master/examples/AvatarAndClickable.js
 //https://github.com/JoeRoddy/react-native-leaderboard/blob/master/examples/CustomExample.js
@@ -43,46 +45,47 @@ export default class LeaderboardScreen extends React.Component {
             <View colors={[, '#DDE8FC', '#76A1EF']}
                   style={{
                       backgroundColor: '#76A1EF',
-                      padding: 15,
-                      paddingTop: 35,
+                      padding: scale(15),
+                      paddingTop: scale(35),
                       alignItems: 'center',
-                      height: '19%'
+                      height: '22%',
+                      minHeight: scale(60 + 20 + 12 + 35 + 15 + 35)
                   }}>
                 <Text style={{
-                    fontSize: 25,
-                    fontFamily: 'Cabin-Bold',
+                    fontSize: txt.header,
+                    fontFamily: txt.bold,
                     color: 'white',
-                    paddingTop: 20
+                    paddingTop: scale(20)
                 }}>Leaderboard</Text>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginTop: 12
+                    marginTop: scale(12)
                 }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: 25,
-                        fontFamily: 'Cabin-Bold',
+                        fontSize: txt.small,
+                        fontFamily: txt.bold,
                         flex: 1,
                         textAlign: 'right',
-                        marginRight: 40
+                        marginRight: scale(40)
                     }}>
                         {ordinal_suffix_of(this.state.rank)}
                     </Text>
                     <Image style={{
                         flex: .66,
-                        height: 60,
-                        width: 60,
-                        borderRadius: 60 / 2
+                        height: scale(60),
+                        width: scale(60),
+                        borderRadius: scale(60 / 2)
                     }}
                            source={{uri: this.state.user.photourl}}/>
                     <Text style={{
                         color: 'white',
-                        fontSize: 25,
-                        fontFamily: 'Cabin-Bold',
+                        fontSize: txt.small,
+                        fontFamily: txt.bold,
                         flex: 1,
-                        marginLeft: 40
+                        marginLeft: scale(40)
                     }}>
                         {this.state.user.szn_points} pts
                     </Text>
@@ -125,8 +128,8 @@ export default class LeaderboardScreen extends React.Component {
             data: this.state.profs,
             icon: "photourl",
             evenRowColor: '#F5F6FE',
-            labelStyle: {fontFamily: 'Cabin-Bold'},
-            scoreStyle: {fontFamily: 'Cabin-Bold'}
+            labelStyle: {fontFamily: txt.bold, fontSize: txt.small},
+            scoreStyle: {fontFamily: txt.bold, fontSize: txt.small}
             //labelStyle: this.state.user.rank % 2 > 0 ? {color: 'white'} : {color: 'red'}
         }
 

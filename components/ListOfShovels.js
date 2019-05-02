@@ -4,6 +4,9 @@ import { Icon, ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
 import { SecureStore } from 'expo';
 
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
+
 export default class ListOfShovels extends React.Component {
   constructor(props) {
     super(props);
@@ -65,9 +68,9 @@ export default class ListOfShovels extends React.Component {
   renderItem = ({ item }) => (
     <ListItem
       title={this.getHumanReadableDate(item)}
-      titleStyle={{ fontFamily: 'Cabin-Bold', }}
+      titleStyle={{ fontFamily: txt.bold, fontSize: txt.small }}
       subtitle={this.getHumanReadableTime(item) + '\n' + item.address}
-      subtitleStyle={{ fontFamily: 'Cabin-Regular', }}
+      subtitleStyle={{ fontFamily: txt.reg, fontSize: (txt.small - scale(2))}}
       Component={TouchableScale}
       friction={90} //
       tension={100} // These props are passed to the parent component (TouchableScale)
@@ -101,6 +104,7 @@ export default class ListOfShovels extends React.Component {
   };
 
   render() {
+    this.fetchData();
     return (
       <FlatList
         keyExtractor={this.keyExtractor}

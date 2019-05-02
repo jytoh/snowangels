@@ -123,7 +123,6 @@ export default class UsersMap extends React.Component {
   }
 
   innerJoin(x,y) {
-    console.log('starting inner join');
     joined_list = [];
     x.map((marker,idx) => {
       y.map((m2,idx2) => {
@@ -135,8 +134,6 @@ export default class UsersMap extends React.Component {
     this.setState({
       joined_list: joined_list
     });
-    console.log(this.state.joined_list);
-
   }
   /**
    * changes the region for this components state and the state of HomeScreen
@@ -227,7 +224,7 @@ export default class UsersMap extends React.Component {
               }}
               onPress = {() => {this.markerOnPress(marker)}
               }
-              pinColor = {(marker.state == 0) ? 'black' : 'red'}
+              pinColor = {(marker.state == 1) ? 'red' : 'black'}
             />
           );
         })
