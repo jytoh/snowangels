@@ -79,7 +79,7 @@ const MarkerOverlay = (props) => {
     }
 
     function any_recs_not_compl(reqs){
-        return reqs.some(req => (req.state < 2))
+        return reqs.some(req => (req.state > 0))
     }
 
     /**
