@@ -81,8 +81,8 @@ const MarkerOverlay = (props) => {
     }
 
     function any_recs_not_compl(reqs){
-        return reqs.some(req => (req.state != 0))
-    }
+
+        return reqs.some(req => (req.state > 0))    }
 
     /**
      * Returns whether the user is logged in

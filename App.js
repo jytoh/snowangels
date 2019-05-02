@@ -51,7 +51,7 @@ export default class App extends React.Component {
     } 
     if (this.state.signedIn) {
       return (
-        <DrawerNavigatorHome screenProps={{name: this.state.name, photoUrl: this.state.photoUrl}}/>
+        <DrawerNavigatorHome screenProps={{name: this.state.name, photoUrl: this.state.photoUrl, uid:this.state.uid}}/>
       );
     }
     else {

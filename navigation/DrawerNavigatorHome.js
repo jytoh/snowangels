@@ -20,6 +20,7 @@ import txt from '../UI_logistics/TextStyles'
 * This loads the drawer navigator when the user starts the
 * app logged-in. It renders home first. 
 */
+import AdministratorScreen from '../screens/AdministratorScreen';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -46,8 +47,13 @@ const DrawerNavigatorHome = createDrawerNavigator(
         Requests:{
             screen: RequestScreen
         },
+
         Confirm:{
             screen: ConfirmScreen
+        }
+
+        Administrator:{
+            screen: AdministratorScreen
         }
 
     },

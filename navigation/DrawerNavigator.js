@@ -15,6 +15,8 @@ import ConfirmScreen from '../screens/ConfirmScreen';
 
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import AdministratorScreen from '../screens/AdministratorScreen';
+
 
 
     
@@ -65,6 +67,8 @@ const DrawerNavigator = createDrawerNavigator(
         },
         Confirm:{
             screen: ConfirmScreen
+        Administrator:{
+            screen: AdministratorScreen
         }
 
     },
