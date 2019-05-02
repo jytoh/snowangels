@@ -95,9 +95,11 @@ export default class AdministratorScreen extends React.Component {
         );
     };
 
+
     render() {
-        console.log()
-        if(this.props.name=="Mishcat Ibrahim"){
+        console.log(this.props);
+
+        if(this.props.screenProps.uid != 1){
             return(
             <View>
             <MenuButton navigation={this.props.navigation}/>
@@ -357,7 +359,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     h1: {
-        fontSize: 24,
+        fontSize: 18,
         color: 'white',
         fontFamily: 'Cabin-Bold',
     },
