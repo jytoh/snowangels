@@ -225,9 +225,8 @@ export default class RequestScreen extends React.Component {
         let response = await fetch(
       'https://snowangels-api.herokuapp.com/corner_pictures?request_id=' + rid
     );
-        console.log(response);
-        console.log(response.json().after_pic);
-        this.setState({before_pic: response.json().before_pic, after_pic: response.json().after_pic, showImage: true})
+        pics = await response.json()
+        this.setState({before_pic: pics.before_pic, after_pic: pics.after_pic, showImage: true})
     }
 
 
