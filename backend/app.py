@@ -787,43 +787,43 @@ def get_top_szn_leader_ids():
     # return ' '.join(top_users)
 
 
-@app.before_request
-def sanitize():
-    name = request.values.get("name")
-    google_id = request.values.get("google_id")
-    url = request.values.get("photourl")
-    tk = request.values.get("token")
-    cid = request.values.get("cid")
-    uid = request.values.get("uid")
-    uid_requester = request.values.get("uid_requester")
-    uid_shoveler = request.values.get("uid_shoveler")
-
-    if name: #names can have various characters so it's easier to just escape all of them than to accidently have somebody's real name not work
-        request.values.set("name",re.escape("name"))
-
-    if google_id and not(google_id.isdigit()):
-        return 404, "google id must be a number"
-
-    if url:
-        parsed = urlparse(photourl) #checking to make sure the file is coming from google
-        request.values.set("photourl", re.escape("name"))
-        if not("googleusercontent.com" in parsed.netloc):
-            return 404, "photo must come from googleusercontent.com"
-
-    if tk and not(tk.isalnum()):
-        return 404, "token must be alphanumeric"
-
-    if cid and not(cid.isdigit()):
-        return 404, "id must be a number"
-
-    if uid and not(uid.isdigit()):
-        return 404, "id must be a number"
-
-    if uid_requester and not(uid_requester.isdigit()):
-        return 404, "id ust be a number"
-
-    if uid_shoveler and not(uid_shoveler.isdigit()):
-        return 404, "id ust be a number"
+# @app.before_request
+# def sanitize():
+#     name = request.values.get("name")
+#     google_id = request.values.get("google_id")
+#     url = request.values.get("photourl")
+#     tk = request.values.get("token")
+#     cid = request.values.get("cid")
+#     uid = request.values.get("uid")
+#     uid_requester = request.values.get("uid_requester")
+#     uid_shoveler = request.values.get("uid_shoveler")
+#
+#     if name: #names can have various characters so it's easier to just escape all of them than to accidently have somebody's real name not work
+#         request.values.set("name",re.escape("name"))
+#
+#     if google_id and not(google_id.isdigit()):
+#         return 404, "google id must be a number"
+#
+#     if url:
+#         parsed = urlparse(photourl) #checking to make sure the file is coming from google
+#         request.values.set("photourl", re.escape("name"))
+#         if not("googleusercontent.com" in parsed.netloc):
+#             return 404, "photo must come from googleusercontent.com"
+#
+#     if tk and not(tk.isalnum()):
+#         return 404, "token must be alphanumeric"
+#
+#     if cid and not(cid.isdigit()):
+#         return 404, "id must be a number"
+#
+#     if uid and not(uid.isdigit()):
+#         return 404, "id must be a number"
+#
+#     if uid_requester and not(uid_requester.isdigit()):
+#         return 404, "id ust be a number"
+#
+#     if uid_shoveler and not(uid_shoveler.isdigit()):
+#         return 404, "id ust be a number"
 
 
 # helper functions
@@ -859,28 +859,28 @@ def get_all_users():
     return jsonify(users=us)
 
 
-@app.before_request
-def authenticate():
-    if request.path[0:15]=="/register_user":
-        return None #registering new users is special and should be treated as such
-    authenticated=False
-    print(request.values)
-    id = request.values.get('id')
-    token = request.values.get('token')
-    # connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
-    #
-    # cur = connection.cursor(cursor_factory=RealDictCursor);
-    # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
-    # c=cur.fetchall()
-    usr = User.query.get(id)
-    if usr is None : #if user doesn't exist
-        return "User doesn't exist", 404
-    if usr.token == token:
-        authenticated=True
-    if authenticated:
-        return None
-    else:
-        return "User authentication token doesn't match id", 401
+# @app.before_request
+# def authenticate():
+#     if request.path[0:15]=="/register_user":
+#         return None #registering new users is special and should be treated as such
+#     authenticated=False
+#     print(request.values)
+#     id = request.values.get('id')
+#     token = request.values.get('token')
+#     # connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
+#     #
+#     # cur = connection.cursor(cursor_factory=RealDictCursor);
+#     # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
+#     # c=cur.fetchall()
+#     usr = User.query.get(id)
+#     if usr is None : #if user doesn't exist
+#         return "User doesn't exist", 404
+#     if usr.token == token:
+#         authenticated=True
+#     if authenticated:
+#         return None
+#     else:
+#         return "User authentication token doesn't match id", 401
 
 
 if __name__ == "__main__":
