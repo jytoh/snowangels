@@ -976,21 +976,6 @@ def get_user_with_points_alt(id):
     return query.all()
 
 
-#get all users
-@app.route("/get_user", methods=['GET'])
-def get_user():
-    id = request.values.get('id')
-    uid= User.query.filter_by(id=id).first().id
-    return jsonify(user = get_user_with_points(uid))
-
-#get specific user
-@app.route("/get_all_users", methods=['GET'])
-def get_all_users():
-    us = []
-    users = User.query.all()
-    for u in users:
-        us.append(get_user_with_points(u.id))
-    return jsonify(users = us)
 
 
 if __name__ == "__main__":
