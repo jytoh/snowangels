@@ -23,7 +23,7 @@ export default class ListOfShovels extends React.Component {
 
  getSpecificUserShovels(arr, user_id) {
 
-    user_shovels = [];
+    var user_shovels = [];
     for (let userObject of arr) {
       if (userObject.uid == user_id) {
         user_shovels.push(userObject);
@@ -36,7 +36,7 @@ export default class ListOfShovels extends React.Component {
     const response = await fetch("https://snowangels-api.herokuapp.com/get_user_history");
     const json = await response.json();
     var user_id = await SecureStore.getItemAsync('id');
-    var userShovels = this.getSpecificUserShovels(json, 2);
+    var userShovels = this.getSpecificUserShovels(json, user_id);
     this.setState({ data: userShovels });
   }
 

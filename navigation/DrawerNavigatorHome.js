@@ -50,7 +50,7 @@ const DrawerNavigatorHome = createDrawerNavigator(
 
         Confirm:{
             screen: ConfirmScreen
-        }
+        },
 
         Administrator:{
             screen: AdministratorScreen

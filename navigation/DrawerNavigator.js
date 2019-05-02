@@ -65,8 +65,9 @@ const DrawerNavigator = createDrawerNavigator(
         Requests:{
             screen: RequestScreen
         },
-        Confirm:{
+        Confirm: {
             screen: ConfirmScreen
+        },
         Administrator:{
             screen: AdministratorScreen
         }

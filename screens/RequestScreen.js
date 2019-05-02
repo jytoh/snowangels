@@ -51,7 +51,8 @@ export default class RequestScreen extends React.Component {
      * @return {string}      ex: Tue, Apr 30 2019
      */
     getHumanReadableDate(item) {
-        var dateString = (new Date(item.time + ' UTC')).toDateString()
+        var dateString = (new Date(item.time + ' UTC')).toDateString();
+        console.log(dateString);
         return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
     }
 
