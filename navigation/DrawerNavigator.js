@@ -10,6 +10,7 @@ import RequestScreen from '../screens/RequestScreen';
 import ShovelCameraScreen from '../screens/ShovelCameraScreen';
 import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
+import AdministratorScreen from '../screens/AdministratorScreen';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -49,6 +50,9 @@ const DrawerNavigator = createDrawerNavigator(
         },
         Requests:{
             screen: RequestScreen
+        },
+        Administrator:{
+            screen: AdministratorScreen
         }
     },
     DrawerConfig

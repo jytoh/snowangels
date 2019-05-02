@@ -38,6 +38,7 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Leaderboard', 'Leaderboard')}
                         {this.navLink('History', 'History')}
                         {this.navLink('Requests','Requests')}
+                        {this.navLink('Administrator','Administrator')}
                     </View>
                 </ScrollView>
                 <View style={styles.footer}>
