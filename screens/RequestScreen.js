@@ -205,13 +205,13 @@ export default class RequestScreen extends React.Component {
                     marginTop: 20
                 }}>
                     <Text onPress={() => this.change_tab(0)}
-                          style={styles.h1}>Pending</Text>
+                          style={styles.h1}>Fulfilled</Text>
                     <Text style={styles.h1}> | </Text>
                     <Text onPress={() => this.change_tab(1)}
-                          style={styles.h1}>Claimed</Text>
+                          style={styles.h1}>Pending</Text>
                     <Text style={styles.h1}> | </Text>
                     <Text onPress={() => this.change_tab(2)}
-                          style={styles.h1}>Confirmed</Text>
+                          style={styles.h1}>Claimed</Text>
                 </View>
             </View>
         )
