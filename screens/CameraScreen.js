@@ -13,13 +13,10 @@ import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
 import {SecureStore} from 'expo';
 
-import {Camera, Permissions, ImagePicker} from 'expo';
-import {Feather} from '@expo/vector-icons';
+import {Camera, Permissions} from 'expo';
 // import {decode as atob, encode as btoa} from 'base-64';
 import shorthash from 'shorthash';
-import {FileSystem} from 'expo';
 
-import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 
 import { scale } from '../UI_logistics/ScaleRatios'

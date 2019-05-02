@@ -10,6 +10,7 @@ import RequestScreen from '../screens/RequestScreen';
 import ShovelCameraScreen from '../screens/ShovelCameraScreen';
 import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
+import ConfirmScreen from '../screens/ConfirmScreen';
 
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
@@ -44,7 +45,11 @@ const DrawerNavigatorHome = createDrawerNavigator(
         },
         Requests:{
             screen: RequestScreen
+        },
+        Confirm:{
+            screen: ConfirmScreen
         }
+
     },
 
     {

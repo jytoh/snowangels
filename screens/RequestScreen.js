@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Button,
+    Image,
     StyleSheet,
     Text,
     View,
@@ -126,7 +127,7 @@ export default class RequestScreen extends React.Component {
     }
 
     al(rid, st) {
-        if (st == 0 || st == 1) {
+        if (this.state.tab == 0 || this.state.tab == 1) {
             Alert.alert(
                 'Sure?',
                 'Do you want to remove this Request?',
@@ -140,7 +141,7 @@ export default class RequestScreen extends React.Component {
                 ],
                 {cancelable: true},
             );
-        } else if (st == 2) {
+        } else if (this.state.tab == 2) {
             Alert.alert(
                 'Sure?',
                 'Do you want to validate this Request?',
@@ -149,6 +150,10 @@ export default class RequestScreen extends React.Component {
                         text: 'Cancel',
                         onPress: () => console.log('Cancel Pressed'),
                         style: 'cancel',
+                    },
+                    {
+                        text: 'See before and after pictures of corner',
+                        onPress: () => this.props.navigation.navigate('Confirm',{rid})
                     },
                     {
                         text: 'Invalid Shovel',
@@ -165,6 +170,38 @@ export default class RequestScreen extends React.Component {
     }
 
     renderHeader() {
+
+        // if(this.state.showImage){
+
+        //     return (
+        //     <View>
+        //     <Text style={{
+        //         fontSize: 25,
+        //         fontFamily: 'Cabin-Bold',
+        //         justifyContent: 'center',
+        //         color: 'black',
+        //         paddingTop: 40
+        //     }}>Before Shovel</Text>
+        //     <Image
+        //     style={{width: 300, height: 300}}
+        //     source={{uri: this.state.before_pic}}
+        //     />
+        //     <Text style={{
+        //         fontSize: 25,
+        //         fontFamily: 'Cabin-Bold',
+        //         justifyContent: 'center',
+        //         color: 'black',
+        //         paddingTop: 20
+        //     }}>After Shovel</Text>
+        //     <Image
+        //     style={{width: 300, height: 300}}
+        //     source={{uri: this.state.after_pic}}
+        //     />
+        //     <Button title="Go back to request screen" size='30' onPress= {this.returnToRequest}/>
+        //     </View> 
+        //     )
+        //     }
+
         return (
             <View colors={[, '#DDE8FC', '#76A1EF']}
                   style={styles.header}>
@@ -173,16 +210,43 @@ export default class RequestScreen extends React.Component {
                     fontFamily: txt.bold,
                     color: 'white',
                 }}>My Requests</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 15,
+                    marginTop: 20
+                }}>
+                    <Text onPress={() => this.change_tab(0)}
+                          style={styles.h1}>Pending</Text>
+                    <Text style={styles.h1}> | </Text>
+                    <Text onPress={() => this.change_tab(1)}
+                          style={styles.h1}>Claimed</Text>
+                    <Text style={styles.h1}> | </Text>
+                    <Text onPress={() => this.change_tab(2)}
+                          style={styles.h1}>Confirmed</Text>
+                </View>
             </View>
         )
     }
 
+    returnToRequest = async () => {
+        this.setState({showImage: false})
+    }
+
+    async showPictures(rid) {
+        let response = await fetch(
+      'https://snowangels-api.herokuapp.com/corner_pictures?request_id=' + rid
+    );
+        pics = await response.json()
+        this.setState({before_pic: pics.before_pic, after_pic: pics.after_pic, showImage: true})
+    }
 
     async sendRequest() {
         // var user_id = 2;
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
-        var re = await fetch('https://snowangels-api.herokuapp.com/get_requests?uid=%d1'.replace("%d1", user_id),
+        var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=%d2'.replace("%d1", user_id).replace("%d2", st),
             {
                 method: 'GET'
             }).then(response => response.json())
@@ -194,8 +258,7 @@ export default class RequestScreen extends React.Component {
 
             }).catch((error) => {
                 // handle your errors here
-            })
-
+        })
     }
 
     async validateShovel(rid, vb) {
@@ -260,6 +323,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         height: '18%'
+    },
+    h1: {
+        fontSize: txt.small,
+        fontFamily: txt.reg,
+        color: 'white'
     },
     button: {
         zIndex: 9,
