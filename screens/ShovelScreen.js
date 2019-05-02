@@ -15,7 +15,7 @@ export default class ShovelScreen extends React.Component {
     return (
       <View colors={[, '#DDE8FC', '#76A1EF']}
         style={styles.header}>
-        <Text style={{ fontSize: txt.header, fontFamily: txt.bold, color: 'white' }}>My Shovels</Text>
+        <Text style={{ fontSize: txt.header, fontFamily: txt.bold, color: 'white' }}>My Shovel History</Text>
       </View>
     )
   }

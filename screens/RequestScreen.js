@@ -7,7 +7,8 @@ import {
     View,
     FlatList,
     TouchableWithoutFeedback,
-    Alert
+    Alert,
+    TouchableOpacity
 } from 'react-native';
 import {List, ListItem} from 'react-native-elements';
 import MenuButton from '../components/MenuButton'
@@ -42,7 +43,7 @@ export default class RequestScreen extends React.Component {
         } else if (item.state == 1) {
             return 'Corner Requested'
         } else if (item.state == 2) {
-            return 'Corner Shoveled'
+            return 'Corner Shoveled, Awaiting Your Validation'
         }
     }
 
@@ -216,14 +217,17 @@ export default class RequestScreen extends React.Component {
                     marginBottom: 15,
                     marginTop: 20
                 }}>
-                    <Text onPress={() => this.change_tab(0)}
-                          style={styles.h1}>Pending</Text>
+                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(1)}>
+                        <Text style={styles.h1}>Pending</Text>
+                    </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
-                    <Text onPress={() => this.change_tab(1)}
-                          style={styles.h1}>Claimed</Text>
+                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(2)}>
+                        <Text style={styles.h1}>Shoveled</Text>
+                    </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
-                    <Text onPress={() => this.change_tab(2)}
-                          style={styles.h1}>Confirmed</Text>
+                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(0)}>
+                        <Text style={styles.h1}>Confirmed</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -317,16 +321,17 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#76A1EF',
         padding: scale(15),
-        paddingTop: scale(35),
+        paddingTop: scale(40),
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
         height: '18%'
     },
     h1: {
-        fontSize: txt.small,
+        fontSize: txt.button,
         fontFamily: txt.reg,
-        color: 'white'
+        color: 'white',
+        textAlign: 'center'
     },
     button: {
         zIndex: 9,

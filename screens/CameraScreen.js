@@ -156,7 +156,6 @@ export default class CameraScreen extends React.Component {
                 <SafeAreaVew><Text>No access to camera</Text></SafeAreaVew>);
         } else {
             if (this.state.imageUri) {
-                // console.log(this.state.imageUri);
                 return (
                     <View style={styles.container}>
                         <Image style={styles.image}
@@ -188,7 +187,17 @@ export default class CameraScreen extends React.Component {
             } else {
                 return (
                     <View style={styles.container}>
-                        <MenuButton navigation={this.props.navigation}/>
+                         <TouchableOpacity
+                                style={styles.backButton}
+                                onPress={() => {
+                                    this.setState({imageUri: null})
+                                    this.props.navigation.navigate('Home')
+                                }}>
+                                <Text
+                                    style={styles.backText}>
+                                    {' '}Back to Map{' '}
+                                </Text>
+                        </TouchableOpacity>
                         <Camera
                             ref={ref => {
                                 this.camera = ref;
@@ -238,6 +247,18 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    backButton: {
+        zIndex: 9,
+        position: "absolute",
+        top: scale(40),
+        left: scale(20),        
+        backgroundColor: '#E1EAFB'
+    },
+    backText:{
+        fontSize: txt.button,
+        fontFamily: txt.bold,
+        color: '#76A1EF'
+    },
     bottombar: {
         flex: 1,
         backgroundColor: '#E1EAFB',
@@ -250,7 +271,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1EAFB'
     },
     takephoto: {
-        fontSize: txt.button,
+        fontSize: txt.button + 2,
         marginBottom: scale(20),
         color: '#76A1EF',
         textAlign: 'center',
