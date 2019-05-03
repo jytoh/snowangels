@@ -859,28 +859,28 @@ def get_all_users():
     return jsonify(users=us)
 
 
-# @app.before_request
-# def authenticate():
-#     if request.path[0:15]=="/register_user":
-#         return None #registering new users is special and should be treated as such
-#     authenticated=False
-#     print(request.values)
-#     id = request.values.get('id')
-#     token = request.values.get('token')
-#     # connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
-#     #
-#     # cur = connection.cursor(cursor_factory=RealDictCursor);
-#     # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
-#     # c=cur.fetchall()
-#     usr = User.query.get(id)
-#     if usr is None : #if user doesn't exist
-#         return "User doesn't exist", 404
-#     if usr.token == token:
-#         authenticated=True
-#     if authenticated:
-#         return None
-#     else:
-#         return "User authentication token doesn't match id", 401
+@app.before_request
+def authenticate():
+    if request.path[0:15]=="/register_user":
+        return None #registering new users is special and should be treated as such
+    authenticated=False
+    print(request.values)
+    id = request.values.get('id')
+    token = request.values.get('token')
+    # connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
+    #
+    # cur = connection.cursor(cursor_factory=RealDictCursor);
+    # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
+    # c=cur.fetchall()
+    usr = User.query.get(id)
+    if usr is None : #if user doesn't exist
+        return "User doesn't exist", 404
+    if usr.token == token:
+        authenticated=True
+    if authenticated:
+        return None
+    else:
+        return "User authentication token doesn't match id", 401
 
 
 if __name__ == "__main__":
