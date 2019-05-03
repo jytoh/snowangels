@@ -85,8 +85,9 @@ const MarkerOverlay = (props) => {
     }
 
     function alreadyReq() {
-        Alert.alert(
+        /*Alert.alert(
             'Corner Already Requested',
+            "Already requested",
             [
 
                 {
@@ -95,7 +96,7 @@ const MarkerOverlay = (props) => {
                 },
             ],
             {cancelable: false},
-        );
+        );*/
     }
 
     function outsideRadius() {
@@ -132,6 +133,8 @@ const MarkerOverlay = (props) => {
                 outsideRadius();
             }
             else if(re.length > 0 &&any_recs_not_compl(re)){
+                console.log("re.length", re.length)
+                console.log("any_recs_not_compl(re)", any_recs_not_compl(re))
                 alreadyReq();
             }
             else {
@@ -194,9 +197,8 @@ const MarkerOverlay = (props) => {
         }
     }
 
-    console.log("cornerState", cornerState)
 
-    if (cornerState != -1) {
+    if (cornerState != 1) {
         return (
             <View style={styles.overlayContainer}>
                 <Ionicons
