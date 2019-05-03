@@ -17,14 +17,14 @@ POSTGRES = {
     'pw': 'password',
     'db': 'template1',  # had to change this bc I couldnt add a db
     'host': 'localhost',
-    'port': int(os.environ.get("PORT", 5000)),
+    'port': 5432 #int(os.environ.get("PORT", 5000)),
     # the port 5000 option gave problems when testing locally
 }
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
+# app.config[
+#     'SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
 # using this to test locally
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 # added this to not keep restarting
 # app.config['DEBUG'] = False
@@ -153,13 +153,12 @@ class Shoveling(db.Model):
 
     # took out state + added user_id and corner_id
     def __init__(self, user_id=None, corner_id=None, before_pic=None,
-                 after_pic=None, start=None, end=None):
+                 after_pic=None):
         # self.state = state
         self.user_id = user_id
         self.corner_id = corner_id
         self.before_pic = before_pic
         self.after_pic = after_pic
-        self.start = start
         self.end = datetime.datetime.now()
 
 
@@ -443,7 +442,7 @@ def get_user_history():
         .select_from(Shoveling) \
         .join(User, Shoveling.user_id == User.id) \
         .join(Corner, Shoveling.corner_id == Corner.id) \
-        .order_by(User.id.asc(), Request.time.desc()).all()
+        .order_by(User.id.asc(), Shoveling.end.desc()).all()
 
     result = []
     for row in join:
