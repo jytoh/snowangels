@@ -69,7 +69,7 @@ const DrawerNavigatorAdmin = createDrawerNavigator(
         drawerWidth: WIDTH * 0.83,
             contentComponent: ({ navigation, screenProps}) => {
             console.log('administrator screen name =', screenProps.name)
-            return (<MenuDrawer navigation={navigation} name={screenProps.name} photoUrl={screenProps.photoUrl}/>)
+            return (<MenuDrawer navigation={navigation} name={screenProps.name} photoUrl={screenProps.photoUrl} uid={screenProps.uid}/>)
         }
     }
 );

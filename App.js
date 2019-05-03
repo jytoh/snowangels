@@ -50,7 +50,7 @@ export default class App extends React.Component {
         <AppLoading/>
       </View>);
     } 
-    if (this.state.signedIn && (this.state.name == "Cathy Li")) {
+    if (this.state.signedIn && (this.state.uid == 1)) {
       return (
         <DrawerNavigatorAdmin screenProps={{name: this.state.name, photoUrl: this.state.photoUrl, uid:this.state.uid}}/>
       )

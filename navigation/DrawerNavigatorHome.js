@@ -62,7 +62,7 @@ const DrawerNavigatorHome = createDrawerNavigator(
         },
         drawerWidth: WIDTH * 0.83,
         contentComponent: ({ navigation, screenProps}) => {
-            return (<MenuDrawer navigation={navigation} name={screenProps.name} photoUrl={screenProps.photoUrl}/>)
+            return (<MenuDrawer navigation={navigation} name={screenProps.name} photoUrl={screenProps.photoUrl} uid={screenProps.uid}/>)
         }
     }
 );

@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView, Platform, Dimensions, StyleSheet, Toucha
 
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import {SecureStore} from "expo";
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -15,6 +16,7 @@ export default class MenuDrawer extends React.Component {
             </TouchableOpacity>
         )
     }
+
     render() {
         return(
             <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} >
@@ -34,7 +36,7 @@ export default class MenuDrawer extends React.Component {
                     </View>
                 </View>
                 <ScrollView style={styles.scroller}>
-                {(this.props.name == "Cathy Li") ? (
+                {(this.props.uid == 1) ? (
                     <View style = {styles.bottomLinks}>
                         {this.navLink('Home', 'Map')}
                         {this.navLink('Profile', 'Profile')}

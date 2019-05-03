@@ -21,6 +21,7 @@ export default class HomeScreen extends React.Component {
 			markerOverlayIsVisible: false,
 			markerOverlayTitle: null,
 			highlightedCornerId: null,
+			highlightedCornerState: null,
 			markerPosition: null,
 			fontLoaded: false,
 			signedIn: false,
@@ -73,9 +74,11 @@ export default class HomeScreen extends React.Component {
 			markerOverlayTitle: marker.title,
 			markerPosition: marker.coordinate
 		});
+
 		this.state.markerOverlayTitle = marker.title
 		this.state.markerPosition = marker.coordinate
 		this.state.highlightedCornerId = marker.key
+		this.state.highlightedCornerState = marker.state
 	}
 
 	getUserLocationHandler() {
@@ -120,6 +123,7 @@ export default class HomeScreen extends React.Component {
 				<MarkerOverlay
 					title={this.state.markerOverlayTitle}
 					cornerId={this.state.highlightedCornerId}
+					cornerState={this.state.highlightedCornerState}
 					markerPosition={this.state.markerPosition}
 					visible={this.state.markerOverlayIsVisible}
 					setModalVisibility={this.setModalVisibility}
