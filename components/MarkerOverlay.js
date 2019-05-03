@@ -112,13 +112,10 @@ const MarkerOverlay = (props) => {
             {cancelable: false},
         );
     }
+    }
 
-    async function sendRequest() {
-        // console.log('corner id', cornerId)
+   async function sendRequest() {
         const a = await userIsNearCorner();
-        // console.log('user is near corner?', a)
-        // console.log('user is singed in?', signedIn)
-        // console.log('user id is', uid);
             var user_id = await SecureStore.getItemAsync('id');
             var re = await fetch('https://snowangels-api.herokuapp.com/get_corners_requests?cid=%d1'.replace("%d1", cornerId),
                 {
@@ -126,7 +123,6 @@ const MarkerOverlay = (props) => {
                 }).then(response => response.json())
                 .then((jsonData) => {
                     return jsonData;
-
                 }).catch((error) => {
                     // handle your errors here
                     console.error(error)
@@ -148,6 +144,7 @@ const MarkerOverlay = (props) => {
                 }
             }
     }
+
 
     function al() {
         Alert.alert(
