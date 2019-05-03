@@ -159,7 +159,7 @@ class Shoveling(db.Model):
         self.corner_id = corner_id
         self.before_pic = before_pic
         self.after_pic = after_pic
-        self.start = datetime.datetime.now()
+        self.start = start
         self.end = end
 
 
@@ -437,13 +437,13 @@ def get_user_history():
     join = db.session.query( \
         User.id.label("userid"),
         User.name.label("name"),
-        Shoveling.start.label("time"),
+        Request.time.label("time"),
         Corner.street1.label("street1"),
         Corner.street2.label("street2")) \
-        .select_from(Shoveling) \
-        .join(User, Shoveling.user_id == User.id) \
-        .join(Corner, Shoveling.corner_id == Corner.id) \
-        .order_by(User.id.asc(), Shoveling.start.desc()).all()
+        .select_from(Request) \
+        .join(User, Request.user_id == User.id) \
+        .join(Corner, Request.corner_id == Corner.id) \
+        .order_by(User.id.asc(), Request.time.desc()).all()
 
     result = []
     for row in join:

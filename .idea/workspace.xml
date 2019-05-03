@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backend/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="442" column="31" lean-forward="true" selection-start-line="442" selection-start-column="31" selection-end-line="442" selection-end-column="31" />
+            <state relative-caret-position="56">
+              <caret line="443" column="51" lean-forward="true" selection-start-line="443" selection-start-column="51" selection-end-line="443" selection-end-column="51" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -202,13 +202,13 @@
         <option value="$PROJECT_DIR$/UI_logistics/TextStyles.js" />
         <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
         <option value="$PROJECT_DIR$/components/ListOfShovels.js" />
-        <option value="$PROJECT_DIR$/backend/app.py" />
         <option value="$PROJECT_DIR$/screens/ConfirmScreen.js" />
         <option value="$PROJECT_DIR$/navigation/DrawerNavigatorHome.js" />
         <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/navigation/DrawerNavigatorAdmin.js" />
         <option value="$PROJECT_DIR$/components/MenuDrawer.js" />
         <option value="$PROJECT_DIR$/screens/AdministratorScreen.js" />
+        <option value="$PROJECT_DIR$/backend/app.py" />
       </list>
     </option>
   </component>
@@ -401,7 +401,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="167935000" />
+    <option name="totallyTimeSpent" value="168331000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -414,7 +414,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="721" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49302325" visible="true" weight="0.3529887" />
       <window_info id="Structure" order="1" sideWeight="0.5069767" side_tool="true" weight="0.3263328" />
@@ -691,8 +690,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="442" column="31" lean-forward="true" selection-start-line="442" selection-start-column="31" selection-end-line="442" selection-end-column="31" />
+        <state relative-caret-position="56">
+          <caret line="443" column="51" lean-forward="true" selection-start-line="443" selection-start-column="51" selection-end-line="443" selection-end-column="51" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
