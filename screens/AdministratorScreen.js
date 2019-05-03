@@ -97,22 +97,20 @@ export default class AdministratorScreen extends React.Component {
 
 
     render() {
-        console.log(this.props);
-
-        if(this.props.screenProps.uid != 1){
-            return(
-            <View>
-            <MenuButton navigation={this.props.navigation}/>
-            <Text style={{
-                fontSize: 25,
-                fontFamily: 'Cabin-Bold',
-                justifyContent: 'center',
-                color: 'black',
-                paddingTop: 80
-            }}>You do not have permission to view this page</Text>
-            </View>
-            )
-        } else{
+        // if(this.props.screenProps.uid != 1){
+        //     return(
+        //     <View>
+        //     <MenuButton navigation={this.props.navigation}/>
+        //     <Text style={{
+        //         fontSize: 25,
+        //         fontFamily: 'Cabin-Bold',        //         justifyContent: 'center',
+        //         color: 'black',
+        //         paddingTop: 80
+        //     }}>You do not have permission to view this page</Text>
+        //     </View>
+        //     )
+        // } else{
+            this.sendRequest();
             return (
                 <View style={styles.container}>
                     {this.renderHeader()}
@@ -126,8 +124,8 @@ export default class AdministratorScreen extends React.Component {
                     />
                 </View>
             )
-        }
-        this.sendRequest();
+            
+        //}
     }
 
     al(rid, st) {

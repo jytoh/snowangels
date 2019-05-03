@@ -15,40 +15,23 @@ import ConfirmScreen from '../screens/ConfirmScreen';
 
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
-import AdministratorScreen from '../screens/AdministratorScreen';
 
 
-
-    
 /*
 * This loads the drawer navigator when the user starts the
-* app logged-out. It renders profile first so the user can log in 
-* and locks the drawer so the user can't navigate to other screens. 
+* app logged-in. It renders home first. 
 */
+import AdministratorScreen from '../screens/AdministratorScreen';
 
 const WIDTH = Dimensions.get('window').width;
 
-const DrawerConfig = {
-    drawerLockMode: 'locked-closed',
-    contentOptions: {
-        activeBackgroundColor: '#e91e63',
-        itemsContainerStyle: {
-            marginTop: scale(50),
-        },
-        itemStyle: {fontFamily: 'Cabin-Regular'}
-    },
-    drawerWidth: WIDTH * 0.83,
-    contentComponent: ({ navigation }) => {
-        return (<MenuDrawer navigation={navigation} />)
-    },
-}
-const DrawerNavigator = createDrawerNavigator(
+const DrawerNavigatorAdmin = createDrawerNavigator(
     {
-        Profile: {
-            screen: ProfileScreen
-        },
         Home: {
             screen: HomeScreen
+        },
+        Profile: {
+            screen: ProfileScreen
         },
         Shovel: {
             screen: ShovelScreen
@@ -65,12 +48,31 @@ const DrawerNavigator = createDrawerNavigator(
         Requests:{
             screen: RequestScreen
         },
-        Confirm: {
+
+        Confirm:{
             screen: ConfirmScreen
         },
+        Administrator:{
+            screen: AdministratorScreen
+        }
+
     },
-    DrawerConfig
+
+    {       
+        contentOptions: {
+            activeBackgroundColor: '#e91e63',
+            itemsContainerStyle: {
+                marginTop: scale(50),
+            },
+            labelStyle: {fontFamily: 'Cabin-Regular'}
+        },
+        drawerWidth: WIDTH * 0.83,
+            contentComponent: ({ navigation, screenProps}) => {
+            console.log('administrator screen name =', screenProps.name)
+            return (<MenuDrawer navigation={navigation} name={screenProps.name} photoUrl={screenProps.photoUrl}/>)
+        }
+    }
 );
 
 
-export default createAppContainer(DrawerNavigator);
+export default createAppContainer(DrawerNavigatorAdmin);
