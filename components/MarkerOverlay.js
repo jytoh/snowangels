@@ -85,7 +85,7 @@ const MarkerOverlay = (props) => {
     }
 
     function alreadyReq() {
-        /*Alert.alert(
+        Alert.alert(
             'Corner Already Requested',
             "Already requested",
             [
@@ -96,7 +96,7 @@ const MarkerOverlay = (props) => {
                 },
             ],
             {cancelable: false},
-        );*/
+        );
     }
 
     function outsideRadius() {

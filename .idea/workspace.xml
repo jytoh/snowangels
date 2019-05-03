@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="" />
+    <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/components/MarkerOverlay.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/MarkerOverlay.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,118 +16,13 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/backend/app.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="445" column="62" selection-start-line="445" selection-start-column="62" selection-end-line="445" selection-end-column="62" />
-              <folding>
-                <element signature="e#0#40#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/ConfirmScreen.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="693">
-              <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="90" column="7" lean-forward="true" selection-start-line="90" selection-start-column="7" selection-end-line="90" selection-end-column="7" />
+            <state relative-caret-position="204">
+              <caret line="98" column="10" lean-forward="true" selection-start-line="98" selection-start-column="10" selection-end-line="98" selection-end-column="10" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/AdministratorScreen.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="269" column="41" selection-start-line="269" selection-start-column="41" selection-end-line="269" selection-end-column="41" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/components/MenuDrawer.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-271">
-              <caret line="25" column="18" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="66" column="7" lean-forward="true" selection-start-line="66" selection-start-column="7" selection-end-line="66" selection-end-column="7" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37">
-              <caret line="49" column="21" lean-forward="true" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/navigation/DrawerNavigatorAdmin.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="71" column="133" selection-start-line="71" selection-start-column="133" selection-end-line="71" selection-end-column="133" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/navigation/DrawerNavigatorHome.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="64" column="133" selection-start-line="64" selection-start-column="112" selection-end-line="64" selection-end-column="133" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/navigation/DrawerNavigator.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="16" column="44" lean-forward="true" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -207,7 +104,6 @@
         <option value="$PROJECT_DIR$/screens/LeaderboardScreen.js" />
         <option value="$PROJECT_DIR$/screens/ShovelCameraScreen.js" />
         <option value="$PROJECT_DIR$/screens/CameraScreen.js" />
-        <option value="$PROJECT_DIR$/components/MarkerOverlay.js" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
         <option value="$PROJECT_DIR$/navigation/DrawerNavigator.js" />
         <option value="$PROJECT_DIR$/UI_logistics/ScaleRatios.js" />
@@ -221,6 +117,7 @@
         <option value="$PROJECT_DIR$/components/MenuDrawer.js" />
         <option value="$PROJECT_DIR$/screens/AdministratorScreen.js" />
         <option value="$PROJECT_DIR$/backend/app.py" />
+        <option value="$PROJECT_DIR$/components/MarkerOverlay.js" />
       </list>
     </option>
   </component>
@@ -413,7 +310,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="169086000" />
+    <option name="totallyTimeSpent" value="169534000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -735,16 +632,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="90" column="7" lean-forward="true" selection-start-line="90" selection-start-column="7" selection-end-line="90" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/components/MenuDrawer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-271">
@@ -781,6 +668,16 @@
           <caret line="445" column="62" selection-start-line="445" selection-start-column="62" selection-end-line="445" selection-end-column="62" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="98" column="10" lean-forward="true" selection-start-line="98" selection-start-column="10" selection-end-line="98" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
