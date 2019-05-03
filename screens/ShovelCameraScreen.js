@@ -233,6 +233,11 @@ export default class ShovelCameraScreen extends React.Component {
                             type={this.state.type}>
                         </Camera>
                         <View style={styles.bottombar}>
+                            <View
+                                style={styles.helpText}
+                                >
+                                <Text>Take a photo of the shoveled street corner.</Text>
+                            </View>
                             <TouchableOpacity
                                 style={styles.takephototouchable}
                                 onPress={() => this.capturePicture()}>
@@ -265,6 +270,9 @@ export default class ShovelCameraScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    helpText: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         flexDirection: 'column'
@@ -290,7 +298,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#E1EAFB',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: scale(150)
     },
     takephototouchable: {
         flex: 3,
@@ -303,7 +312,7 @@ const styles = StyleSheet.create({
         color: '#76A1EF',
         textAlign: 'center',
         alignItems: 'center',
-        paddingTop: scale(24),
+        paddingTop: scale(12),
         fontFamily: txt.bold
     },
     fliptouchable: {
