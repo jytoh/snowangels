@@ -27,7 +27,8 @@ const MarkerOverlay = (props) => {
      */
     const {
         title, visible, setModalVisibility,
-        userLocation, markerPosition, navigation, signedIn, uid, cornerId
+        userLocation, markerPosition, navigation, signedIn, uid, cornerId,
+        cornerState
     } = props;
 
     var isNearCorner = null;
@@ -197,29 +198,44 @@ const MarkerOverlay = (props) => {
         }
     }
 
-    return (
-        <View style={styles.overlayContainer}>
-            <Ionicons
-                name="ios-close-circle-outline"
-                color="#000000"
-                size={25}
-                style={styles.xButton}
-                onPress={() => setModalVisibility(false)}
-            />
-            <Text style={styles.intersectionText}>{title}</Text>
-            <TouchableOpacity onPress={sendRequest} style={styles.buttonStyle}>
-                <View style={styles.request}>
-                    <Text style={styles.buttonText}>Request a Snow Angel</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={sendShovel} style={styles.buttonStyle}>
-                <View style={styles.request}>
-                    <Text style={styles.buttonText}>Record a Shoveling
-                        Job</Text>
-                </View>
-            </TouchableOpacity>
-        </View>
-    )
+    if (cornerState == 0) {
+        return (
+            <View style={styles.overlayContainer}>
+                <Ionicons
+                    name="ios-close-circle-outline"
+                    color="#000000"
+                    size={25}
+                    style={styles.xButton}
+                    onPress={() => setModalVisibility(false)}
+                />
+                <Text style={styles.intersectionText}>{title}</Text>
+                <TouchableOpacity onPress={sendRequest} style={styles.buttonStyle}>
+                    <View style={styles.request}>
+                        <Text style={styles.buttonText}>Request a Snow Angel</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    } else {
+        return (
+            <View style={styles.overlayContainer}>
+                <Ionicons
+                    name="ios-close-circle-outline"
+                    color="#000000"
+                    size={25}
+                    style={styles.xButton}
+                    onPress={() => setModalVisibility(false)}
+                />
+                <Text style={styles.intersectionText}>{title}</Text>
+                <TouchableOpacity onPress={sendShovel} style={styles.buttonStyle}>
+                    <View style={styles.request}>
+                        <Text style={styles.buttonText}>Record a Shoveling
+                            Job</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 }
 
 
