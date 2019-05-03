@@ -20,7 +20,7 @@ export default class ConfirmScreen extends React.Component {
         super(props);
         this.state = {before_pic: "", after_pic: ""};
         const {navigation} = this.props;
-        rid = navigation.getParam('rid',0);
+        var rid = navigation.getParam('rid',0);
         this.sendRequest();
         this.showPictures(rid)
     }
