@@ -219,15 +219,15 @@ export default class RequestScreen extends React.Component {
                     marginTop: 20
                 }}>
                     <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(1)}>
-                        <Text style={styles.h1}>Pending</Text>
+                        <Text style={styles.h1}>Unshoveled</Text>
                     </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
                     <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(2)}>
-                        <Text style={styles.h1}>Claimed</Text>
+                        <Text style={styles.h1}>Shoveled</Text>
                     </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
                     <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(0)}>
-                        <Text style={styles.h1}>Fulfilled</Text>
+                        <Text style={styles.h1}>Validated</Text>
                     </TouchableOpacity>
                 </View>
             </View>
