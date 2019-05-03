@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Button, Modal, Text, AsyncStorage } from 'react-native';
 import MapView from 'react-native-maps';
-import MarkerOverlay from '../components/MarkerOverlay';
 import LocationMarkerPicture from '../assets/LocationMarkerPicture.png'
 //var RNFS = require('react-native-fs');
 
