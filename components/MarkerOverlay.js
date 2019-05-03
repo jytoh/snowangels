@@ -39,7 +39,6 @@ const MarkerOverlay = (props) => {
     if (!visible) {
         return null;
     }
-    ;
 
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween
@@ -82,7 +81,8 @@ const MarkerOverlay = (props) => {
 
     function any_recs_not_compl(reqs){
 
-        return reqs.some(req => (req.state > 0))    }
+        return reqs.some(req => (req.state > 0))
+    }
 
     function alreadyReq() {
         Alert.alert(
@@ -111,7 +111,6 @@ const MarkerOverlay = (props) => {
             ],
             {cancelable: false},
         );
-    }
     }
 
    async function sendRequest() {
@@ -195,7 +194,9 @@ const MarkerOverlay = (props) => {
         }
     }
 
-    if (cornerState == 0) {
+    console.log("cornerState", cornerState)
+
+    if (cornerState != -1) {
         return (
             <View style={styles.overlayContainer}>
                 <Ionicons
