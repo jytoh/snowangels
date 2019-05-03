@@ -36,7 +36,7 @@ export default class MenuDrawer extends React.Component {
                     </View>
                 </View>
                 <ScrollView style={styles.scroller}>
-                {(this.props.uid == 1) ? (
+                {(this.props.uid == 9) ? (
                     <View style = {styles.bottomLinks}>
                         {this.navLink('Home', 'Map')}
                         {this.navLink('Profile', 'Profile')}
