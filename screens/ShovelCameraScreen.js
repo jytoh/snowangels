@@ -172,7 +172,7 @@ export default class ShovelCameraScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
-        const uid = navigation.getParam('uid', 0);
+        const uid = this.props.screenProps.uid;
         console.log('camera state, cid =', cornerId)
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
