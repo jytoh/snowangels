@@ -34,6 +34,7 @@ export default class MenuDrawer extends React.Component {
                     </View>
                 </View>
                 <ScrollView style={styles.scroller}>
+                {(this.props.name == "Cathy Li") ? (
                     <View style = {styles.bottomLinks}>
                         {this.navLink('Home', 'Map')}
                         {this.navLink('Profile', 'Profile')}
@@ -41,7 +42,17 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Shovel', 'History')}
                         {this.navLink('Requests','Requests')}
                         {this.navLink('Administrator','Administrator')}
+                    </View>) : 
+                    (
+                    <View style = {styles.bottomLinks}>
+                        {this.navLink('Home', 'Map')}
+                        {this.navLink('Profile', 'Profile')}
+                        {this.navLink('Leaderboard', 'Leaderboard')}
+                        {this.navLink('Shovel', 'History')}
+                        {this.navLink('Requests','Requests')}
                     </View>
+                    )
+                }
                 </ScrollView>
                 <View style={styles.footer}>
                     <Text style={styles.description}>Snow Angels</Text>

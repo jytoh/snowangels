@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AppLoading, Font } from 'expo';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import DrawerNavigatorHome from './navigation/DrawerNavigatorHome';
+import DrawerNavigatorAdmin from './navigation/DrawerNavigatorAdmin';
 import {AsyncStorage} from 'react-native';
 
 
@@ -49,13 +50,20 @@ export default class App extends React.Component {
         <AppLoading/>
       </View>);
     } 
-    if (this.state.signedIn) {
+    if (this.state.signedIn && (this.state.name == "Cathy Li")) {
       return (
-        <DrawerNavigatorHome screenProps={{name: this.state.name, photoUrl: this.state.photoUrl, uid:this.state.uid}}/>
-      );
+        <DrawerNavigatorAdmin screenProps={{name: this.state.name, photoUrl: this.state.photoUrl, uid:this.state.uid}}/>
+      )
     }
     else {
-      return <DrawerNavigator />
+      if (this.state.signedIn) {
+        return (
+          <DrawerNavigatorHome screenProps={{name: this.state.name, photoUrl: this.state.photoUrl, uid:this.state.uid}}/>
+        );
+      }
+      else {
+        return <DrawerNavigator />
+      }
     }
   }
 

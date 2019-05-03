@@ -47,15 +47,9 @@ const DrawerNavigatorHome = createDrawerNavigator(
         Requests:{
             screen: RequestScreen
         },
-
         Confirm:{
             screen: ConfirmScreen
         },
-
-        Administrator:{
-            screen: AdministratorScreen
-        }
-
     },
 
     {
