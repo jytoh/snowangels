@@ -32,13 +32,16 @@ const MarkerOverlay = (props) => {
 
     var isNearCorner = null;
 
+    state = {
+        refreshValue: 1
+    }
+
     // maximum meters you are allowed to be from corner to report or start shovel
     const maxMetersAwayFromCorner = 500;
 
     if (!visible) {
         return null;
-    }
-    ;
+    };
 
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween
@@ -82,7 +85,7 @@ const MarkerOverlay = (props) => {
 
     function any_recs_not_compl(reqs){
 
-        return reqs.some(req => (req.state > 0))    }
+        return reqs.some(req => (req.state == 1))    }
 
     /**
      * Returns whether the user is logged in
@@ -152,7 +155,7 @@ const MarkerOverlay = (props) => {
             if( a == false ){
                 outsideRadius();
             }
-            else if(re.length > 0 &&any_recs_not_compl(re)){
+            else if(re.length == 1 && any_recs_not_compl(re)){
                 alreadyReq();
             }
             else {

@@ -59,7 +59,8 @@ export default class CameraScreen extends React.Component {
         }
     };
 
-    async uploadPicture(cid) {
+    async uploadPicture(cid, user_id) {
+        console.log('from upload picture', user_id);
 
         try {
             const blob = await new Promise((resolve, reject) => {
@@ -80,7 +81,7 @@ export default class CameraScreen extends React.Component {
                 .ref()
                 .child('images/' + this.state.hash + '.jpg');
             const snapshot = await ref.put(blob);
-            var user_id = await SecureStore.getItemAsync('id');
+            //var user_id = await SecureStore.getItemAsync('id');
             const remoteUri = await snapshot.ref.getDownloadURL();
             var details = {
                 'uid': user_id,
@@ -123,7 +124,7 @@ export default class CameraScreen extends React.Component {
             }).catch((error) => {
                 console.error(error);
             });
-
+            this.props.navigation.navigate('Home')
     }
 
     async fetch_state() {
@@ -146,7 +147,9 @@ export default class CameraScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
+        const uid = navigation.getParam('uid', 0);
         console.log('camera state, cid =', cornerId);
+        console.log('camera state, uid =', uid);
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
         if (hasPermission === null) {
@@ -164,8 +167,7 @@ export default class CameraScreen extends React.Component {
                             <TouchableOpacity
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
-                                    this.uploadPicture(cornerId);
-                                    this.props.navigation.navigate('Home');
+                                    this.uploadPicture(cornerId, uid);
                                 }}>
                                 <Text
                                     style={styles.takephoto}>

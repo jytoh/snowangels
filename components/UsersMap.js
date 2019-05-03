@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Button, Modal, Text, AsyncStorage } from 'react-native';
 import MapView from 'react-native-maps';
+import { AppLoading } from 'expo';
 import MarkerOverlay from '../components/MarkerOverlay';
 import LocationMarkerPicture from '../assets/LocationMarkerPicture.png'
+import { withNavigation } from "react-navigation";
 //var RNFS = require('react-native-fs');
 
 export default class UsersMap extends React.Component {
@@ -32,7 +34,9 @@ export default class UsersMap extends React.Component {
       userLocationMarker: null,
 
       // circle around user location marker
-      userLocationCircle: null
+      userLocationCircle: null,
+
+      loading: false
     }
     // this.getAllCorners()
     // this.getAllStates()
@@ -49,7 +53,23 @@ export default class UsersMap extends React.Component {
     await this.getAllCorners()
     await this.getAllStates()
     this.getUserLocationHandler()
-    this.innerJoin(this.state.markers, this.state.corner_states)
+    await this.innerJoin(this.state.markers, this.state.corner_states)
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      console.log('focused users map!')
+      this.refreshScreen()
+		});
+  }
+
+  async refreshScreen(){
+    await this.setState({loading: true})
+    console.log('refreshing users map screen')
+    await this.getAllCorners()
+    await this.getAllStates()
+    this.getUserLocationHandler()
+    await this.innerJoin(this.state.markers, this.state.corner_states)
+    this.displayMarkers()
+    await this.setState({loading: false})
+    console.log('refreshed users map screen')
 
   }
 
@@ -122,7 +142,7 @@ export default class UsersMap extends React.Component {
     }
   }
 
-  innerJoin(x,y) {
+  async innerJoin(x,y) {
     joined_list = [];
     x.map((marker,idx) => {
       y.map((m2,idx2) => {
@@ -233,25 +253,33 @@ export default class UsersMap extends React.Component {
   }
 
   render() {
-    return (
-      <View style={styles.mapContainer}>
-        <MapView
-          initialRegion={{
-            latitude: 42.4451,
-            longitude: -76.4837,
-            latitudeDelta: 0.0081,
-            longitudeDelta: 0.0081
-          }}
-          region={this.state.region}
-          onRegionChange={() => this.onRegionChange()}
-          style={styles.map}
-        >
-          {this.displayMarkers()}
-          {this.state.userLocationMarker}
-          {this.state.userLocationCircle}
-        </MapView>
-      </View>
-    );
+    if (this.state.loading == true){
+      console.log('loading users map!!')
+      return (
+        <AppLoading />
+      )
+    }
+    else {
+      return (
+        <View style={styles.mapContainer}>
+          <MapView
+            initialRegion={{
+              latitude: 42.4451,
+              longitude: -76.4837,
+              latitudeDelta: 0.0081,
+              longitudeDelta: 0.0081
+            }}
+            region={this.state.region}
+            onRegionChange={() => this.onRegionChange()}
+            style={styles.map}
+          >
+            {this.displayMarkers()}
+            {this.state.userLocationMarker}
+            {this.state.userLocationCircle}
+          </MapView>
+        </View>
+      );
+    }
   }
 }
 
