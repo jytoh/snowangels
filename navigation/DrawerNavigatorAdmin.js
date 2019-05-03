@@ -12,6 +12,7 @@ import MenuDrawer from '../components/MenuDrawer'
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 import ConfirmScreen from '../screens/ConfirmScreen';
 
+
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
 
@@ -24,7 +25,7 @@ import AdministratorScreen from '../screens/AdministratorScreen';
 
 const WIDTH = Dimensions.get('window').width;
 
-const DrawerNavigatorHome = createDrawerNavigator(
+const DrawerNavigatorAdmin = createDrawerNavigator(
     {
         Home: {
             screen: HomeScreen
@@ -47,12 +48,17 @@ const DrawerNavigatorHome = createDrawerNavigator(
         Requests:{
             screen: RequestScreen
         },
+
         Confirm:{
             screen: ConfirmScreen
         },
+        Administrator:{
+            screen: AdministratorScreen
+        }
+
     },
 
-    {
+    {       
         contentOptions: {
             activeBackgroundColor: '#e91e63',
             itemsContainerStyle: {
@@ -61,11 +67,12 @@ const DrawerNavigatorHome = createDrawerNavigator(
             labelStyle: {fontFamily: 'Cabin-Regular'}
         },
         drawerWidth: WIDTH * 0.83,
-        contentComponent: ({ navigation, screenProps}) => {
+            contentComponent: ({ navigation, screenProps}) => {
+            console.log('administrator screen name =', screenProps.name)
             return (<MenuDrawer navigation={navigation} name={screenProps.name} photoUrl={screenProps.photoUrl} uid={screenProps.uid}/>)
         }
     }
 );
 
 
-export default createAppContainer(DrawerNavigatorHome);
+export default createAppContainer(DrawerNavigatorAdmin);

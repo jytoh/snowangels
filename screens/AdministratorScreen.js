@@ -97,22 +97,20 @@ export default class AdministratorScreen extends React.Component {
 
 
     render() {
-        console.log(this.props);
-
-        if(this.props.screenProps.uid != 1){
-            return(
-            <View>
-            <MenuButton navigation={this.props.navigation}/>
-            <Text style={{
-                fontSize: 25,
-                fontFamily: 'Cabin-Bold',
-                justifyContent: 'center',
-                color: 'black',
-                paddingTop: 80
-            }}>You do not have permission to view this page</Text>
-            </View>
-            )
-        } else{
+        // if(this.props.screenProps.uid != 1){
+        //     return(
+        //     <View>
+        //     <MenuButton navigation={this.props.navigation}/>
+        //     <Text style={{
+        //         fontSize: 25,
+        //         fontFamily: 'Cabin-Bold',        //         justifyContent: 'center',
+        //         color: 'black',
+        //         paddingTop: 80
+        //     }}>You do not have permission to view this page</Text>
+        //     </View>
+        //     )
+        // } else{
+            this.sendRequest();
             return (
                 <View style={styles.container}>
                     {this.renderHeader()}
@@ -126,8 +124,8 @@ export default class AdministratorScreen extends React.Component {
                     />
                 </View>
             )
-        }
-        this.sendRequest();
+            
+        //}
     }
 
     al(rid, st) {
@@ -269,7 +267,7 @@ export default class AdministratorScreen extends React.Component {
         let response = await fetch(
       'https://snowangels-api.herokuapp.com/corner_pictures?request_id=' + rid
     );
-        pics = await response.json()
+        var pics = await response.json();
         this.setState({before_pic: pics.before_pic, after_pic: pics.after_pic, showImage: true})
     }
 
