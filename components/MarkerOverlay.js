@@ -209,7 +209,10 @@ const MarkerOverlay = (props) => {
                     onPress={() => setModalVisibility(false)}
                 />
                 <Text style={styles.intersectionText}>{title}</Text>
-                <TouchableOpacity onPress={sendRequest} style={styles.buttonStyle}>
+                <TouchableOpacity
+                    onPress={sendRequest}
+                    style={styles.buttonStyle}
+                    >
                     <View style={styles.request}>
                         <Text style={styles.buttonText}>Request a Snow Angel</Text>
                     </View>
@@ -266,11 +269,13 @@ const styles = StyleSheet.create({
     request: {
         flex: 1,
         backgroundColor: '#76A1EF',
-        borderRadius: 5,
+        borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        width: Dimensions.get('window').width * 0.5,
+        marginTop: scale(25),
         opacity: 1,
+        width: scale(250),
+        maxHeight: scale(105)
     },
     buttonStyle: {
         flex: 1,
