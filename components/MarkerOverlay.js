@@ -33,12 +33,16 @@ const MarkerOverlay = (props) => {
 
     var isNearCorner = null;
 
+    state = {
+        refreshValue: 1
+    }
+
     // maximum meters you are allowed to be from corner to report or start shovel
     const maxMetersAwayFromCorner = 400;
 
     if (!visible) {
         return null;
-    }
+    };
 
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween

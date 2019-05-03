@@ -68,12 +68,8 @@ export default class ShovelCameraScreen extends React.Component {
         }
     };
 
-    async uploadPicture(cid) {
-        console.log('from upload picture', this.state.uid);
-        console.log("hi1 " + this.state.imageUri);
-        console.log("hi2 " + this.state.bytea);
-        console.log("hi3 " + this.state.b64);
-        console.log("hi4 " + this.state.hash);
+    async uploadPicture(cid, user_id) {
+        console.log('from shovel screen upload picture', user_id);
 
         try {
             const blob = await new Promise((resolve, reject) => {
@@ -152,7 +148,7 @@ export default class ShovelCameraScreen extends React.Component {
             {cancelable: false},
         );
         });
-
+        this.props.navigation.navigate('Home');
     }
 
 
@@ -176,6 +172,7 @@ export default class ShovelCameraScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
+        const uid = navigation.getParam('uid', 0);
         console.log('camera state, cid =', cornerId)
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
@@ -195,8 +192,7 @@ export default class ShovelCameraScreen extends React.Component {
                             <TouchableOpacity
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
-                                    this.uploadPicture(cornerId);
-                                    this.props.navigation.navigate('Home');
+                                    this.uploadPicture(cornerId, uid);
                                 }}>
                                 <Text
                                     style={styles.takephoto}>
@@ -218,7 +214,17 @@ export default class ShovelCameraScreen extends React.Component {
             } else {
                 return (
                     <View style={styles.container}>
-                        <MenuButton navigation={this.props.navigation}/>
+                        <TouchableOpacity
+                                style={styles.backButton}
+                                onPress={() => {
+                                    this.setState({imageUri: null})
+                                    this.props.navigation.navigate('Home')
+                                }}>
+                                <Text
+                                    style={styles.backText}>
+                                    {' '}Back to Map{' '}
+                                </Text>
+                        </TouchableOpacity>
                         <Camera
                             ref={ref => {
                                 this.camera = ref;
@@ -267,6 +273,18 @@ const styles = StyleSheet.create({
         flex: 6,
         width: '100%',
         height: '100%',
+    },
+    backButton: {
+        zIndex: 9,
+        position: "absolute",
+        top: scale(40),
+        left: scale(20),        
+        backgroundColor: '#E1EAFB'
+    },
+    backText:{
+        fontSize: txt.button,
+        fontFamily: txt.bold,
+        color: '#76A1EF'
     },
     bottombar: {
         flex: 1,
