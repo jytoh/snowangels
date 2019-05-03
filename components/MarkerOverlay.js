@@ -50,10 +50,9 @@ const MarkerOverlay = (props) => {
         /**
          * Checks to see if the user position is near the maxMetersAwayFromCorner
          * threshold
-         * @param  {navigator.geolocation obj}  pos            the user's location
-         * @param  {latitude: number, longtitude: number}  markerPosition the position
-         *                                                                of the marker
-         *                                                                in question
+         * @param  {navigator.geolocation obj}  pos    the user's location
+         * @param  {latitude: number, longtitude: number}  markerPosition
+         *                            theposition of the marker in question
          * @return {Boolean}                if near threshold
          */
         function isNearThreshold(pos, markerPosition) {
@@ -83,17 +82,6 @@ const MarkerOverlay = (props) => {
     function any_recs_not_compl(reqs){
 
         return reqs.some(req => (req.state > 0))    }
-
-    /**
-     * Returns whether the user is logged in
-     * UNIMPLEMENTED
-     * @return {boolean}
-     */
-    // async function checkIfUserIsLoggedIn() {
-    //     await fetch_state()
-    //     // change to userState.signedin later
-    //     return userState.signedIn
-    // }
 
     function alreadyReq() {
         Alert.alert(
@@ -206,34 +194,6 @@ const MarkerOverlay = (props) => {
             } catch {
                 al();
             }
-            //   var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-            //   var params = {
-            //       uid: user_id,
-            //       cid: cornerId, //hardcoding for now
-            //       after_pic: "d",
-            //   };
-
-            //   var formBody = [];
-            // for (var property in params) {
-            //   var encodedKey = encodeURIComponent(property);
-            //   var encodedValue = encodeURIComponent(params[property]);
-            //   formBody.push(encodedKey + "=" + encodedValue);
-            // }
-            // formBody = formBody.join("&");
-            //   var sh = await fetch("https://snowangels-api.herokuapp.com/new_shovel", {
-            //       method: 'POST',
-            //       headers: {
-            //           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            //       },
-            //       body: formBody
-
-            //   }).then(response => response.json()).then(responseJson => {
-            //           return responseJson;
-            //       }
-            //   ).catch((error) => {
-            //       // handle your errors here
-            //       al();
-            //   });
         }
     }
 
