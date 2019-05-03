@@ -98,9 +98,6 @@ const MarkerOverlay = (props) => {
     function alreadyReq() {
         Alert.alert(
             'Corner Already Requested',
-            "You can't make a request for a shoveling of this corner, likely" +
-            " because" +
-            " a request has already been made by someone else.",
             [
 
                 {
@@ -115,9 +112,7 @@ const MarkerOverlay = (props) => {
     function outsideRadius() {
         Alert.alert(
             'Out of Range',
-            "You can't make a request for a shoveling of this corner, likely" +
-            " because" +
-            " you are outside the geofence of this corner.",
+            "Get in range to request or shovel",
             [
 
                 {
