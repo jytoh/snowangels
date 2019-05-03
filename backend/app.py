@@ -160,7 +160,7 @@ class Shoveling(db.Model):
         self.before_pic = before_pic
         self.after_pic = after_pic
         self.start = start
-        self.end = end
+        self.end = datetime.datetime.now()
 
 
 # COMMENT THIS OUT WHEN DEPLOYING
@@ -437,12 +437,12 @@ def get_user_history():
     join = db.session.query( \
         User.id.label("userid"),
         User.name.label("name"),
-        Request.time.label("time"),
+        Shoveling.end.label("time"),
         Corner.street1.label("street1"),
         Corner.street2.label("street2")) \
-        .select_from(Request) \
-        .join(User, Request.user_id == User.id) \
-        .join(Corner, Request.corner_id == Corner.id) \
+        .select_from(Shoveling) \
+        .join(User, Shoveling.user_id == User.id) \
+        .join(Corner, Shoveling.corner_id == Corner.id) \
         .order_by(User.id.asc(), Request.time.desc()).all()
 
     result = []
@@ -455,7 +455,6 @@ def get_user_history():
 
 
 # get all people subscribed to a corner
-
 @app.route("/ppl_subscribed", methods=['GET'])
 def get_ppl_subscribed():
     cid = request.args.get('cid')
