@@ -45,9 +45,6 @@ export default class ShovelCameraScreen extends React.Component {
                         bytea: pic.base64.toByteArray,
                         hash: shorthash.unique(pic.base64)
                     }),
-                    console.log("hi1 " + this.state.imageUri),
-                    console.log("hi2 " + this.state.bytea),
-                    console.log("hi4 " + this.state.hash),
                 )
                 .catch(err => {
                     throw err;
@@ -106,7 +103,7 @@ export default class ShovelCameraScreen extends React.Component {
 
         } catch (error) {
         }
-        
+
         formBody = formBody.join("&");
         //POST call for new shovel  
         let response = await fetch('https://snowangels-api.herokuapp.com/new_shovel', {
