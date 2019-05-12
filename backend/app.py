@@ -434,7 +434,7 @@ def num_points():
 @app.route("/corner_pictures", methods=['GET'])
 def corner_pictures():
     """
-    Get total number of requests a user has made
+    Get before and after pictures of corners
     Parameters:
         request_id: request_id
     Returns:
@@ -479,7 +479,7 @@ def validate_shovel():
         db.session.commit()
         req.state = 1
         db.session.commit()
-        # TODO: after implementing subscriptions and notificatios, need to re-notify ppl that this corner needs to be cleared
+        # TODO: after implementing subscriptions and notifications, need to re-notify ppl that this corner needs to be cleared
         return jsonify(requester=uid_requester, shoveler=uid_shoveler,
                        corner=cid, validate_bit=validate_bit)
     # if requester says shoveling claim is valid, set state of request to steady state, 0
@@ -880,7 +880,7 @@ def get_week_leader_id():
 @app.route("/week_leader_name", methods=['GET'])
 def get_week_leader_name():
     """
-    Get ID of leader of the week
+    Get name of leader of the week
     Returns:
         JSON object with user name 
     """
@@ -903,7 +903,7 @@ def get_szn_leader_id():
 @app.route("/szn_leader_name", methods=['GET'])
 def get_szn_leader_name():
     """
-    Get name of leader of the week
+    Get name of leader of the season
     Returns:
         JSON object with user name 
     """
@@ -955,7 +955,6 @@ def get_top_szn_leader_ids():
     top_users = map(str, [u.user_id for u in
                           Point.query.order_by(Point.szn_pts.desc())][:int(x)])
     return jsonify(top_users=' '.join(top_users))
-    # return ' '.join(top_users)
 
 
 @app.before_request
@@ -999,12 +998,24 @@ def sanitize():
 
 # helper functions
 def get_num_users():
+    """
+    Get number of users
+    Returns:
+        Number of total users
+    """
     users = User.query.all()
     return len(users)
 
-# get specific user
+
 @app.route("/get_user", methods=['GET'])
 def get_user():
+    """
+    Get information on a specific user 
+    Parameters:
+        id: id of user
+    Returns:
+        JSON object with user id, google id, name, photourl, token, points for day, week, and season, and list of after pics
+    """
     id = request.values.get('id')
     user = User.query.filter_by(id=id).first()
     uid = user.id
@@ -1015,9 +1026,13 @@ def get_user():
                    pnt.szn_pts, after_pics=pnt.after_pics)
 
 
-# get all users
 @app.route("/get_all_users", methods=['GET'])
 def get_all_users():
+    """
+    Get information on all users
+    Returns:
+        JSON objects with user id, google id, name, photourl, token, points for day, week, and season, and list of after pics
+    """
     us = []
     users = User.query.all()
     for u in users:
@@ -1038,11 +1053,6 @@ def authenticate():
      print(request.values)
      id = request.values.get('id')
      token = request.values.get('token')
-     #connection = psycopg2.connect(dbname="template1", user="postgres", password="password", host="localhost", post=os.environ.get("PORT", 5000));
-     #
-     # cur = connection.cursor(cursor_factory=RealDictCursor);
-     # cur.execute("SELECT * FROM USERS WHERE id = "+id+";")
-     # c=cur.fetchall()
      usr = User.query.get(id)
      if usr is None : #if user doesn't exist
          return "User doesn't exist", 404
@@ -1091,6 +1101,11 @@ def sanitize():
 
 #helper functions
 def get_num_users():
+    """
+    Get number of users
+    Returns:
+        Number of total users
+    """
     users = User.query.all()
     return len(user)
 
