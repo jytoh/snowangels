@@ -163,7 +163,7 @@ class Shoveling(db.Model):
         self.corner_id = corner_id
         self.before_pic = before_pic
         self.after_pic = after_pic
-        self.start = start
+        self.start = datetime.datetime.now()
         self.end = end
 
 
@@ -384,10 +384,11 @@ def num_points():
 @app.route("/corner_pictures", methods=['GET'])
 def corner_pictures():
     request_id = request.values.get("request_id")
-    req = Request.query.filter_by(id=request_id, state=2).first()
+    req = Request.query.filter_by(id=request_id, state=2).order_by(
+        Request.time.desc()).first()
     cid = req.corner_id
     shoveling = Shoveling.query.filter_by(corner_id = cid).order_by(
-        Shoveling.start.asc()).first()
+        Shoveling.start.desc()).first()
     return jsonify(before_pic=shoveling.before_pic, after_pic=shoveling.after_pic)
 
 # validate shoveling
@@ -398,7 +399,7 @@ def validate_shovel():
     req = Request.query.filter_by(id=request_id, state=2).first()
     cid = req.corner_id
     shoveling = Shoveling.query.filter_by(corner_id=cid).order_by(
-        Shoveling.start.asc()).first()
+        Shoveling.start.desc()).first()
     uid_shoveler = shoveling.user_id
     # if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
 
@@ -460,13 +461,13 @@ def get_user_history():
     join = db.session.query( \
         User.id.label("userid"),
         User.name.label("name"),
-        Request.time.label("time"),
+        Shoveling.start.label("time"),
         Corner.street1.label("street1"),
         Corner.street2.label("street2")) \
-        .select_from(Request) \
-        .join(User, Request.user_id == User.id) \
-        .join(Corner, Request.corner_id == Corner.id) \
-        .order_by(User.id.asc(), Request.time.desc()).all()
+        .select_from(Shoveling) \
+        .join(User, Shoveling.user_id == User.id) \
+        .join(Corner, Shoveling.corner_id == Corner.id) \
+        .order_by(User.id.asc(), Shoveling.start.desc()).all()
 
     result = []
     for row in join:

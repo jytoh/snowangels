@@ -12,6 +12,8 @@ import {
 import {Ionicons} from '@expo/vector-icons'
 import geolib from 'geolib'
 import {SecureStore} from "expo";
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
 
 /**
  * The popup that appears when you click on a marker
@@ -25,18 +27,22 @@ const MarkerOverlay = (props) => {
      */
     const {
         title, visible, setModalVisibility,
-        userLocation, markerPosition, navigation, signedIn, uid, cornerId
+        userLocation, markerPosition, navigation, signedIn, uid, cornerId,
+        cornerState
     } = props;
 
     var isNearCorner = null;
 
+    state = {
+        refreshValue: 1
+    }
+
     // maximum meters you are allowed to be from corner to report or start shovel
-    const maxMetersAwayFromCorner = 500;
+    const maxMetersAwayFromCorner = 400;
 
     if (!visible) {
         return null;
-    }
-    ;
+    };
 
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween
@@ -48,10 +54,9 @@ const MarkerOverlay = (props) => {
         /**
          * Checks to see if the user position is near the maxMetersAwayFromCorner
          * threshold
-         * @param  {navigator.geolocation obj}  pos            the user's location
-         * @param  {latitude: number, longtitude: number}  markerPosition the position
-         *                                                                of the marker
-         *                                                                in question
+         * @param  {navigator.geolocation obj}  pos    the user's location
+         * @param  {latitude: number, longtitude: number}  markerPosition
+         *                            theposition of the marker in question
          * @return {Boolean}                if near threshold
          */
         function isNearThreshold(pos, markerPosition) {
@@ -79,26 +84,14 @@ const MarkerOverlay = (props) => {
     }
 
     function any_recs_not_compl(reqs){
-        return reqs.some(req => (req.state < 2))
-    }
 
-    /**
-     * Returns whether the user is logged in
-     * UNIMPLEMENTED
-     * @return {boolean}
-     */
-    // async function checkIfUserIsLoggedIn() {
-    //     await fetch_state()
-    //     // change to userState.signedin later
-    //     return userState.signedIn
-    // }
+        return reqs.some(req => (req.state > 0))
+    }
 
     function alreadyReq() {
         Alert.alert(
-            'Corner Reqed',
-            "You can't make a request for a shoveling of this corner, likely" +
-            " because" +
-            " a request has already been made by someone else.",
+            'Corner Already Requested',
+            "Already requested",
             [
 
                 {
@@ -110,12 +103,23 @@ const MarkerOverlay = (props) => {
         );
     }
 
-    async function sendRequest() {
-        // console.log('corner id', cornerId)
+    function outsideRadius() {
+        Alert.alert(
+            'Out of Range',
+            "Get in range to request or shovel",
+            [
+
+                {
+                    text: 'OK', onPress: () => {
+                    }
+                },
+            ],
+            {cancelable: false},
+        );
+    }
+
+   async function sendRequest() {
         const a = await userIsNearCorner();
-        // console.log('user is near corner?', a)
-        // console.log('user is singed in?', signedIn)
-        // console.log('user id is', uid);
             var user_id = await SecureStore.getItemAsync('id');
             var re = await fetch('https://snowangels-api.herokuapp.com/get_corners_requests?cid=%d1'.replace("%d1", cornerId),
                 {
@@ -123,14 +127,18 @@ const MarkerOverlay = (props) => {
                 }).then(response => response.json())
                 .then((jsonData) => {
                     return jsonData;
-
                 }).catch((error) => {
                     // handle your errors here
                     console.error(error)
                 });
             console.log(re);
             console.log(any_recs_not_compl(re).toString());
-            if(re.length > 0 &&any_recs_not_compl(re)){
+            if( a == false ){
+                outsideRadius();
+            }
+            else if(re.length > 0 &&any_recs_not_compl(re)){
+                console.log("re.length", re.length)
+                console.log("any_recs_not_compl(re)", any_recs_not_compl(re))
                 alreadyReq();
             }
             else {
@@ -139,10 +147,10 @@ const MarkerOverlay = (props) => {
                         uid: uid,
                         cornerId: cornerId
                     });
-                    //navigation.navigate('Camera')
                 }
             }
     }
+
 
     function al() {
         Alert.alert(
@@ -190,60 +198,51 @@ const MarkerOverlay = (props) => {
             } catch {
                 al();
             }
-            //   var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-            //   var params = {
-            //       uid: user_id,
-            //       cid: cornerId, //hardcoding for now
-            //       after_pic: "d",
-            //   };
-
-            //   var formBody = [];
-            // for (var property in params) {
-            //   var encodedKey = encodeURIComponent(property);
-            //   var encodedValue = encodeURIComponent(params[property]);
-            //   formBody.push(encodedKey + "=" + encodedValue);
-            // }
-            // formBody = formBody.join("&");
-            //   var sh = await fetch("https://snowangels-api.herokuapp.com/new_shovel", {
-            //       method: 'POST',
-            //       headers: {
-            //           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            //       },
-            //       body: formBody
-
-            //   }).then(response => response.json()).then(responseJson => {
-            //           return responseJson;
-            //       }
-            //   ).catch((error) => {
-            //       // handle your errors here
-            //       al();
-            //   });
         }
     }
 
-    return (
-        <View style={styles.overlayContainer}>
-            <Ionicons
-                name="ios-close-circle-outline"
-                color="#000000"
-                size={25}
-                style={styles.xButton}
-                onPress={() => setModalVisibility(false)}
-            />
-            <Text style={styles.intersectionText}>{title}</Text>
-            <TouchableOpacity onPress={sendRequest} style={styles.buttonStyle}>
-                <View style={styles.request}>
-                    <Text style={styles.buttonText}>Request a Snow Angel</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={sendShovel} style={styles.buttonStyle}>
-                <View style={styles.request}>
-                    <Text style={styles.buttonText}>Record a Shoveling
-                        Job</Text>
-                </View>
-            </TouchableOpacity>
-        </View>
-    )
+
+    if (cornerState != 1) {
+        return (
+            <View style={styles.overlayContainer}>
+                <Ionicons
+                    name="ios-close-circle-outline"
+                    color="#000000"
+                    size={25}
+                    style={styles.xButton}
+                    onPress={() => setModalVisibility(false)}
+                />
+                <Text style={styles.intersectionText}>{title}</Text>
+                <TouchableOpacity
+                    onPress={sendRequest}
+                    style={styles.buttonStyle}
+                    >
+                    <View style={styles.request}>
+                        <Text style={styles.buttonText}>Request a Snow Angel</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    } else {
+        return (
+            <View style={styles.overlayContainer}>
+                <Ionicons
+                    name="ios-close-circle-outline"
+                    color="#000000"
+                    size={25}
+                    style={styles.xButton}
+                    onPress={() => setModalVisibility(false)}
+                />
+                <Text style={styles.intersectionText}>{title}</Text>
+                <TouchableOpacity onPress={sendShovel} style={styles.buttonStyle}>
+                    <View style={styles.request}>
+                        <Text style={styles.buttonText}>Record a Shoveling
+                            Job</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 }
 
 
@@ -256,40 +255,42 @@ const styles = StyleSheet.create({
         backgroundColor: '#D1E1F8B3',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20
+        paddingBottom: scale(20)
     },
     xButton: {
         position: 'absolute',
-        top: 10,
-        left: 10
+        top: scale(10),
+        left: scale(10)
     },
     intersectionText: {
         textAlign: 'center',
-        fontSize: 30,
+        fontSize: txt.header,
         justifyContent: 'center',
         alignItems: 'center',
-        fontFamily: 'Cabin-Bold',
-        paddingTop: 15
+        fontFamily: txt.bold,
+        paddingTop: scale(15)
     },
     request: {
         flex: 1,
         backgroundColor: '#76A1EF',
-        borderRadius: 5,
+        borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        width: Dimensions.get('window').width * 0.5,
+        marginTop: scale(25),
         opacity: 1,
+        width: scale(250),
+        maxHeight: scale(105)
     },
     buttonStyle: {
         flex: 1,
-        marginBottom: 7,
-        marginTop: 7
+        marginBottom: scale(7),
+        marginTop: scale(7)
     },
     buttonText: {
         color: 'white',
-        fontFamily: 'Cabin-Bold',
+        fontFamily: txt.bold,
         textAlign: 'center',
-        fontSize: 16
+        fontSize: txt.button - 2
     }
 })
 

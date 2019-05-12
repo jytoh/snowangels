@@ -4,6 +4,11 @@ import MenuButton from '../components/MenuButton';
 import MarkerOverlay from '../components/MarkerOverlay';
 import UsersMap from '../components/UsersMap';
 import {AppLoading, Font} from 'expo';
+import { withNavigation } from "react-navigation";
+
+
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
 
 export default class HomeScreen extends React.Component {
 	constructor(props) {
@@ -16,6 +21,7 @@ export default class HomeScreen extends React.Component {
 			markerOverlayIsVisible: false,
 			markerOverlayTitle: null,
 			highlightedCornerId: null,
+			highlightedCornerState: null,
 			markerPosition: null,
 			fontLoaded: false,
 			signedIn: false,
@@ -30,9 +36,11 @@ export default class HomeScreen extends React.Component {
 		});
 		this.setState({fontLoaded : true});
 		await this.fetch_state();
-		console.log('home screen state',this.state.signedIn)
-		console.log('home screen',2)
-
+		this.focusListener = this.props.navigation.addListener("didFocus", () => {
+			console.log('focused home screen!')
+			this.render()
+		});
+		console.log('is it making it here??')
 	}
 
 	/**
@@ -62,14 +70,15 @@ export default class HomeScreen extends React.Component {
 	 * @param {[type]} marker [description]
 	 */
 	setModalMetaData(marker) {
-		console.log("setModalMetaData", marker)
 		this.setState({
 			markerOverlayTitle: marker.title,
 			markerPosition: marker.coordinate
 		});
+
 		this.state.markerOverlayTitle = marker.title
 		this.state.markerPosition = marker.coordinate
 		this.state.highlightedCornerId = marker.key
+		this.state.highlightedCornerState = marker.state
 	}
 
 	getUserLocationHandler() {
@@ -102,6 +111,7 @@ export default class HomeScreen extends React.Component {
       };
 
 	render() {
+		console.log('render :)')
 		if( !this.state.fontLoaded ) {
 			return (<AppLoading/>
 			);
@@ -113,6 +123,7 @@ export default class HomeScreen extends React.Component {
 				<MarkerOverlay
 					title={this.state.markerOverlayTitle}
 					cornerId={this.state.highlightedCornerId}
+					cornerState={this.state.highlightedCornerState}
 					markerPosition={this.state.markerPosition}
 					visible={this.state.markerOverlayIsVisible}
 					setModalVisibility={this.setModalVisibility}
@@ -125,6 +136,8 @@ export default class HomeScreen extends React.Component {
 					setModalVisibility={this.setModalVisibility}
 					setUserLocation={this.setUserLocation}
 					setModalMetaData={this.setModalMetaData}
+					navigation={this.props.navigation}
+
 				/>
 				</View>
 			</View>
@@ -144,16 +157,16 @@ const styles = StyleSheet.create({
 	container2: {
 		flex: 1,
 		zIndex: 2,
-		top: 40,
+		top: scale(40),
 		alignItems: 'center',
 		justifyContent: 'center',
 		position: "absolute",
 	},
 	text: {
-		fontSize: 20,
+		fontSize: txt.small,
 		zIndex: 20,
 		position: "absolute",
-		top: 80,
+		top: scale(80),
 		alignItems: 'center',
 	},
 	mapContainer: {

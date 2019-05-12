@@ -23,6 +23,9 @@ import {FileSystem} from 'expo';
 import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
+
 export default class ShovelCameraScreen extends React.Component {
 
     state = {
@@ -65,12 +68,8 @@ export default class ShovelCameraScreen extends React.Component {
         }
     };
 
-    async uploadPicture(cid) {
-        console.log('from upload picture', this.state.uid);
-        console.log("hi1 " + this.state.imageUri);
-        console.log("hi2 " + this.state.bytea);
-        console.log("hi3 " + this.state.b64);
-        console.log("hi4 " + this.state.hash);
+    async uploadPicture(cid, user_id) {
+        console.log('from shovel screen upload picture', user_id);
 
         try {
             const blob = await new Promise((resolve, reject) => {
@@ -149,7 +148,7 @@ export default class ShovelCameraScreen extends React.Component {
             {cancelable: false},
         );
         });
-
+        this.props.navigation.navigate('Home');
     }
 
 
@@ -173,6 +172,7 @@ export default class ShovelCameraScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
+        const uid = this.props.screenProps.uid;
         console.log('camera state, cid =', cornerId)
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
@@ -192,8 +192,7 @@ export default class ShovelCameraScreen extends React.Component {
                             <TouchableOpacity
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
-                                    this.uploadPicture(cornerId);
-                                    this.props.navigation.navigate('Home');
+                                    this.uploadPicture(cornerId, uid);
                                 }}>
                                 <Text
                                     style={styles.takephoto}>
@@ -215,7 +214,17 @@ export default class ShovelCameraScreen extends React.Component {
             } else {
                 return (
                     <View style={styles.container}>
-                        <MenuButton navigation={this.props.navigation}/>
+                        <TouchableOpacity
+                                style={styles.backButton}
+                                onPress={() => {
+                                    this.setState({imageUri: null})
+                                    this.props.navigation.navigate('Home')
+                                }}>
+                                <Text
+                                    style={styles.backText}>
+                                    {' '}Back to Map{' '}
+                                </Text>
+                        </TouchableOpacity>
                         <Camera
                             ref={ref => {
                                 this.camera = ref;
@@ -224,6 +233,11 @@ export default class ShovelCameraScreen extends React.Component {
                             type={this.state.type}>
                         </Camera>
                         <View style={styles.bottombar}>
+                            <View
+                                style={styles.helpText}
+                                >
+                                <Text>Take a photo of the shoveled street corner.</Text>
+                            </View>
                             <TouchableOpacity
                                 style={styles.takephototouchable}
                                 onPress={() => this.capturePicture()}>
@@ -256,6 +270,9 @@ export default class ShovelCameraScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    helpText: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         flexDirection: 'column'
@@ -265,11 +282,24 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    backButton: {
+        zIndex: 9,
+        position: "absolute",
+        top: scale(40),
+        left: scale(20),        
+        backgroundColor: '#E1EAFB'
+    },
+    backText:{
+        fontSize: txt.button,
+        fontFamily: txt.bold,
+        color: '#76A1EF'
+    },
     bottombar: {
         flex: 1,
         backgroundColor: '#E1EAFB',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: scale(150)
     },
     takephototouchable: {
         flex: 3,
@@ -277,24 +307,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1EAFB'
     },
     takephoto: {
-        fontSize: 24,
-        marginBottom: 20,
+        fontSize: txt.button,
+        marginBottom: scale(20),
         color: '#76A1EF',
         textAlign: 'center',
         alignItems: 'center',
-        paddingTop: 24,
-        fontFamily: 'Cabin-Bold'
+        paddingTop: scale(12),
+        fontFamily: txt.bold
     },
     fliptouchable: {
         flex: 2,
     },
     flip: {
-        fontSize: 16,
+        fontSize: txt.small,
         color: '#76A1EF',
         textAlign: 'center',
-        paddingBottom: 24,
-        marginTop: 10,
-        fontFamily: 'Cabin-Bold'
+        paddingBottom: scale(24),
+        marginTop: scale(10),
+        fontFamily: txt.bold
     },
     image: {
         zIndex: 100,

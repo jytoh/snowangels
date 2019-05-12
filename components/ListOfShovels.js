@@ -4,10 +4,14 @@ import { Icon, ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
 import { SecureStore } from 'expo';
 
+import { scale } from '../UI_logistics/ScaleRatios'
+import txt from '../UI_logistics/TextStyles'
+
 export default class ListOfShovels extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [] };
+        this.fetchData();
   }
 
   keyExtractor(item, index) {
@@ -15,12 +19,11 @@ export default class ListOfShovels extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchData();
   }
 
  getSpecificUserShovels(arr, user_id) {
 
-    user_shovels = [];
+    var user_shovels = [];
     for (let userObject of arr) {
       if (userObject.uid == user_id) {
         user_shovels.push(userObject);
@@ -33,7 +36,7 @@ export default class ListOfShovels extends React.Component {
     const response = await fetch("https://snowangels-api.herokuapp.com/get_user_history");
     const json = await response.json();
     var user_id = await SecureStore.getItemAsync('id');
-    var userShovels = this.getSpecificUserShovels(json, 2);
+    var userShovels = this.getSpecificUserShovels(json, user_id);
     this.setState({ data: userShovels });
   }
 
@@ -65,9 +68,9 @@ export default class ListOfShovels extends React.Component {
   renderItem = ({ item }) => (
     <ListItem
       title={this.getHumanReadableDate(item)}
-      titleStyle={{ fontFamily: 'Cabin-Bold', }}
+      titleStyle={{ fontFamily: txt.bold, fontSize: txt.small }}
       subtitle={this.getHumanReadableTime(item) + '\n' + item.address}
-      subtitleStyle={{ fontFamily: 'Cabin-Regular', }}
+      subtitleStyle={{ fontFamily: txt.reg, fontSize: (txt.small - scale(2))}}
       Component={TouchableScale}
       friction={90} //
       tension={100} // These props are passed to the parent component (TouchableScale)
@@ -101,6 +104,7 @@ export default class ListOfShovels extends React.Component {
   };
 
   render() {
+
     return (
       <FlatList
         keyExtractor={this.keyExtractor}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { scale } from '../UI_logistics/ScaleRatios'
 
 export default class MenuButton extends React.Component {
     render(){
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
     menuIcon: {
         zIndex: 9,
         position: "absolute",
-        top: 40,
-        left: 20,
+        top: scale(40),
+        left: scale(25),
     }
 })
