@@ -14,34 +14,22 @@ import base64
 
 app = Flask(__name__)
 
+#POSTGRES db config for local testing
 POSTGRES = {
     'user': 'postgres',
     'pw': 'password',
-    'db': 'template1',  # had to change this bc I couldnt add a db
+    'db': 'template1',  
     'host': 'localhost',
     'port': int(os.environ.get("PORT", 5000)),
-    # the port 5000 option gave problems when testing locally
 }
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
-# using this to test locally
+# To test locally, comment out postgres heroku link and use this 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-# postgres://hmlyaitsobjwzz:f479ca588a3638b52918874b6928338e9cc3dd8645c95b8dbdfcc8e3e9e0614b@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d9fbj1td3rr8at'
-#added this to not keep restarting
-# app.config['DEBUG'] = False
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # initialize the database connection
 db = SQLAlchemy(app)
-
-
-class Subscription(db.Model):
-    __tablename__ = 'subscriptions'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
 
 
 class Request(db.Model):
@@ -167,6 +155,14 @@ class Shoveling(db.Model):
         self.end = end
 
 
+#Did not get to implement subscription in time
+class Subscription(db.Model):
+    __tablename__ = 'subscriptions'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    corner_id = db.Column(db.Integer, db.ForeignKey("corners.id"))
+
+
 # COMMENT THIS OUT WHEN DEPLOYING
 db.reflect()
 # db.drop_all()
@@ -178,8 +174,13 @@ db.session.commit()
 # initialize database migration management
 migrate = Migrate(app, db)
 
-#importing corners locally from GIS dataset
+
 def import_corners(file):
+    """
+    Imports corners to the database from GIS dataset
+    Parameters:
+        file: file name which has corner data
+    """
     dframe = filereading.fetchGISdata(file)
     for index, row in dframe.iterrows():#don't change these
         lat = row[2]
@@ -194,33 +195,24 @@ def import_corners(file):
 import_corners("Ints2019 copy.xls") #TODO: change to "Ints2019" for full dataset
 print("added corners")
 
-#for dummy_point in dummy_points:
-#    db.session.add(dummy_point)
-#db.session.commit()
-# end of put in dummy data
-
-@app.route('/')  # delet for production
-def index():
-    print(Corner.query.all())
-    print(Point.query.all())
-    print(Subscription.query.all())
-    print(Request.query.all())
-    print(Shoveling.query.all())
-    print(User.query.all())
-    return 'works'
-
 
 @app.route("/register_user", methods=['POST'])
 def register_user():
+    """
+    Initalizes a new user entry in the database     
+    Parameters:
+        name: name of user 
+        google_id: google id of user
+        url: url of user's photo icon
+        tk: user's access token
+    Returns:
+        JSON object with user's name
+    """
     name = request.form["name"]
     google_id = request.form["google_id"]
     url = request.form["photourl"]
     tk = request.form["token"]
     if (User.query.filter_by(google_id=google_id).first() == None):
-        # initialAuth = request.form["teststring"] #current solution: hardcode something and return that to verify that this is coming from our app
-
-        # if initialAuth =/= "teststring":
-        # return "Error: new users must be registered through the app", 401
         usr = User(name, google_id, url, tk)
         pts = Point(usr.id)
         usr.point = pts
@@ -228,13 +220,19 @@ def register_user():
         db.session.add(pts)
         db.session.commit()
         return jsonify(user=name)
-        # return "%s has been added to the database" % name
     else:
         return "user was already registered"
 
 
 @app.route("/googleid_to_uid", methods=['POST'])
 def googleid_to_uid():
+    """
+    Returns the user's id in the database given their Google ID     
+    Parameters:
+        google_id: google id of user
+    Returns:
+        JSON object with user's user id
+    """
     google_id = request.form["google_id"]
     print(google_id)
     uid = User.query.filter_by(google_id=google_id).first().id
@@ -244,6 +242,11 @@ def googleid_to_uid():
 
 @app.route("/get_all_corners", methods=['GET'])
 def get_all_corners():
+    """
+    Returns the attributes of all corners    
+    Returns:
+        JSON object with all corner entried in db
+    """
     dictlist = [i.serialize for i in Corner.query.all()]
     # return dictlist
     return json.dumps(dictlist, indent=2)
@@ -251,6 +254,16 @@ def get_all_corners():
 
 @app.route("/create_corner", methods=['POST'])
 def create_corner():
+    """
+    Initializes a new corner in the db      
+    Parameters:
+        lat: latitude of the corner
+        long: longitude of the corner
+        st1: street 1 name
+        st2: street 2 name
+    Returns:
+        JSON object with corner's street 1 and 2 names
+    """
     lat = request.form["lat"]
     long = request.form["long"]
     st1 = request.form["street1"]
@@ -259,11 +272,17 @@ def create_corner():
     db.session.add(crnr)
     db.session.commit()
     return jsonify(street1=st1, street2=st2)
-    # return "Added new corner at %s1 and %s2" % (st1, st2)
 
 
 @app.route("/create_corners_from_filename", methods=['POST'])
 def create_corners_from_file():
+    """
+    Initialize all corners in a file into the database  
+    Parameters:
+        file: file name 
+    Returns:
+        String 
+    """
     file = request.form["filename"]
     dframe = filereading.fetchGISdata(file)
     print("success")
@@ -280,6 +299,14 @@ def create_corners_from_file():
 
 @app.route("/new_subscription", methods=['POST'])
 def new_subscription():
+    """
+    Add a subscription to the database 
+    Parameters:
+        uid: user id
+        cid: corner id 
+    Returns:
+        JSON object with user id, corner id, and user name 
+    """
     uid = request.form['uid']
     cid = request.form['cid']
     user = User.query.get(uid)
@@ -290,38 +317,43 @@ def new_subscription():
     db.session.add(subscr)
     db.session.commit()
     return jsonify(user=uid, corner=cid, username=user.name)
-    # return "User %s has subscribed to Corner %s" % (uid, cid)
 
 
 @app.route("/new_request", methods=['POST'])
 def new_request():
+    """
+    Add a request to the database 
+    Parameters:
+        uid: user id
+        cid: corner id 
+        before_pic: before_pic
+    Returns:
+        JSON object with user id, corner id, user name, and before_pic
+    """
     uid = request.values.get("uid")
     cid = request.values.get("cid")
     before_pic = request.values.get("before_pic")
     user = User.query.get(uid)
     corner = Corner.query.get(cid)
-    # req = Request(uid, cid, before_pic)
     reqs = Request.query.filter_by(corner_id=cid).all()
     if any([req.state > 0 for req in reqs]):
         return None
-
     req = Request(uid, cid, before_pic)
     db.session.add(req)
     db.session.commit()
-
-    # may have to convert back to this below
-    # user.request.append(req)
-    # corner.request.append(req)
-    # db.session.add(req)
-
-    # you can't conv
     return jsonify(user=uid, corner=cid, username=user.name,
                    before_pic=before_pic)
-    # #return "User %s has made a request for Corner %s" % (uid, cid)
 
 
 @app.route("/num_requests", methods=['GET'])
 def num_requests():
+    """
+    Get total number of requests a user has made
+    Parameters:
+        uid: user id
+    Returns:
+        JSON object with number of requests
+    """
     uid = request.values.get("uid")
     num_requests = Request.query.filter_by(user_id=uid).count()
     return jsonify(num_requests=num_requests)
@@ -329,6 +361,15 @@ def num_requests():
 
 @app.route("/new_shovel", methods=['POST'])
 def new_shovel():
+    """
+    Add a shovel to the database 
+    Parameters:
+        uid: user id
+        cid: corner id 
+        after_pic: after_pic
+    Returns:
+        JSON object with user id, corner id, user name, before_pic, after_pic, start_time, end_time, and total_time
+    """
     uid = request.form["uid"]
     cid = request.form["cid"]
     user = User.query.get(uid)
@@ -345,10 +386,7 @@ def new_shovel():
     shovel = Shoveling(uid, cid, before_pic, after_pic, start, end)
     db.session.add(shovel)
     db.session.commit()
-    # wasnt sure if we need these next two lines
-    # user.request.append(shovel)
-    # corner.request.append(shovel)
-    # change state to 1 in requests table
+    # change state to 2 in requests table
     req = Request.query.filter_by(corner_id=cid).order_by(
         Request.time.desc()).first()
     req.state = 2
@@ -360,15 +398,20 @@ def new_shovel():
     points_entry.szn_pts += 5
     points_entry.after_pics.append(after_pic)
     db.session.commit()
-    # TODO: figure out total time
     return jsonify(user=uid, corner=cid, username=user.name,
                    before_pic=before_pic, after_pic=after_pic, start_time=start,
                    end_time=end, total_time=0)
-    # return "User %s has claimed to shovel Corner %s" % (uid, cid)
 
 
 @app.route("/num_shovels", methods=['GET'])
 def num_shovels():
+    """
+    Get total number of shovels a user has made
+    Parameters:
+        uid: user id
+    Returns:
+        JSON object with number of shovels
+    """
     uid = request.values.get("uid")
     num_shovels = Shoveling.query.filter_by(user_id=uid).count()
     return jsonify(num_shovels=num_shovels)
@@ -376,14 +419,29 @@ def num_shovels():
 
 @app.route("/num_points", methods=['GET'])
 def num_points():
+    """
+    Get total number of points a user has 
+    Parameters:
+        uid: user id
+    Returns:
+        JSON object with number of points
+    """
     uid = request.values.get("uid")
     num_points = Point.query.filter_by(user_id=uid).first().szn_pts
     return jsonify(points=num_points)
 
-#return before and after photoes
+
 @app.route("/corner_pictures", methods=['GET'])
 def corner_pictures():
+    """
+    Get total number of requests a user has made
+    Parameters:
+        request_id: request_id
+    Returns:
+        JSON object with before and after pictures of corner
+    """
     request_id = request.values.get("request_id")
+    #filter for requsts that have been shoveled but need to be validated
     req = Request.query.filter_by(id=request_id, state=2).order_by(
         Request.time.desc()).first()
     cid = req.corner_id
@@ -391,9 +449,17 @@ def corner_pictures():
         Shoveling.start.desc()).first()
     return jsonify(before_pic=shoveling.before_pic, after_pic=shoveling.after_pic)
 
-# validate shoveling
+
 @app.route("/validate_shovel", methods=['POST'])
 def validate_shovel():
+    """
+    Requester validates a shoveling
+    Parameters:
+        request_id: request_id
+        vb: valid bit
+    Returns:
+        JSON object with requester id, shoveler id, corner id, and valid bit
+    """
     request_id = request.form["request_id"]
     validate_bit = request.form["vb"]
     req = Request.query.filter_by(id=request_id, state=2).first()
@@ -401,8 +467,7 @@ def validate_shovel():
     shoveling = Shoveling.query.filter_by(corner_id=cid).order_by(
         Shoveling.start.desc()).first()
     uid_shoveler = shoveling.user_id
-    # if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 0
-
+    # if requester says shoveling claim is not valid, take away points from shoveler + set state of request to 1
     uid_requester = req.user_id
     if validate_bit == '0':
         points_entry = Point.query.filter_by(user_id=uid_shoveler).first()
@@ -414,49 +479,25 @@ def validate_shovel():
         db.session.commit()
         req.state = 1
         db.session.commit()
-        # TODO: need to re-notify ppl that this corner needs to be cleared
-
+        # TODO: after implementing subscriptions and notificatios, need to re-notify ppl that this corner needs to be cleared
         return jsonify(requester=uid_requester, shoveler=uid_shoveler,
                        corner=cid, validate_bit=validate_bit)
-        # return "User %s calimed that user %s did not properly shovel Corner %s" % (uid_requester, uid_shoveler, cid)
-    # if requester says shoveling claim is valid, set state of request to steady state, 2
+    # if requester says shoveling claim is valid, set state of request to steady state, 0
     elif validate_bit == '1':
         req.state = 0
         db.session.commit()
         return jsonify(requester=uid_requester, shoveler=uid_shoveler,
                        corner=cid, validate_bit=validate_bit)
-        # return "User %s validated that user %s shoveled Corner %s" % (uid_requester, uid_shoveler, cid)
 
 
-# #dummy test for user history
-# dummy_profiles= [
-#     Corner('Wyckoff St','Heights Court',42.4550874247821,-76.4838560729503),
-#     Corner('Wyckoff St','Dearborn Pl',42.4552301688275,-76.4839151377581),
-#     Corner('Woodcrest Terrace','Woodcrest Ave',42.4332223831747,-76.4747075168164),
-#     Corner('Willow Ave','Pier Rd',42.4534911735782,-76.5062921053108),
-#     Corner('Willet Pl','E Buffalo St',42.4414896398069,-76.4928359378613),
-#     Request(1,2,'aaa'),
-#     Request(2,5,'bbb'),
-#     Request(3,3,'ccc'),
-#     Request(1,4,'ddd'),
-#     User('name1','gid1','111','token1'),
-#     User('name2','gid2','222','token2'),
-#     User('name3','gid3','333','token3'),
-#     Point(1),
-#     Point(2),
-#     Point(3),
-#     Point(4),
-#     Point(5),
-#     Point(6)
-# ]
-# for prof in dummy_profiles:
-#     db.session.add(prof)
-# db.session.commit()
 
-
-# get info for user history, in the form (User id, User name, Address of shovel, Time of shovel)
 @app.route("/get_user_history", methods=['GET'])
 def get_user_history():
+    """
+    Returns users history
+    Returns:
+        JSON objects with user ids, names, corner street1, corner street2, and time
+    """
     # join User, Request and Corner
     join = db.session.query( \
         User.id.label("userid"),
@@ -478,32 +519,46 @@ def get_user_history():
     return json.dumps(result, indent=2)
 
 
-# get all people subscribed to a corner
-
 @app.route("/ppl_subscribed", methods=['GET'])
 def get_ppl_subscribed():
+    """
+    Get all people subscribed to a corner
+    Parameters:
+        cid: corner id
+    Returns:
+        JSON object with corner id and all users subsrcibed to that id
+    """
     cid = request.args.get('cid')
     users_subscribed = map(str, [s.user_id for s in
                                  Subscription.query.filter_by(corner_id=cid)])
     return jsonify(corner=cid, users_subscribed=users_subscribed)
-    # return "Users %s are subscribed to corner %s" % (' '.join(users_subscribed), cid)
 
-
-# get corners that user is subscribed to
 
 @app.route("/subscribed_corners", methods=['GET'])
 def get_subscribed_corners():
+    """
+    Get all corners that user is subscribed to
+    Parameters:
+        uid: user id
+    Returns:
+        JSON object with user id and all corner ids they are subscribed to
+    """
     uid = request.args.get('uid')
     corners = map(str, [s.corner_id for s in
                         Subscription.query.filter_by(user_id=uid)])
     return jsonify(user=uid, corners=corners)
-    # return "User %s is subscribed to corners %s" % (uid, ' '.join(corners))
 
-
-# unsubscribe a user from a corner
 
 @app.route("/unsubscribe_corner", methods=['DELETE'])
 def unsubscribe_corner():
+    """
+    Unsubscribe a user from a corner
+    Parameters:
+        uid: user id
+        cid: corner id user will unsubscribe from
+    Returns:
+        JSON object with user id and corner id
+    """
     uid = request.args.get('uid')
     cid = request.args.get('cid')
     subscription = Subscription.query.filter_by(user_id=uid,
@@ -511,13 +566,17 @@ def unsubscribe_corner():
     db.session.delete(subscription)
     db.session.commit()
     return jsonify(user=uid, corner=cid)
-    # return "User %s has unsubscribed from corner %s" % (uid, cid)
 
-
-# get state of a corner request
 
 @app.route("/state", methods=['GET'])
 def get_states():
+    """
+    Get state of a corner request
+    Parameters:
+        cid: corner id 
+    Returns:
+        JSON object with corner id and its state
+    """
     cid = request.args.get('cid')
     statequery = Request.query.filter_by(corner_id=cid).order_by(
         Request.time.desc()).first()
@@ -526,36 +585,46 @@ def get_states():
     else:
         state = 0
     return jsonify(corner=cid, state=state)
-    # return "Corner %s has  %s" % (cid, state)
 
-
-# get user id who last requested a corner
 
 @app.route("/latest_requester_id", methods=['GET'])
 def get_latest_requester_id():
+    """
+    Get user id who last requested a corner
+    Parameters:
+        cid: corner id 
+    Returns:
+        JSON object with corner id and user id of who last requested that corner
+    """
     cid = request.args.get('cid')
     uid = Request.query.filter_by(corner_id=cid).order_by(
         Request.time.desc()).first().user_id
     return jsonify(corner=cid, user=uid)
-    # return "%s was the last person to make a request on corner %s" % (uid, cid)
 
-
-# get name of who last requested a corner
 
 @app.route("/latest_requester_name", methods=['GET'])
 def get_latest_requester_name():
+    """
+    Get name of who last requested a corner
+    Parameters:
+        cid: corner id 
+    Returns:
+        JSON object with corner id and user name of who last requested that corner
+    """
     cid = request.args.get('cid')
     uid = Request.query.filter_by(corner_id=cid).order_by(
         Request.time.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
     return jsonify(corner=cid, user=uid, name=name)
-    # return "%s was the last person to make a request on corner %s" % (name, cid)
 
-
-# get corner info: street names
 
 @app.route("/states", methods=['GET'])
 def get_state():
+    """
+    Get states of all corners
+    Returns:
+        JSON objects with corner id and state
+    """
     reqs = Request.query.order_by(Request.time.desc()).all()
     st = []
     reqids = []
@@ -573,6 +642,13 @@ def get_state():
 
 @app.route("/get_corners_requests", methods=['GET'])
 def get_c_requests():
+    """
+    Get all requests made on a specified corner
+    Parameters:
+        cid: corner id
+    Returns:
+        JSON objects with corner id and state
+    """
     cid = request.args.get('cid')
     reqs = Request.query.filter_by(corner_id=cid).order_by(Request.time.desc(
 
@@ -588,11 +664,15 @@ def get_c_requests():
     return json.dumps(result)
 
 
-# return "Corner %s has  %s" % (cid, state)
-# get user id who last requested a corner
-
 @app.route("/get_requests", methods=['GET'])
 def get_requests():
+    """
+    Get all requests of a given user
+    Parameters:
+        uid: user id
+    Returns:
+        JSON objects with request id, state, corner street1, corner street2, and time
+    """
     uid = request.args.get('uid')
     reqs = Request.query.filter_by(user_id=uid).order_by(Request.time.desc(
 
@@ -610,6 +690,14 @@ def get_requests():
 
 @app.route("/get_requests_filter_state_cid", methods=['GET'])
 def get_requests_filter_state_cid():
+    """
+    Get all requests at a given corner with a specific state
+    Parameters:
+        cid: corner id
+        state: state of request
+    Returns:
+        JSON objects with request id, state, corner street1, corner street2, and time
+    """
     cid = request.args.get('cid')
     state = request.args.get('state')
     reqs = Request.query.filter_by(corner_id=cid, state=state).order_by(
@@ -627,9 +715,13 @@ def get_requests_filter_state_cid():
     return json.dumps(result)
 
 
-#get all requests
 @app.route("/get_all_requests_not_shoveled", methods=['GET'])
 def get_all_requests_not_shoveled():
+    """
+    Get all requests that have not been shoveled
+    Returns:
+        JSON objects with request id, state, corner street1, corner street2, and time of requests that haven't been shoveled
+    """
     reqs = Request.query.filter_by(state=0).order_by(
         Request.time.desc(
 
@@ -655,8 +747,14 @@ def get_all_requests_not_shoveled():
                        'time': req.time.strftime("%m/%d/%Y, %H:%M:%S")})
     return json.dumps(result)
 
+
 @app.route("/get_requests_shoveled", methods=['GET'])
 def get_requests_shoveled():
+    """
+    Get all requests that have been shoveled
+    Returns:
+        JSON objects with request id, state, corner street1, corner street2, and time of requests that have been shoveled
+    """
     reqs = Request.query.filter_by(state=2).order_by(
         Request.time.desc(
 
@@ -674,6 +772,14 @@ def get_requests_shoveled():
 
 @app.route("/get_requests_filter_state", methods=['GET'])
 def get_requests_filter_state():
+    """
+    Get all requests made by a specific user that are at a specific state
+    Parameters:
+        uid: user id
+        state: state of request
+    Returns:
+        JSON objects with request id, state, corner street1, corner street2, and time
+    """
     uid = request.args.get('uid')
     state = request.args.get('state')
     reqs = Request.query.filter_by(user_id=uid, state=state).order_by(
@@ -693,6 +799,13 @@ def get_requests_filter_state():
 
 @app.route("/remove_request", methods=['DELETE'])
 def remove_req():
+    """
+    Remove a request from the db    
+    Parameters:
+        req_id: request id
+    Returns:
+        JSON object with request id
+    """
     req_id = request.args.get('id')
     req = Request.query.filter_by(id=req_id).one()
     db.session.delete(req)
@@ -702,108 +815,142 @@ def remove_req():
 
 @app.route("/corner_street_names", methods=['GET'])
 def get_corner_street_names():
-    # cid = request.form["cid"]
+    """
+    Get the street names of a corner
+    Parameters:
+        cid: corner id
+    Returns:
+        JSON object with corner street1 and street2 
+    """
     cid = request.args.get('cid')
-    # martin's edit
     str1 = Corner.query.filter_by(id=cid).first().street1
     str2 = Corner.query.filter_by(id=cid).first().street2
     return jsonify(street1=str1, street2=str2)
-    # return "Corner %s is at streets %s and %s" % (cid, str1, str2)
 
-
-# get corner info: latitude and longtitude
 
 @app.route("/corner_coordinates", methods=['GET'])
 def get_corner_coordinates():
+    """
+    Get latitude and longitude of a corner
+    Parameters:
+        cid: corner id
+    Returns:
+        JSON objects with corner id, latitude, and longitude 
+    """
     cid = request.args.get('cid')
     lat = Corner.query.filter_by(id=cid).lat
     lon = Corner.query.filter_by(id=cid).lon
     return jsonify(corner=cid, lat=lat, lon=lon)
-    # return "Corner %s is at coordinates (%s, %s)" % (cid, lat, lon)
 
-
-# get ID of leader of the day
 
 @app.route("/day_leader_id", methods=['GET'])
 def get_day_leader_id():
+    """
+    Get ID of leader of the day
+    Returns:
+        JSON object with user id 
+    """
     uid = Point.query.order_by(Point.day_pts.desc()).first().user_id
     return jsonify(user=uid)
-    # return "User id %s is the leader of the day" % (uid)
 
-
-# get name of leader of the day
 
 @app.route("/day_leader_name", methods=['GET'])
 def get_day_leader_name():
+    """
+    Get name of leader of the day
+    Returns:
+        JSON object with user name 
+    """
     uid = Point.query.order_by(Point.day_pts.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
     return jsonify(name=name)
-    # return "User %s is the leader of the day" % (name)
 
-
-# get ID of leader of the week
 
 @app.route("/week_leader_id", methods=['GET'])
 def get_week_leader_id():
+    """
+    Get ID of leader of the week
+    Returns:
+        JSON object with user id 
+    """
     uid = Point.query.order_by(Point.week_pts.desc()).first().user_id
     return jsonify(user=uid)
-    # return "User id %s is the leader of the week" % (uid)
 
-
-# get name of leader of the day
 
 @app.route("/week_leader_name", methods=['GET'])
 def get_week_leader_name():
+    """
+    Get ID of leader of the week
+    Returns:
+        JSON object with user name 
+    """
     uid = Point.query.order_by(Point.week_pts.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
     return jsonify(name=name)
-    # return "User %s is the leader of the week" % (name)
 
-
-# get ID of leader of the season
 
 @app.route("/szn_leader_id", methods=['GET'])
 def get_szn_leader_id():
+    """
+    Get ID of leader of the season
+    Returns:
+        JSON object with user id 
+    """
     uid = Point.query.order_by(Point.szn_pts.desc()).first().user_id
     return jsonify(user=uid)
-    # return "User id %s is the leader of the season" % (uid)
 
-
-# get name of leader of the season
 
 @app.route("/szn_leader_name", methods=['GET'])
 def get_szn_leader_name():
+    """
+    Get name of leader of the week
+    Returns:
+        JSON object with user name 
+    """
     uid = Point.query.order_by(Point.szn_pts.desc()).first().user_id
     name = User.query.filter_by(id=uid).first().name
     return jsonify(name=name)
-    # return "User %s is the leader of the season" % (name)
 
-
-# get top x user ids for the day
 
 @app.route("/top_day_leader_ids", methods=['GET'])
 def get_top_day_leader_ids():
+    """
+    Get top users of the day
+    Parameters:
+        num_users: number of top users
+    Returns:
+        JSON objects of num_users top users
+    """
     x = request.args.get('num_users')
     top_users = map(str, [u.user_id for u in
                           Point.query.order_by(Point.day_pts.desc())][:int(x)])
     return jsonify(top_users=' '.join(top_users))
-    # return ' '.join(top_users)
 
-
-# get top x user ids for the week
 
 @app.route("/top_week_leader_ids", methods=['GET'])
 def get_top_week_leader_ids():
+    """
+    Get top users of the week
+    Parameters:
+        num_users: number of top users
+    Returns:
+        JSON objects of num_users top users
+    """
     x = request.args.get('num_users')
     top_users = map(str, [u.user_id for u in
                           Point.query.order_by(Point.week_pts.desc())][:int(x)])
     return jsonify(top_users=' '.join(top_users))
-    # return ' '.join(top_users)
 
 
-# get top x user ids for the season
 @app.route("/top_szn_leader_ids", methods=['GET'])
 def get_top_szn_leader_ids():
+    """
+    Get top users of the season
+    Parameters:
+        num_users: number of top users
+    Returns:
+        JSON objects of num_users top users
+    """
     x = request.args.get('num_users')
     top_users = map(str, [u.user_id for u in
                           Point.query.order_by(Point.szn_pts.desc())][:int(x)])
@@ -855,7 +1002,7 @@ def get_num_users():
     users = User.query.all()
     return len(users)
 
-
+# get specific user
 @app.route("/get_user", methods=['GET'])
 def get_user():
     id = request.values.get('id')
@@ -868,7 +1015,7 @@ def get_user():
                    pnt.szn_pts, after_pics=pnt.after_pics)
 
 
-# get specific user
+# get all users
 @app.route("/get_all_users", methods=['GET'])
 def get_all_users():
     us = []
@@ -929,9 +1076,6 @@ def sanitize():
         if not("googleusercontent.com" in parsed.netloc):
             return 404, "photo must come from googleusercontent.com"
 
-    #if tk and not(tk.isalnum()):
-    #    return 404, "token must be alphanumeric"
-
     if cid and not(cid.isdigit()):
         return 404, "id must be a number"
 
@@ -951,15 +1095,6 @@ def get_num_users():
     return len(user)
 
 def get_user_with_points(id):
-    #query = db.session.query(
-    #User.id,
-    #User.user_id,
-    #User.name,
-    #User.photourl,
-    #Point.day_pts,
-    #Point.week_pts,
-    #Point.szn_pts)
-    #join = query.join(Point.user_id == User.id).filter(User.id == id)
     query = db.session.query(User).join(User.point).filter(User.id ==id)
     return query.all()
 
@@ -973,9 +1108,7 @@ def get_user_with_points_alt(id):
     Point.week_pts,
     Point.szn_pts)
     join = query.join(Point.user_id == User.id).filter(User.id == id)
-    #query = db.session.query(User).join(User.point).filter(User.id ==id)
     return query.all()
-
 
 
 
