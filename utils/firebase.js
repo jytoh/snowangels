@@ -1,3 +1,4 @@
+//Config template for setting up Firebase storage 
 import Environment from "../config/environment";
 import * as firebase from "firebase";
 firebase.initializeApp({

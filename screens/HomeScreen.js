@@ -4,6 +4,8 @@ import MenuButton from '../components/MenuButton';
 import MarkerOverlay from '../components/MarkerOverlay';
 import UsersMap from '../components/UsersMap';
 import {AppLoading, Font} from 'expo';
+import { withNavigation } from "react-navigation";
+
 
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
@@ -34,6 +36,11 @@ export default class HomeScreen extends React.Component {
 		});
 		this.setState({fontLoaded : true});
 		await this.fetch_state();
+		this.focusListener = this.props.navigation.addListener("didFocus", () => {
+			console.log('focused home screen!')
+			this.render()
+		});
+		console.log('is it making it here??')
 	}
 
 	/**
@@ -104,6 +111,7 @@ export default class HomeScreen extends React.Component {
       };
 
 	render() {
+		console.log('render :)')
 		if( !this.state.fontLoaded ) {
 			return (<AppLoading/>
 			);
@@ -128,6 +136,8 @@ export default class HomeScreen extends React.Component {
 					setModalVisibility={this.setModalVisibility}
 					setUserLocation={this.setUserLocation}
 					setModalMetaData={this.setModalMetaData}
+					navigation={this.props.navigation}
+
 				/>
 				</View>
 			</View>

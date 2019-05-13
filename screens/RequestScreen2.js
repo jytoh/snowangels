@@ -18,9 +18,12 @@ export default class RequestScreen extends React.Component {
         super(props);
         this.state = {reqs: []};
         this.sendRequest()
-
     }
-
+    
+    /**
+    * Display pop-up when user clicks a request on the request screen
+    * @param  {Number} rid ID of the request
+    */
     al(rid) {
         Alert.alert(
             'Sure?',
@@ -37,6 +40,10 @@ export default class RequestScreen extends React.Component {
         );
     }
 
+    /**
+    * Display header of Requests component
+    * @return  {Object} view of header
+    */
     renderHeader() {
         return (
             <View colors={[, '#DDE8FC', '#76A1EF']}
@@ -52,9 +59,11 @@ export default class RequestScreen extends React.Component {
                </View>
              </View>
           )
-       }
+    }
 
-
+    /**
+    * Updates state to reflect requests that fall under the tab that was clicked
+    */
     async sendRequest() {
         // var user_id = 2;
         var user_id = await SecureStore.getItemAsync('id');
@@ -74,8 +83,11 @@ export default class RequestScreen extends React.Component {
         });
     }
 
+    /**
+    * Remove a request from the database
+    * @param  {Number} rid ID of the request
+    */
     async removeRequest(rid) {
-        // var rid = this.state.reqs[0].request_id;
         var re = await fetch('https://snowangels-api.herokuapp.com/remove_request?id=%d'.replace("%d", rid),
             {
                 method: 'DELETE'
@@ -87,8 +99,6 @@ export default class RequestScreen extends React.Component {
                 // handle your errors here
                 console.error(error)
             })
-
-
         this.sendRequest();
     }
 
@@ -115,15 +125,6 @@ export default class RequestScreen extends React.Component {
             />
             <MenuButton navigation={this.props.navigation} />
             </View>
-            // <View style={styles.buttonContainer}>
-            //     <Button
-            //         onPress={() => {
-            //             this.removeRequest();
-            //         }}
-            //         title="Remove Most Recent Request"
-            //     />
-            // </View>
-
         );
     }
 }

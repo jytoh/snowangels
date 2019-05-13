@@ -24,10 +24,14 @@ export default class ProfileScreen extends React.Component {
         num_shovels: 0,
         points: 0,
     };
+
   async componentDidMount() {
     await this.fetch_state();
   };
   
+  /**
+  * Refreshes profile screen to update the number of requests, shovels, and points
+  */
   async refresh() {
     let response_request = await fetch(
       'https://snowangels-api.herokuapp.com/num_requests?uid=' + this.state.uid
@@ -42,6 +46,7 @@ export default class ProfileScreen extends React.Component {
     let response2Json = await response_shovel.json();
     let response3Json = await response_points.json();
 
+    //Update state with result of fetch calls
     this.setState({
       num_requests: response1Json.num_requests,
       num_shovels: response2Json.num_shovels,
@@ -50,6 +55,9 @@ export default class ProfileScreen extends React.Component {
     await this.store_state(this.state);
   };
 
+  /**
+  * Uses the Expo MailComposer to send email to app administrator
+  */
   async give_feedback(){
     MailComposer.composeAsync({
       recipients: ['mi243@cornell.edu'], 
@@ -58,13 +66,20 @@ export default class ProfileScreen extends React.Component {
     })
   }
 
+  /**
+  * Signs user in. Adds a new user entry in the database if this is the user's first time logging in 
+  * @return {String} access token received from result of Fetch call
+  */
   async signInWithGoogleAsync() {
       try {
+        //Use Expo function to log in user on app
         const result = await Expo.Google.logInAsync({
           androidClientId: '144414055124-h8ahrjbhjf2j9icso7qkb7i1s3ceie7k.apps.googleusercontent.com',
           iosClientId: '144414055124-7l2s1hcmt21i37g09s31i62o3nstqn1l.apps.googleusercontent.com',
           scopes: ['profile', 'email'],
         });
+
+        //If user is logged in successfully, update the state to reflect this
         if (result.type === 'success') {
           this.setState({
             signedIn: true,
@@ -90,6 +105,8 @@ export default class ProfileScreen extends React.Component {
             var encodedValue = encodeURIComponent(details[property]);
             formBody.push(encodedKey + "=" + encodedValue);
           }
+
+          //Fetch call to register new user 
           formBody = formBody.join("&");
           let response = await fetch('https://snowangels-api.herokuapp.com/register_user', {
               method: 'POST',
@@ -107,6 +124,8 @@ export default class ProfileScreen extends React.Component {
             var encodedValue_for_uid = encodeURIComponent(details_for_uid[property_for_uid]);
             formBody_for_uid.push(encodedKey_for_uid + "=" + encodedValue_for_uid);
           }
+
+          //Fetch call to get user id from google id which user has when they log in 
           formBody_for_uid = formBody_for_uid.join("&");
           let response_for_uid = await fetch('https://snowangels-api.herokuapp.com/googleid_to_uid', {
               method: 'POST',
@@ -117,6 +136,7 @@ export default class ProfileScreen extends React.Component {
           });
           let responseJson_for_uid = await response_for_uid.json();
 
+          //Fetch calls to get the number of requests, shovels, and points, which all appear on the profile screen
           let response_request = await fetch(
             'https://snowangels-api.herokuapp.com/num_requests?uid=' + responseJson_for_uid.uid.toString()
           );
@@ -150,6 +170,10 @@ export default class ProfileScreen extends React.Component {
       }
   };
   
+  /**
+  * Update state of the component
+  * @param  {Number} state state of component
+  */
   async store_state(state) {
     const json_state = JSON.stringify(state);
     try {
@@ -160,6 +184,9 @@ export default class ProfileScreen extends React.Component {
     }
   };
 
+  /**
+  * Fetch current state of component
+  */
   async fetch_state() {
     try {
       const lastStateJSON = await AsyncStorage.getItem('lastState');
@@ -194,6 +221,9 @@ export default class ProfileScreen extends React.Component {
     }
   };
 
+  /**
+  * Log user out of account 
+  */
   async logout() {
     await this.setState({
       signedIn: false,
@@ -210,6 +240,12 @@ export default class ProfileScreen extends React.Component {
     await this.store_state(this.state);
   };
 
+  /**
+  * Display name and header of user in their profile header
+  * @param  {String} name User's name 
+  * @param  {String} uri URI of user's photo icon on Google
+  * @returns {Object} view of header
+  */
   renderHeader(name, uri) {
     return (
         <View colors={[, '#6D9AED', '#6D9AED']}

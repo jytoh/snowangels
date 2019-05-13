@@ -10,15 +10,10 @@ import {
     Dimensions
 } from 'react-native';
 import MenuButton from '../components/MenuButton'
-// import Camera from 'react-native-camera';
 import {SecureStore} from 'expo';
-
 import {Camera, Permissions} from 'expo';
-// import {decode as atob, encode as btoa} from 'base-64';
 import shorthash from 'shorthash';
-
 import firebase from "../utils/firebase.js";
-
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
 
@@ -28,23 +23,21 @@ export default class CameraScreen extends React.Component {
         hasPermission: null,
         imageUri: null,
         type: Camera.Constants.Type.back,
-        b64: null,
     }
 
     async componentDidMount() {
         const {status} = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({hasPermission: status === 'granted'});
-        //await this.fetch_state();
     }
 
-
+    /**
+    * Capture photo through camera component
+    */
     async capturePicture() {
         if (this.camera) {
             let pic = await this.camera.takePictureAsync({base64: true})
                 .then(pic => this.setState({
                         imageUri: pic.uri,
-                        b64: pic.base64,
-                        bytea: pic.base64.toByteArray,
                         hash: shorthash.unique(pic.base64)
                     }),
                 )
@@ -52,15 +45,20 @@ export default class CameraScreen extends React.Component {
                     throw err;
                 });
             console.log('took a picture!');
-            //let bytea = base64js.toByteArray(this.state.b64);
-            //console.log(bytea);
         } else {
             console.log('doesnt enter')
         }
     };
 
-    async uploadPicture(cid) {
+    /**
+    * Upload photo to the Firebase cloud storage
+    * @param  {Number} cid Corner id at which user is taking a photo at 
+    * @param  {Number} user_id User id of the user taking the photo
+    */
+    async uploadPicture(cid, user_id) {
+        console.log('from upload picture', user_id);
 
+        //Add the photo to the Firebase cloud as a binary lorge object
         try {
             const blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
@@ -74,58 +72,46 @@ export default class CameraScreen extends React.Component {
                 xhr.open('GET', this.state.imageUri, true);
                 xhr.send(null);
             });
-            // console.log("b");
             const ref = firebase
                 .storage()
                 .ref()
                 .child('images/' + this.state.hash + '.jpg');
             const snapshot = await ref.put(blob);
-            var user_id = await SecureStore.getItemAsync('id');
             const remoteUri = await snapshot.ref.getDownloadURL();
             var details = {
                 'uid': user_id,
-                'cid': cid, //hardcoding for now
+                'cid': cid, 
                 'before_pic': remoteUri,
             };
-            // console.log("c");
-            // We're done with the blob, close and release it
+
             blob.close();
-               } catch (error) {
+        } catch (error) {
         }
 
-            // console.log(remoteUri)
+        var formBody = [];
+        for (var property in details) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
 
-            // console.log("hi3 " + decode(this.state.b64, 'escape' ));
-
-            // let filename = this.state.imageUri.split('/').pop();
-            // let match = /\.(\w+)$/.exec(filename);
-            // let type = match ? `image/${match[1]}` : `image`;
-
-            // console.log(this.state.hash);
-            //user_id instead of google_id
-            // console.log(user_id)
-            // console.log(cid)
-
-            var formBody = [];
-            for (var property in details) {
-                var encodedKey = encodeURIComponent(property);
-                var encodedValue = encodeURIComponent(details[property]);
-                formBody.push(encodedKey + "=" + encodedValue);
-            }
-
-            formBody = formBody.join("&");
-            await fetch('https://snowangels-api.herokuapp.com/new_request', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: formBody,
-            }).catch((error) => {
-                console.error(error);
-            });
-
+        //POST call for new request  
+        formBody = formBody.join("&");
+        await fetch('https://snowangels-api.herokuapp.com/new_request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formBody,
+        }).catch((error) => {
+            console.error(error);
+        });
+        this.props.navigation.navigate('Home')
     }
 
+    /**
+    * Fetch current state of component
+    */
     async fetch_state() {
         try {
             const lastStateJSON = await AsyncStorage.getItem('lastState');
@@ -146,7 +132,9 @@ export default class CameraScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
+        const uid = this.props.screenProps.uid;
         console.log('camera state, cid =', cornerId);
+        console.log('camera state, uid =', uid);
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
         if (hasPermission === null) {
@@ -164,8 +152,7 @@ export default class CameraScreen extends React.Component {
                             <TouchableOpacity
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
-                                    this.uploadPicture(cornerId);
-                                    this.props.navigation.navigate('Home');
+                                    this.uploadPicture(cornerId, uid);
                                 }}>
                                 <Text
                                     style={styles.takephoto}>
@@ -206,6 +193,11 @@ export default class CameraScreen extends React.Component {
                             type={this.state.type}>
                         </Camera>
                         <View style={styles.bottombar}>
+                            <View
+                                style={styles.helpText}
+                                >
+                                <Text>Take a photo of the snow covered street corner.</Text>
+                            </View>
                             <TouchableOpacity
                                 style={styles.takephototouchable}
                                 onPress={() => this.capturePicture()}>
@@ -238,6 +230,9 @@ export default class CameraScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    helpText: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         flexDirection: 'column'
@@ -251,7 +246,7 @@ const styles = StyleSheet.create({
         zIndex: 9,
         position: "absolute",
         top: scale(40),
-        left: scale(20),        
+        left: scale(20),
         backgroundColor: '#E1EAFB'
     },
     backText:{
@@ -263,7 +258,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#E1EAFB',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: scale(150)
     },
     takephototouchable: {
         flex: 3,
@@ -276,7 +272,7 @@ const styles = StyleSheet.create({
         color: '#76A1EF',
         textAlign: 'center',
         alignItems: 'center',
-        paddingTop: scale(24),
+        paddingTop: scale(12),
         fontFamily: txt.bold
     },
     fliptouchable: {

@@ -11,6 +11,7 @@ export default class ListOfShovels extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [] };
+        this.fetchData();
   }
 
   keyExtractor(item, index) {
@@ -18,7 +19,6 @@ export default class ListOfShovels extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchData();
   }
 
  getSpecificUserShovels(arr, user_id) {
@@ -104,7 +104,7 @@ export default class ListOfShovels extends React.Component {
   };
 
   render() {
-    this.fetchData();
+
     return (
       <FlatList
         keyExtractor={this.keyExtractor}

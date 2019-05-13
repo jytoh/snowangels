@@ -33,13 +33,16 @@ const MarkerOverlay = (props) => {
 
     var isNearCorner = null;
 
+    state = {
+        refreshValue: 1
+    }
+
     // maximum meters you are allowed to be from corner to report or start shovel
     const maxMetersAwayFromCorner = 400;
 
     if (!visible) {
         return null;
-    }
-    ;
+    };
 
     /**
      * Returns a boolean whether the user is less than or equal to distanceBetween
@@ -82,11 +85,13 @@ const MarkerOverlay = (props) => {
 
     function any_recs_not_compl(reqs){
 
-        return reqs.some(req => (req.state > 0))    }
+        return reqs.some(req => (req.state > 0))
+    }
 
     function alreadyReq() {
         Alert.alert(
             'Corner Already Requested',
+            "Already requested",
             [
 
                 {
@@ -113,12 +118,8 @@ const MarkerOverlay = (props) => {
         );
     }
 
-    async function sendRequest() {
-        // console.log('corner id', cornerId)
+   async function sendRequest() {
         const a = await userIsNearCorner();
-        // console.log('user is near corner?', a)
-        // console.log('user is singed in?', signedIn)
-        // console.log('user id is', uid);
             var user_id = await SecureStore.getItemAsync('id');
             var re = await fetch('https://snowangels-api.herokuapp.com/get_corners_requests?cid=%d1'.replace("%d1", cornerId),
                 {
@@ -126,7 +127,6 @@ const MarkerOverlay = (props) => {
                 }).then(response => response.json())
                 .then((jsonData) => {
                     return jsonData;
-
                 }).catch((error) => {
                     // handle your errors here
                     console.error(error)
@@ -137,6 +137,8 @@ const MarkerOverlay = (props) => {
                 outsideRadius();
             }
             else if(re.length > 0 &&any_recs_not_compl(re)){
+                console.log("re.length", re.length)
+                console.log("any_recs_not_compl(re)", any_recs_not_compl(re))
                 alreadyReq();
             }
             else {
@@ -148,6 +150,7 @@ const MarkerOverlay = (props) => {
                 }
             }
     }
+
 
     function al() {
         Alert.alert(
@@ -198,7 +201,8 @@ const MarkerOverlay = (props) => {
         }
     }
 
-    if (cornerState == 0) {
+
+    if (cornerState != 1) {
         return (
             <View style={styles.overlayContainer}>
                 <Ionicons

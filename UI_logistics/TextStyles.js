@@ -4,7 +4,7 @@ import {StyleSheet} from 'react-native';
 
 const txt = {
         small: scale(20),
-        button: scale(24),
+        button: scale(22),
         large: scale(40),
         header: scale(30),
 
