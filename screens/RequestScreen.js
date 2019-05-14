@@ -210,7 +210,7 @@ export default class RequestScreen extends React.Component {
                     fontSize: txt.header,
                     fontFamily: txt.bold,
                     color: 'white',
-                }}>My Requests</Text>
+                }}>My Request History</Text>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -218,15 +218,15 @@ export default class RequestScreen extends React.Component {
                     marginBottom: 15,
                     marginTop: 20
                 }}>
-                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(1)}>
+                    <TouchableOpacity style = {(this.state.tab ==1) ? styles.onTab : styles.offTab} onPress={() => this.change_tab(1)}>
                         <Text style={styles.h1}>Unshoveled</Text>
                     </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
-                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(2)}>
+                    <TouchableOpacity style = {(this.state.tab ==2) ? styles.onTab : styles.offTab} onPress={() => this.change_tab(2)}>
                         <Text style={styles.h1}>Shoveled</Text>
                     </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
-                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(0)}>
+                    <TouchableOpacity style = {(this.state.tab == 0) ? styles.onTab : styles.offTab} onPress={() => this.change_tab(0)}>
                         <Text style={styles.h1}>Validated</Text>
                     </TouchableOpacity>
                 </View>
@@ -318,6 +318,13 @@ const styles = StyleSheet.create({
     text: {
         fontSize: txt.header,
         fontFamily: txt.reg
+    },
+    onTab: {
+        flex: 1,
+        backgroundColor: '#B0C4DE80',
+    },
+    offTab: {
+        flex: 1,
     },
     header: {
         backgroundColor: '#76A1EF',

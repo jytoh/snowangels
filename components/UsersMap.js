@@ -69,6 +69,7 @@ export default class UsersMap extends React.Component {
     await this.innerJoin(this.state.markers, this.state.corner_states)
     this.displayMarkers()
     await this.setState({loading: false})
+    this.state.setModalVisibility(false)
     console.log('refreshed users map screen')
 
   }

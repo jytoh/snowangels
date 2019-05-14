@@ -41,8 +41,8 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Home', 'Map')}
                         {this.navLink('Profile', 'Profile')}
                         {this.navLink('Leaderboard', 'Leaderboard')}
-                        {this.navLink('Shovel', 'History')}
-                        {this.navLink('Requests','Requests')}
+                        {this.navLink('Shovel', 'Shovel History')}
+                        {this.navLink('Requests','Request History')}
                         {this.navLink('Administrator','Administrator')}
                     </View>) : 
                     (
@@ -50,8 +50,8 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Home', 'Map')}
                         {this.navLink('Profile', 'Profile')}
                         {this.navLink('Leaderboard', 'Leaderboard')}
-                        {this.navLink('Shovel', 'History')}
-                        {this.navLink('Requests','Requests')}
+                        {this.navLink('Shovel', 'Shovel History')}
+                        {this.navLink('Requests','Request History')}
                     </View>
                     )
                 }

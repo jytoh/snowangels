@@ -193,6 +193,7 @@ export default class ShovelCameraScreen extends React.Component {
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
                                     this.uploadPicture(cornerId, uid);
+                                    this.setState({imageUri: null});
                                 }}>
                                 <Text
                                     style={styles.takephoto}>

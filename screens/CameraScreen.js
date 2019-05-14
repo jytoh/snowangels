@@ -12,7 +12,6 @@ import {
 import MenuButton from '../components/MenuButton'
 // import Camera from 'react-native-camera';
 import {SecureStore} from 'expo';
-
 import {Camera, Permissions} from 'expo';
 // import {decode as atob, encode as btoa} from 'base-64';
 import shorthash from 'shorthash';
@@ -168,6 +167,7 @@ export default class CameraScreen extends React.Component {
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
                                     this.uploadPicture(cornerId, uid);
+                                    this.setState({imageUri: null});
                                 }}>
                                 <Text
                                     style={styles.takephoto}>
