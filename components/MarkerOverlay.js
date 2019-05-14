@@ -84,10 +84,17 @@ const MarkerOverlay = (props) => {
     }
 
     function any_recs_not_compl(reqs){
+        /**
+     * TODO
+     */
 
         return reqs.some(req => (req.state > 0))
     }
 
+    /**
+     * Displays popup if the corner is already requested.
+     * @return {void}
+     */
     function alreadyReq() {
         Alert.alert(
             'Corner Already Requested',
@@ -103,6 +110,11 @@ const MarkerOverlay = (props) => {
         );
     }
 
+     /**
+     * Displays popup if the user is outside the radius of the corner, which is 
+     * set in const maxMetersAwayFromCorner. 
+     * @return {void}
+     */
     function outsideRadius() {
         Alert.alert(
             'Out of Range',
@@ -118,7 +130,14 @@ const MarkerOverlay = (props) => {
         );
     }
 
+    
    async function sendRequest() {
+       /**
+     * Checks if the user is signed in and close enough to the corner and requests the corner. 
+     * Changes the state of the corner to be requested, and navigates to the camera screen 
+     * so the user can take a picture of the corner.
+     * @return {void}
+     */
         const a = await userIsNearCorner();
             var user_id = await SecureStore.getItemAsync('id');
             var re = await fetch('https://snowangels-api.herokuapp.com/get_corners_requests?cid=%d1'.replace("%d1", cornerId),
@@ -128,21 +147,16 @@ const MarkerOverlay = (props) => {
                 .then((jsonData) => {
                     return jsonData;
                 }).catch((error) => {
-                    // handle your errors here
-                    console.error(error)
                 });
-            console.log(re);
-            console.log(any_recs_not_compl(re).toString());
+c
             if( a == false ){
                 outsideRadius();
             }
             else if(re.length > 0 &&any_recs_not_compl(re)){
-                console.log("re.length", re.length)
-                console.log("any_recs_not_compl(re)", any_recs_not_compl(re))
                 alreadyReq();
             }
             else {
-                if (await signedIn && a) { //userIsNearCorner() &&
+                if (await signedIn && a) { 
                     navigation.navigate('Camera', {
                         uid: uid,
                         cornerId: cornerId
@@ -153,12 +167,15 @@ const MarkerOverlay = (props) => {
 
 
     function al() {
+         /**
+     * Displays popup that the user is trying to shovel a corner that has not been requested.
+     * @return {void}
+     */
         Alert.alert(
             'Invalid Corner',
             "You can't validate a shoveling for this corner, likely because" +
             " a shoveling has not been requested yet.",
             [
-
                 {
                     text: 'OK', onPress: () => {
                     }
@@ -169,7 +186,14 @@ const MarkerOverlay = (props) => {
     }
 
     async function sendShovel() {
-        if (await signedIn) { //userIsNearCorner() &&
+          /**
+     * Checks if the user is signed in and close enough to the corner and  shovels the corner. 
+     * Changes the state of the corner to be shoveled, and navigates to the camera screen 
+     * so the user can take a picture of the corner.
+     * @return {void}
+     */
+        
+        if (await signedIn) { 
             try {
                 var user_id = await SecureStore.getItemAsync('id');
                 var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state_cid?cid=%d1&state=1'.replace("%d1", cornerId),
@@ -181,19 +205,16 @@ const MarkerOverlay = (props) => {
 
                     }).catch((error) => {
                         // handle your errors here
-                        console.error(error)
                     });
-                console.log(re);
                 if (re.length == 0){
                     al();
                     return;
                 }
-                if (await signedIn) { //userIsNearCorner() && 
+                if (await signedIn) {
                     navigation.navigate('ShovelCamera', {
                         uid: uid,
                         cornerId: cornerId
                     });
-                    //navigation.navigate('Camera')
                 }
             } catch {
                 al();
@@ -201,7 +222,7 @@ const MarkerOverlay = (props) => {
         }
     }
 
-
+    /* TODO*/ 
     if (cornerState != 1) {
         return (
             <View style={styles.overlayContainer}>
@@ -244,7 +265,6 @@ const MarkerOverlay = (props) => {
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     overlayContainer: {
