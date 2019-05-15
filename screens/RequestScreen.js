@@ -10,19 +10,20 @@ import {
     Alert,
     TouchableOpacity
 } from 'react-native';
-import {List, ListItem} from 'react-native-elements';
+import {ListItem} from 'react-native-elements';
 import MenuButton from '../components/MenuButton'
 import TouchableScale from 'react-native-touchable-scale';
 import {SecureStore} from "expo";
 
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import Loader from '../components/Loader';
 
 
 export default class RequestScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {reqs: [], tab: 0};
+        this.state = {reqs: [], tab: 0, loading: false};
         this.sendRequest();
     }
 
@@ -111,9 +112,9 @@ export default class RequestScreen extends React.Component {
     };
 
     render() {
-        // this.sendRequest();
         return (
             <View style={styles.container}>
+                <Loader loading={this.state.loading} />
                 {this.renderHeader()}
                 <MenuButton navigation={this.props.navigation}/>
                 <FlatList
@@ -248,6 +249,7 @@ export default class RequestScreen extends React.Component {
 
     async sendRequest() {
         // var user_id = 2;
+        this.setState({loading: true})
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
         var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=%d2'.replace("%d1", user_id).replace("%d2", st),
@@ -262,7 +264,8 @@ export default class RequestScreen extends React.Component {
 
             }).catch((error) => {
                 // handle your errors here
-        })
+        });
+        await this.setState({loading: false})
     }
 
     async validateShovel(rid, vb) {

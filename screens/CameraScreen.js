@@ -2,24 +2,18 @@ import React from 'react';
 import {
     Image,
     TouchableOpacity,
-    SafeAreaView,
-    Button,
     StyleSheet,
     Text,
     View,
     Dimensions
 } from 'react-native';
-import MenuButton from '../components/MenuButton'
-// import Camera from 'react-native-camera';
-import {SecureStore} from 'expo';
 import {Camera, Permissions} from 'expo';
-// import {decode as atob, encode as btoa} from 'base-64';
 import shorthash from 'shorthash';
-
 import firebase from "../utils/firebase.js";
-
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import Loader from '../components/Loader';
+
 
 export default class CameraScreen extends React.Component {
 
@@ -28,12 +22,12 @@ export default class CameraScreen extends React.Component {
         imageUri: null,
         type: Camera.Constants.Type.back,
         b64: null,
+        loading: false
     }
 
     async componentDidMount() {
         const {status} = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({hasPermission: status === 'granted'});
-        //await this.fetch_state();
     }
 
 
@@ -60,8 +54,9 @@ export default class CameraScreen extends React.Component {
 
     async uploadPicture(cid, user_id) {
         console.log('from upload picture', user_id);
-
+        
         try {
+            this.setState({loading: true})
             const blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
@@ -123,6 +118,7 @@ export default class CameraScreen extends React.Component {
             }).catch((error) => {
                 console.error(error);
             });
+            await this.setState({loading: false})
             this.props.navigation.navigate('Home')
     }
 
@@ -160,6 +156,7 @@ export default class CameraScreen extends React.Component {
             if (this.state.imageUri) {
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                         <Image style={styles.image}
                                source={{uri: this.state.imageUri}}/>
                         <View style={styles.bottombar}>
@@ -189,6 +186,7 @@ export default class CameraScreen extends React.Component {
             } else {
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                          <TouchableOpacity
                                 style={styles.backButton}
                                 onPress={() => {

@@ -2,29 +2,20 @@ import React from 'react';
 import {
     Image,
     TouchableOpacity,
-    SafeAreaView,
-    Button,
     StyleSheet,
     Text,
     View,
     Dimensions,
     Alert
 } from 'react-native';
-import MenuButton from '../components/MenuButton'
-// import Camera from 'react-native-camera';
 import {SecureStore} from 'expo';
-
-import {Camera, Permissions, ImagePicker} from 'expo';
-import {Feather} from '@expo/vector-icons';
-// import {decode as atob, encode as btoa} from 'base-64';
+import {Camera, Permissions} from 'expo';
 import shorthash from 'shorthash';
-import {FileSystem} from 'expo';
-
-import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
-
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import Loader from '../components/Loader';
+
 
 export default class ShovelCameraScreen extends React.Component {
 
@@ -33,12 +24,12 @@ export default class ShovelCameraScreen extends React.Component {
         imageUri: null,
         type: Camera.Constants.Type.back,
         b64: null,
+        loading: false
     };
 
     async componentDidMount() {
         const {status} = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({hasPermission: status === 'granted'});
-        //await this.fetch_state();
     };
 
 
@@ -72,6 +63,7 @@ export default class ShovelCameraScreen extends React.Component {
         console.log('from shovel screen upload picture', user_id);
 
         try {
+            this.setState({loading: true})
             const blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
@@ -95,13 +87,6 @@ export default class ShovelCameraScreen extends React.Component {
             console.log("c");
             // We're done with the blob, close and release it
             blob.close();
-
-
-            // console.log("hi3 " + decode(this.state.b64, 'escape' ));
-
-            // let filename = this.state.imageUri.split('/').pop();
-            // let match = /\.(\w+)$/.exec(filename);
-            // let type = match ? `image/${match[1]}` : `image`;
 
             console.log(this.state.hash);
             var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
@@ -148,6 +133,7 @@ export default class ShovelCameraScreen extends React.Component {
             {cancelable: false},
         );
         });
+        await this.setState({loading: false})
         this.props.navigation.navigate('Home');
     }
 
@@ -186,6 +172,7 @@ export default class ShovelCameraScreen extends React.Component {
                 console.log(this.state.imageUri);
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                         <Image style={styles.image}
                                source={{uri: this.state.imageUri}}/>
                         <View style={styles.bottombar}>
@@ -215,6 +202,7 @@ export default class ShovelCameraScreen extends React.Component {
             } else {
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                         <TouchableOpacity
                                 style={styles.backButton}
                                 onPress={() => {
