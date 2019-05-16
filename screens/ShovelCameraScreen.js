@@ -24,6 +24,16 @@ import Loader from '../components/Loader';
 
 export default class ShovelCameraScreen extends React.Component {
 
+    /*
+    * State stores mainly user and camera information
+    * bool hasPermission: whether or not the app has permission to 
+    *   access the camera
+    * string imageUri: uri of the captured image
+    * string type: front camera vs back camera
+    * string b64: base64 encoding of image. no longer needed to be
+    *   stored in state if using a shorthash
+    * bool loading: whether or not a component is loading
+    */
     state = {
         hasPermission: null,
         imageUri: null,
@@ -33,6 +43,11 @@ export default class ShovelCameraScreen extends React.Component {
 
     };
 
+    /**
+    * Invoked immedately after CameraScreen is mounted
+    * and checks whether or not permission has been granted
+    * for camera access. (Only needs granted once)
+    */
     async componentDidMount() {
         const {status} = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({hasPermission: status === 'granted'});
@@ -40,6 +55,9 @@ export default class ShovelCameraScreen extends React.Component {
 
     /**
     * Capture photo through camera component
+    * 
+    * Stores the imageUri and the hash of the picture's
+    * base64 encoding in the state 
     */
     async capturePicture() {
         if (this.camera) {
@@ -54,10 +72,8 @@ export default class ShovelCameraScreen extends React.Component {
                 .catch(err => {
                     throw err;
                 });
-            console.log('took a picture!');
             this.setState({loading: false})
         } else {
-            console.log('doesnt enter')
         }
     };
 
@@ -67,8 +83,6 @@ export default class ShovelCameraScreen extends React.Component {
     * @param  {Number} user_id User id of the user taking the photo
     */
     async uploadPicture(cid, user_id) {
-        console.log('from shovel screen upload picture', user_id);
-
         //Add the photo to the Firebase cloud as a binary lorge object
         try {
             this.setState({loading: true})
@@ -93,16 +107,7 @@ export default class ShovelCameraScreen extends React.Component {
             const remoteUri = await snapshot.ref.getDownloadURL();
             // We're done with the blob, close and release it
             blob.close();
-
-
-            console.log(this.state.hash);
             var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
-            console.log(user_id)
-            console.log(cid)
-            console.log(remoteUri)
-
-            console.log(remoteUri.toString())
-
             var user_id = await SecureStore.getItemAsync('id')
 
             var details = {
@@ -147,31 +152,39 @@ export default class ShovelCameraScreen extends React.Component {
         this.props.navigation.navigate('Home');
     }
 
-    /**
-    * Fetch current state of component
-    */
+   /**
+   * Retrieves the state from AsyncStorage
+   * 
+   * Initially used to retrieve the user_id for pic but now the
+   * user_id is passed through screen props. This fuction is no
+   * longer used but is kept here in case it is needed
+   */
     async fetch_state() {
         try {
             const lastStateJSON = await AsyncStorage.getItem('lastState');
-            console.log(lastStateJSON)
             const lastState = JSON.parse(lastStateJSON);
             this.setState({
                 user_id: lastState.user_id,
             });
-            console.log('Got last state');
         } catch (error) {
-            console.log('No last state to fetch');
             this.setState({
                 user_id: null,
             })
         }
     };
 
+    /*
+    * Renders the camera
+    * 
+    * If permission is granted, the user is able to 
+    * take a picture, upload or retake it, or return
+    * to the home screen. If a photo is captured, it is
+    * displayed on the screen. 
+    */
     render() {
         const {navigation} = this.props;
         const cornerId = navigation.getParam('cornerId', 0);
         const uid = this.props.screenProps.uid;
-        console.log('camera state, cid =', cornerId)
         const {hasPermission} = this.state;
         const {imageUri} = this.state;
         if (hasPermission === null) {
@@ -181,7 +194,6 @@ export default class ShovelCameraScreen extends React.Component {
                 <SafeAreaVew><Text>No access to camera</Text></SafeAreaVew>);
         } else {
             if (this.state.imageUri) {
-                console.log(this.state.imageUri);
                 return (
                     <View style={styles.container}>
                         <Loader loading={this.state.loading} />

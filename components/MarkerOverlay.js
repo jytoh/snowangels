@@ -166,7 +166,7 @@ const MarkerOverlay = (props) => {
 
 
     function al() {
-         /**
+    /**
      * Displays popup that the user is trying to shovel a corner that has not been requested.
      * @return {void}
      */
