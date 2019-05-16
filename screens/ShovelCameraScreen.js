@@ -10,10 +10,8 @@ import {
 } from 'react-native';
 import {SecureStore} from 'expo';
 import {Camera, Permissions} from 'expo';
-import shorthash from 'shorthash';
 import MenuButton from '../components/MenuButton'
-import {SecureStore} from 'expo';
-import {Camera, Permissions, ImagePicker} from 'expo';
+import {ImagePicker} from 'expo';
 import {Feather} from '@expo/vector-icons';
 import shorthash from 'shorthash';
 import {FileSystem} from 'expo';
