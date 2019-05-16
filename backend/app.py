@@ -189,12 +189,17 @@ def switch_db():
     which_db = request.values.get('db')
     if which_db == "main":
         app.config['SQLALCHEMY_DATABASE_URI'] = main_db_uri
-        return "switched to main database"
     elif which_db == "test":
         app.config['SQLALCHEMY_DATABASE_URI'] = test_db_uri
-        return "switched to test db"
     else:
         return "invalid database"
+
+    db = SQLAlchemy(app)
+    db.reflect()
+    db.create_all()
+    db.session.commit()
+    migrate = Migrate(app, db)
+    return "switched database to %s" % which_db
 
 
 
