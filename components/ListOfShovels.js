@@ -21,7 +21,15 @@ export default class ListOfShovels extends React.Component {
   componentDidMount() {
   }
 
+  
  getSpecificUserShovels(arr, user_id) {
+    /**
+         * Returns a list of shovels for the current user.
+         * @param  {List} arr
+         * @param  {int}  user_id
+         * 
+         * @return {userObject List}                
+         */
 
     var user_shovels = [];
     for (let userObject of arr) {
@@ -32,7 +40,14 @@ export default class ListOfShovels extends React.Component {
     return user_shovels;
   }
 
+  
   fetchData = async () => {
+        /**
+         * Returns the user history corresponding to the current user from the database. 
+         * Set the UserShovels field of the state to be a list of shovels.
+         * 
+         * @return {void}                
+         */
     const response = await fetch("https://snowangels-api.herokuapp.com/get_user_history");
     const json = await response.json();
     var user_id = await SecureStore.getItemAsync('id');
@@ -65,6 +80,8 @@ export default class ListOfShovels extends React.Component {
     return jsDateTime.toLocaleTimeString('en-US')
   }
 
+ /** TODO: Do any of these require documentation?*/
+ 
   renderItem = ({ item }) => (
     <ListItem
       title={this.getHumanReadableDate(item)}

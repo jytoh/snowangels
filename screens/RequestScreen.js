@@ -14,7 +14,6 @@ import {ListItem} from 'react-native-elements';
 import MenuButton from '../components/MenuButton'
 import TouchableScale from 'react-native-touchable-scale';
 import {SecureStore} from "expo";
-
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
 import Loader from '../components/Loader';
@@ -27,12 +26,15 @@ export default class RequestScreen extends React.Component {
         this.sendRequest();
     }
 
+    /**
+    * Updtes state of tab in component and updates requests that show up based on tab clicked
+    */
     change_tab(tab) {
         this.setState({tab: tab});
         try {
+            //makes call to function that updates which requests show up on the screen based on current tab
             this.sendRequest();
         } catch (error) {
-
         }
     }
 
@@ -128,7 +130,13 @@ export default class RequestScreen extends React.Component {
         )
     }
 
+    /**
+    * Display pop-up when user clicks a request on the request screen
+    * @param  {Number} rid ID of the request
+    * @param  {Number} st reflects the tab that the user is on
+    */
     al(rid, st) {
+        //Requests that no user has shoveled yet or requests that have already been validated (state = 0 request has been validated, state=1 request made on corner but it hasn't been shoveled yet)
         if (this.state.tab == 0 || this.state.tab == 1) {
             Alert.alert(
                 'Sure?',
@@ -143,7 +151,9 @@ export default class RequestScreen extends React.Component {
                 ],
                 {cancelable: true},
             );
-        } else if (this.state.tab == 2) {
+        } 
+        //Requests that have been shoveled but not validated by the user yet
+        else if (this.state.tab == 2) {
             Alert.alert(
                 'Sure?',
                 'Do you want to validate this Request?',
@@ -171,39 +181,12 @@ export default class RequestScreen extends React.Component {
         }
     }
 
+
+    /**
+    * Display header of Requests component
+    * @return  {Object} view of header
+    */
     renderHeader() {
-
-        // if(this.state.showImage){
-
-        //     return (
-        //     <View>
-        //     <Text style={{
-        //         fontSize: 25,
-        //         fontFamily: 'Cabin-Bold',
-        //         justifyContent: 'center',
-        //         color: 'black',
-        //         paddingTop: 40
-        //     }}>Before Shovel</Text>
-        //     <Image
-        //     style={{width: 300, height: 300}}
-        //     source={{uri: this.state.before_pic}}
-        //     />
-        //     <Text style={{
-        //         fontSize: 25,
-        //         fontFamily: 'Cabin-Bold',
-        //         justifyContent: 'center',
-        //         color: 'black',
-        //         paddingTop: 20
-        //     }}>After Shovel</Text>
-        //     <Image
-        //     style={{width: 300, height: 300}}
-        //     source={{uri: this.state.after_pic}}
-        //     />
-        //     <Button title="Go back to request screen" size='30' onPress= {this.returnToRequest}/>
-        //     </View> 
-        //     )
-        //     }
-
         return (
             <View colors={[, '#DDE8FC', '#76A1EF']}
                   style={styles.header}>
@@ -235,21 +218,35 @@ export default class RequestScreen extends React.Component {
         )
     }
 
+    /**
+    * Validate a user's shovel
+    * @param  {Number} rid ID of the request 
+    * @param  {Number} vb Valid bit: 0 if corner was not shoveled properly, 1 if it was
+    */
     returnToRequest = async () => {
         this.setState({showImage: false})
     }
 
+    /**
+    * Show pictures of a corner before and after it was shoveled
+    * @param  {Number} rid ID of the request 
+    */
     async showPictures(rid) {
         let response = await fetch(
       'https://snowangels-api.herokuapp.com/corner_pictures?request_id=' + rid
     );
-        pics = await response.json()
+        var pics = await response.json();
         this.setState({before_pic: pics.before_pic, after_pic: pics.after_pic, showImage: true})
     }
 
+    /**
+    * Updates state to reflect requests that fall under the tab that was clicked
+    */
     async sendRequest() {
+
         // var user_id = 2;
         this.setState({loading: true})
+
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
         var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=%d2'.replace("%d1", user_id).replace("%d2", st),
@@ -268,6 +265,11 @@ export default class RequestScreen extends React.Component {
         await this.setState({loading: false})
     }
 
+    /**
+    * Validate a user's shovel
+    * @param  {Number} rid ID of the request 
+    * @param  {Number} vb Valid bit: 0 if corner was not shoveled properly, 1 if it was
+    */
     async validateShovel(rid, vb) {
         var details = {
             'request_id': rid,
@@ -280,6 +282,8 @@ export default class RequestScreen extends React.Component {
             formBody.push(encodedKey + "=" + encodedValue);
         }
         formBody = formBody.join("&");
+
+        //Fetch call to validate shovel
         var re = await fetch('https://snowangels-api.herokuapp.com/validate_shovel',
             {
                 method: 'POST',
@@ -290,7 +294,6 @@ export default class RequestScreen extends React.Component {
             }).then(response => response.json())
             .then((jsonData) => {
                 return jsonData;
-
             }).catch((error) => {
                 // handle your errors here
                 console.error(error)
@@ -298,8 +301,12 @@ export default class RequestScreen extends React.Component {
         this.sendRequest();
     }
 
+    /**
+    * Remove a request from the database
+    * @param  {Number} rid ID of the request
+    */
     async removeRequest(rid) {
-        // var rid = this.state.reqs[0].request_id;
+        //Fetch call to remove the request from the database
         var re = await fetch('https://snowangels-api.herokuapp.com/remove_request?id=%d'.replace("%d", rid),
             {
                 method: 'DELETE'
@@ -311,8 +318,6 @@ export default class RequestScreen extends React.Component {
                 // handle your errors here
                 console.error(error)
             })
-
-
         this.sendRequest();
     }
 }

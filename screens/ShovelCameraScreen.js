@@ -11,6 +11,13 @@ import {
 import {SecureStore} from 'expo';
 import {Camera, Permissions} from 'expo';
 import shorthash from 'shorthash';
+import MenuButton from '../components/MenuButton'
+import {SecureStore} from 'expo';
+import {Camera, Permissions, ImagePicker} from 'expo';
+import {Feather} from '@expo/vector-icons';
+import shorthash from 'shorthash';
+import {FileSystem} from 'expo';
+import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
@@ -25,6 +32,7 @@ export default class ShovelCameraScreen extends React.Component {
         type: Camera.Constants.Type.back,
         b64: null,
         loading: false
+
     };
 
     async componentDidMount() {
@@ -32,36 +40,36 @@ export default class ShovelCameraScreen extends React.Component {
         this.setState({hasPermission: status === 'granted'});
     };
 
-
-
+    /**
+    * Capture photo through camera component
+    */
     async capturePicture() {
         if (this.camera) {
             let pic = await this.camera.takePictureAsync({base64: true})
                 .then(pic => this.setState({
                         imageUri: pic.uri,
-                        b64: pic.base64,
                         bytea: pic.base64.toByteArray,
                         hash: shorthash.unique(pic.base64)
                     }),
-                    console.log("hi1 " + this.state.imageUri),
-                    console.log("hi2 " + this.state.bytea),
-                    console.log("hi3 " + this.state.b64),
-                    console.log("hi4 " + this.state.hash),
                 )
                 .catch(err => {
                     throw err;
                 });
             console.log('took a picture!');
-            //let bytea = base64js.toByteArray(this.state.b64);
-            //console.log(bytea);
         } else {
             console.log('doesnt enter')
         }
     };
 
+    /**
+    * Upload photo to the Firebase cloud storage
+    * @param  {Number} cid Corner id at which user is taking a photo at 
+    * @param  {Number} user_id User id of the user taking the photo
+    */
     async uploadPicture(cid, user_id) {
         console.log('from shovel screen upload picture', user_id);
 
+        //Add the photo to the Firebase cloud as a binary lorge object
         try {
             this.setState({loading: true})
             const blob = await new Promise((resolve, reject) => {
@@ -77,16 +85,15 @@ export default class ShovelCameraScreen extends React.Component {
                 xhr.open('GET', this.state.imageUri, true);
                 xhr.send(null);
             });
-            console.log("b");
             const ref = firebase
                 .storage()
                 .ref()
                 .child('images/' + this.state.hash + '.jpg');
             const snapshot = await ref.put(blob);
             const remoteUri = await snapshot.ref.getDownloadURL();
-            console.log("c");
             // We're done with the blob, close and release it
             blob.close();
+
 
             console.log(this.state.hash);
             var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
@@ -95,9 +102,12 @@ export default class ShovelCameraScreen extends React.Component {
             console.log(remoteUri)
 
             console.log(remoteUri.toString())
+
+            var user_id = await SecureStore.getItemAsync('id')
+
             var details = {
                 'uid': user_id,
-                'cid': cid, //hardcoding for now
+                'cid': cid, 
                 'after_pic': remoteUri,
             };
             var formBody = [];
@@ -108,9 +118,10 @@ export default class ShovelCameraScreen extends React.Component {
             }
 
         } catch (error) {
-
         }
+
         formBody = formBody.join("&");
+        //POST call for new shovel  
         let response = await fetch('https://snowangels-api.herokuapp.com/new_shovel', {
             method: 'POST',
             headers: {
@@ -124,7 +135,6 @@ export default class ShovelCameraScreen extends React.Component {
             "You can't validate a shoveling for this corner, likely because" +
             " a shoveling has not been requested yet.",
             [
-
                 {
                     text: 'OK', onPress: () => {
                     }
@@ -137,7 +147,9 @@ export default class ShovelCameraScreen extends React.Component {
         this.props.navigation.navigate('Home');
     }
 
-
+    /**
+    * Fetch current state of component
+    */
     async fetch_state() {
         try {
             const lastStateJSON = await AsyncStorage.getItem('lastState');

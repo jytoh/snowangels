@@ -15,7 +15,6 @@ export default class LeaderboardScreen extends React.Component {
 
     constructor(props) {
         super(props);
-//get all users from DB; should adjust references to states 
         this.state = {
             profs: [],
             user: {},
@@ -26,6 +25,13 @@ export default class LeaderboardScreen extends React.Component {
     }
 
     compare(a, b) {
+        /**
+         * Compres the scores of two users. Returns 1 if user a has more points than user b, -1 if 
+         * user b has more points, and 0 if both users have the same number of points.
+         * @param  {user}  a 
+         * @param {user}  b
+         * @return {int}
+         */
         if (a.szn_pts < b.szn_pts) {
             return 1;
         } else if (a.szn_pts == b.szn_pts) {
@@ -36,12 +42,19 @@ export default class LeaderboardScreen extends React.Component {
     }
 
     sortedProfs() {
+         /**
+         * Returns the index of a specific user, corresponding to their rank on the leaderboard. 
+         * @return {int} 
+         */
         return 1 + this.state.profs.sort(this.compare).findIndex(item => item.name == this.state.user.name);
     }
 
-//try to return whole thing with user info. Potentially make backend function that gets 5 before and 5 after 
 
     renderHeader() {
+         /**
+         * Sets up style of the and scaling of the leaderboard.
+         * @return {void} 
+         */
         return (
             <View colors={[, '#DDE8FC', '#76A1EF']}
                   style={{
@@ -97,6 +110,12 @@ export default class LeaderboardScreen extends React.Component {
 
     async refreshData() {
         this.setState({loading: true})
+
+         /**
+         * Refreshes data on the leaderboard from database by setting the user, profs and rank fields of the 
+         * state of the leaderboard to include users, user data, and sorted users respectively.
+         * @return {void} 
+         */
         var data = await fetch('https://snowangels-api.herokuapp.com/get_all_users', {
             method: 'GET'
         }).then(response => response.json()).then((jsonData) => {
@@ -120,11 +139,18 @@ export default class LeaderboardScreen extends React.Component {
         this.setState({
             rank: this.sortedProfs()
         });
+
         await this.setState({loading: false})
         // console.log(this.state);
+
     }
 
     render() {
+          /**
+         * Sets props for leader board from its state. Prop documentation can be found here: 
+         * https://github.com/JoeRoddy/react-native-leaderboard
+         * @return {void} 
+         */
         const props = {
             labelBy: "name",
             sortBy: "szn_pts",
@@ -133,7 +159,6 @@ export default class LeaderboardScreen extends React.Component {
             evenRowColor: '#F5F6FE',
             labelStyle: {fontFamily: txt.bold, fontSize: txt.small},
             scoreStyle: {fontFamily: txt.bold, fontSize: txt.small}
-            //labelStyle: this.state.user.rank % 2 > 0 ? {color: 'white'} : {color: 'red'}
         }
 
         return (
@@ -155,6 +180,15 @@ export default class LeaderboardScreen extends React.Component {
 
 }
 const ordinal_suffix_of = (i) => {
+     /**
+         * Returns the ordinal suffix of i. 
+         * Example usage: 
+         * ordinal_suffix_of(1) = "1st"
+         * ordinal_suffix_of(2) = "2nd"
+         * ordinal_suffix_of(3) = "3rd"
+         * @param  {int}  i
+         * @return {string}
+         */
     var j = i % 10,
         k = i % 100;
     if (j == 1 && k != 11) {
