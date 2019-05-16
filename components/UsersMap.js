@@ -244,7 +244,7 @@ export default class UsersMap extends React.Component {
               }}
               onPress = {() => {this.markerOnPress(marker)}
               }
-              pinColor = {(marker.state == 1) ? 'red' : ((marker.state == 2) ? 'blue' : 'black')}
+              pinColor = {(marker.state == 1) ? 'blue' : ((marker.state == 2) ? 'red' : 'black')}
             />
           );
         })
