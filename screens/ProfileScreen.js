@@ -24,6 +24,7 @@ export default class ProfileScreen extends React.Component {
   * string token: login/access token
   * bool loaded: Whether or not the sign-in was successful
   * int num_requests, num_shovels, points: Score/history data
+  * bool loading: whether or not a component is loading
   */
   state = {
         signedIn: false,
@@ -55,10 +56,7 @@ export default class ProfileScreen extends React.Component {
    * number of user's requests, shovels, and points from the backend. 
    * It stores this information in the state for fast retrieval
    * in the future. 
-
-
-   Refreshes profile screen to update the number of requests, shovels, and points
-  */
+   */
 
   async refresh() {
     await this.setState({loading: true})
@@ -114,9 +112,8 @@ export default class ProfileScreen extends React.Component {
    * 'loaded' as true, which is used in other functions
    * to determine whether or not the screen can be rendered and 
    * whether to render the default sign-in screen or attempt
-   * to render the user's profile.
-
-  * Signs user in. Adds a new user entry in the database if this is the user's first time logging in 
+   * to render the user's profile. 
+   * Adds a new user entry in the database if this is the user's first time logging in 
   * @return {String} access token received from result of Fetch call
   */
 
@@ -229,9 +226,6 @@ export default class ProfileScreen extends React.Component {
    * whether or not the user is signed in and the information
    * is properly loaded is stored via AsyncStorage
    * @param {state} state 
-
-  * Update state of the component
-  * @param  {Number} state state of component
   */
 
   async store_state(state) {
@@ -252,10 +246,7 @@ export default class ProfileScreen extends React.Component {
    * user state. If there is no last state, it sets the state 
    * to be default values, which will be overwritten once the
    * user logs in. 
-
-  * Fetch current state of component
   */
-
   async fetch_state() {
     try {
       const lastStateJSON = await AsyncStorage.getItem('lastState');
@@ -294,7 +285,6 @@ export default class ProfileScreen extends React.Component {
    * 
    * Logs the user out by resetting all values to default
    * values and setting signedIn to false.
-  * Log user out of account 
   */
   async logout() {
     await this.setState({
@@ -314,13 +304,6 @@ export default class ProfileScreen extends React.Component {
   };
 
   /**
-   * Renders the header of the screen, which contains the user's namee
-   * and profile image
-   * 
-   * @TODO
-   * @param {String} name 
-   * @param {String} uri 
-
   * Display name and header of user in their profile header
   * @param  {String} name User's name 
   * @param  {String} uri URI of user's photo icon on Google

@@ -5,11 +5,7 @@ import {
     StyleSheet,
     Text,
     View,
-    Dimensions
 } from 'react-native';
-import {List, ListItem} from 'react-native-elements';
-import MenuButton from '../components/MenuButton'
-import TouchableScale from 'react-native-touchable-scale';
 import {SecureStore} from "expo";
 
 import { scale } from '../UI_logistics/ScaleRatios'
@@ -25,8 +21,11 @@ export default class ConfirmScreen extends React.Component {
         this.showPictures(rid)
     }
 
+    /**
+     * Pulls all the user's pending requests, completed requests,
+     * and shovelings pending their validation and stores in the state
+     */
     async sendRequest() {
-        // var user_id = 2;
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
         var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=%d2'.replace("%d1", user_id).replace("%d2", st),
@@ -38,16 +37,26 @@ export default class ConfirmScreen extends React.Component {
                 this.setState({
                     reqs: jsonData
                 });
-
             }).catch((error) => {
                 // handle your errors here
         })
     }
 
+    /**
+     * Invoked immediately after ConfirmScreen is mounted
+     * 
+     * Currently empty, but can be later used to call functions
+     * that are needed to set up the screen. 
+     */
     async componentDidMount() {
-        console.log('at confirm screen rn')
     }
 
+    /**
+     * Pulls the before/after pictures of the corner
+     * and stores them in the state
+     * 
+     * @param {*} rid The request ID of the corner
+     */
     async showPictures(rid) {
         let response = await fetch(
       'https://snowangels-api.herokuapp.com/corner_pictures?request_id=' + rid
@@ -56,10 +65,11 @@ export default class ConfirmScreen extends React.Component {
         this.setState({before_pic: pics.before_pic, after_pic: pics.after_pic, showImage: true})
     }
     
+    /*
+    * Renders the confirm screen - contains the before shovel picture, 
+    * after shovel picture, and a button to return o request screen. 
+    */
     render() {
-    console.log('at confirm screen rn')
-    // const {navigation} = this.props;
-    // rid = navigation.getParam('rid',0)
     return (
         <View style={styles.container}>
             <View style={styles.topPic}>
