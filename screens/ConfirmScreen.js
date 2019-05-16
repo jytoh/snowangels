@@ -18,7 +18,7 @@ import txt from '../UI_logistics/TextStyles'
 export default class ConfirmScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {before_pic: "", after_pic: ""};
+        this.state = {before_pic: " ", after_pic: " "};
         const {navigation} = this.props;
         var rid = navigation.getParam('rid',0);
         this.sendRequest();

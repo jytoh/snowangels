@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/screens/LeaderboardScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/LeaderboardScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/RequestScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/RequestScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/ConfirmScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/ConfirmScreen.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,22 +17,19 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/navigation/DrawerNavigatorHome.js">
+        <entry file="file://$PROJECT_DIR$/backend/requeststests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="960">
-              <caret line="64" column="133" selection-start-line="64" selection-start-column="112" selection-end-line="64" selection-end-column="133" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="165">
+              <caret line="8" column="98" selection-start-line="8" selection-start-column="98" selection-end-line="8" selection-end-column="98" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/LeaderboardScreen.js">
+        <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="115" column="9" selection-start-line="115" selection-start-column="9" selection-end-line="115" selection-end-column="9" />
+            <state relative-caret-position="1843">
+              <caret line="280" column="40" selection-start-line="280" selection-start-column="37" selection-end-line="280" selection-end-column="40" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -41,10 +38,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
+        <entry file="file://$PROJECT_DIR$/screens/ConfirmScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="247" column="34" lean-forward="true" selection-start-line="247" selection-start-column="34" selection-end-line="247" selection-end-column="34" />
+            <state relative-caret-position="121">
+              <caret line="20" column="52" selection-start-line="20" selection-start-column="52" selection-end-line="20" selection-end-column="52" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -63,7 +60,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>admini</find>
       <find>user_id</find>
       <find>txt</find>
       <find>get_user_history</find>
@@ -91,8 +87,9 @@
       <find>sendRe</find>
       <find>blue</find>
       <find>this.refresh</find>
-      <find>sendReque</find>
       <find>refresh</find>
+      <find>sendReque</find>
+      <find>uri</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -131,7 +128,6 @@
         <option value="$PROJECT_DIR$/UI_logistics/TextStyles.js" />
         <option value="$PROJECT_DIR$/navigation/DrawerNavigatorHome.js" />
         <option value="$PROJECT_DIR$/navigation/DrawerNavigatorAdmin.js" />
-        <option value="$PROJECT_DIR$/screens/ConfirmScreen.js" />
         <option value="$PROJECT_DIR$/screens/AdministratorScreen.js" />
         <option value="$PROJECT_DIR$/components/ListOfShovels.js" />
         <option value="$PROJECT_DIR$/backend/app.py" />
@@ -144,6 +140,7 @@
         <option value="$PROJECT_DIR$/components/UsersMap.js" />
         <option value="$PROJECT_DIR$/screens/LeaderboardScreen.js" />
         <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
+        <option value="$PROJECT_DIR$/screens/ConfirmScreen.js" />
       </list>
     </option>
   </component>
@@ -187,11 +184,6 @@
               <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
               <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
               <item name="screens" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snowangels-cs5150" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snowangels-cs5150" type="462c0819:PsiDirectoryNode" />
-              <item name="UI_logistics" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -335,12 +327,12 @@
       <workItem from="1556863350021" duration="105000" />
       <workItem from="1556885075884" duration="380000" />
       <workItem from="1557973206628" duration="1259000" />
-      <workItem from="1557974695727" duration="552000" />
+      <workItem from="1557974695727" duration="1808000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="180791000" />
+    <option name="totallyTimeSpent" value="182047000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -395,9 +387,6 @@
     <entry file="file://$PROJECT_DIR$/backend/src/app.py" />
     <entry file="file://$PROJECT_DIR$/backend/run.py" />
     <entry file="file://$PROJECT_DIR$/backend/models.py" />
-    <entry file="file://$PROJECT_DIR$/backend/requeststests.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -500,16 +489,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="467">
           <caret line="305" column="17" selection-start-line="305" selection-start-column="17" selection-end-line="305" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/ConfirmScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="61" column="27" selection-start-line="61" selection-start-column="13" selection-end-line="61" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -624,16 +603,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/navigation/DrawerNavigatorHome.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="64" column="133" selection-start-line="64" selection-start-column="112" selection-end-line="64" selection-end-column="133" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1365">
@@ -711,6 +680,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/navigation/DrawerNavigatorHome.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="64" column="133" selection-start-line="64" selection-start-column="112" selection-end-line="64" selection-end-column="133" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/screens/LeaderboardScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
@@ -721,10 +700,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/backend/requeststests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="8" column="98" selection-start-line="8" selection-start-column="98" selection-end-line="8" selection-end-column="98" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="247" column="34" lean-forward="true" selection-start-line="247" selection-start-column="34" selection-end-line="247" selection-end-column="34" />
+        <state relative-caret-position="1843">
+          <caret line="280" column="40" selection-start-line="280" selection-start-column="37" selection-end-line="280" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/ConfirmScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="20" column="52" selection-start-line="20" selection-start-column="52" selection-end-line="20" selection-end-column="52" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
