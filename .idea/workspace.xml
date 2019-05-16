@@ -25,23 +25,23 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/backend/app.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="98">
+              <caret line="243" column="23" selection-start-line="243" selection-start-column="23" selection-end-line="243" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/backend/test_app.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
               <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/backend/app.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2493">
-              <caret line="184" column="18" lean-forward="true" selection-start-line="184" selection-start-column="18" selection-end-line="184" selection-end-column="18" />
-              <folding>
-                <element signature="e#0#40#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -149,9 +149,9 @@
         <option value="$PROJECT_DIR$/tests/server_tests.py" />
         <option value="$PROJECT_DIR$/backend/tests/server_tests.py" />
         <option value="$PROJECT_DIR$/backend/server_tests.py" />
-        <option value="$PROJECT_DIR$/backend/app.py" />
-        <option value="$PROJECT_DIR$/backend/app.py" />
         <option value="$PROJECT_DIR$/backend/test_app.py" />
+        <option value="$PROJECT_DIR$/backend/app.py" />
+        <option value="$PROJECT_DIR$/backend/app.py" />
       </list>
     </option>
   </component>
@@ -373,7 +373,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="187244000" />
+    <option name="totallyTimeSpent" value="188194000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -386,8 +386,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="721" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4902386" visible="true" weight="0.38772213" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4902386" visible="true" weight="0.38772213" />
       <window_info id="Structure" order="1" sideWeight="0.5069767" side_tool="true" weight="0.3263328" />
       <window_info id="Favorites" order="2" sideWeight="0.5097614" side_tool="true" weight="0.38772213" />
       <window_info id="Capture Tool" order="3" />
@@ -404,7 +405,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.26709062" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.26709062" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="bottom" id="Bucklescript" order="13" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -755,13 +756,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/test_app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/requeststests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -769,10 +763,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/backend/test_app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/backend/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2493">
-          <caret line="184" column="18" lean-forward="true" selection-start-line="184" selection-start-column="18" selection-end-line="184" selection-end-column="18" />
+        <state relative-caret-position="98">
+          <caret line="243" column="23" selection-start-line="243" selection-start-column="23" selection-end-line="243" selection-end-column="23" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>

@@ -239,6 +239,9 @@ def create_corner():
 
 @app.route("/create_corners_from_filename", methods=['POST'])
 def create_corners_from_file():
+    should_clear = request.form["should_clear"]
+    if should_clear == "true": db.session.query(Corner).delete()
+    db.session.commit()
     file = request.form["filename"]
     dframe = filereading.fetchGISdata(file)
     print("success")
