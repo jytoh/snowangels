@@ -40,6 +40,10 @@ export default class RequestScreen extends React.Component {
 
     keyExtractor = (item) => item.request_id.toString();
 
+    /**
+     * Returns header title of tab
+     * @return {string}      ex: Request Fulfilled
+     */
     getHumanReadableState(item) {
         if (item.state == 0) {
             return 'Request Fulfilled'
@@ -59,6 +63,10 @@ export default class RequestScreen extends React.Component {
         return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
     }
 
+    /**
+     * Returns street names 
+     * @return {string}      ex: University Ave & Stewart Ave 
+     */
     getHumanReadableSubtitle(item) {
         return this.getHumanReadableTime(item) +
             '\n' +
@@ -219,9 +227,7 @@ export default class RequestScreen extends React.Component {
     }
 
     /**
-    * Validate a user's shovel
-    * @param  {Number} rid ID of the request 
-    * @param  {Number} vb Valid bit: 0 if corner was not shoveled properly, 1 if it was
+    * Sets state to stop showing before and after images and return back to the requests list
     */
     returnToRequest = async () => {
         this.setState({showImage: false})

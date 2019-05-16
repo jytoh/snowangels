@@ -19,6 +19,9 @@ export default class AdministratorScreen extends React.Component {
         this.state = {reqs: [], tab: 0, showImage: false, before_pic: "", after_pic: ""};
     }
 
+    /**
+    * Updates state of tab in component and updates requests that show up based on tab clicked
+    */
     change_tab(tab) {
         this.setState({tab: tab});
         try {
@@ -32,6 +35,10 @@ export default class AdministratorScreen extends React.Component {
 
     keyExtractor = (item) => item.request_id.toString();
 
+    /**
+     * Returns header title of tab
+     * @return {string}      ex: Request Fulfilled
+     */
     getHumanReadableState(item) {
         if (item.state == 0) {
             return 'Request Fulfilled'
@@ -50,6 +57,10 @@ export default class AdministratorScreen extends React.Component {
         return dateString.substring(0, 3) + ", " + dateString.substring(4, dateString.length)
     }
 
+    /**
+     * Returns street names 
+     * @return {string}      ex: University Ave & Stewart Ave 
+     */
     getHumanReadableSubtitle(item) {
         return this.getHumanReadableTime(item) +
             '\n' +
@@ -96,19 +107,7 @@ export default class AdministratorScreen extends React.Component {
 
 
     render() {
-        // if(this.props.screenProps.uid != 1){
-        //     return(
-        //     <View>
-        //     <MenuButton navigation={this.props.navigation}/>
-        //     <Text style={{
-        //         fontSize: 25,
-        //         fontFamily: 'Cabin-Bold',        //         justifyContent: 'center',
-        //         color: 'black',
-        //         paddingTop: 80
-        //     }}>You do not have permission to view this page</Text>
-        //     </View>
-        //     )
-        // } else{
+
             return (
                 <View style={styles.container}>
                     {this.renderHeader()}
@@ -123,10 +122,15 @@ export default class AdministratorScreen extends React.Component {
                 </View>
             )
             
-        //}
     }
 
+    /**
+    * Display pop-up when administrator clicks a request on the request screen
+    * @param  {Number} rid ID of the request
+    * @param  {Number} st reflects the tab that the administrator is on
+    */
     al(rid, st) {
+        //Requests that no user has shoveled yet (tab state = 0 request has been validated)
         if (this.state.tab == 0) {
             Alert.alert(
                 'Sure?',
@@ -141,7 +145,9 @@ export default class AdministratorScreen extends React.Component {
                 ],
                 {cancelable: true},
             );
-        } else if (this.state.tab == 1) {
+        } 
+        //requests that have already been validated (tab state = 1 request made on corner but it hasn't been shoveled yet or has been shoveled but not validated yet)
+        else if (this.state.tab == 1) {
             Alert.alert(
                 'Sure?',
                 'Do you want to validate this Request?',
@@ -170,8 +176,10 @@ export default class AdministratorScreen extends React.Component {
     }
 
 
+    /**
+    * Updates state to reflect requests that fall under the tab that was clicked
+    */
     async sendRequest() {
-        // var user_id = 2;
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
         if (st==0){
@@ -207,7 +215,11 @@ export default class AdministratorScreen extends React.Component {
 
     }
 
-//validate shovel 
+    /**
+    * Validate a user's shovel
+    * @param  {Number} rid ID of the request 
+    * @param  {Number} vb Valid bit: 0 if corner was not shoveled properly, 1 if it was
+    */
     async validateShovel(rid, vb) {
         var details = {
             'request_id': rid,
@@ -220,6 +232,8 @@ export default class AdministratorScreen extends React.Component {
             formBody.push(encodedKey + "=" + encodedValue);
         }
         formBody = formBody.join("&");
+
+        //Fetch call to validate shovel
         var re = await fetch('https://snowangels-api.herokuapp.com/validate_shovel',
             {
                 method: 'POST',
@@ -238,7 +252,10 @@ export default class AdministratorScreen extends React.Component {
         this.sendRequest();
     }    
 
-//delete request
+    /**
+    * Remove a request from the database
+    * @param  {Number} rid ID of the request
+    */
     async removeRequest(rid) {
         // var rid = this.state.reqs[0].request_id;
         var re = await fetch('https://snowangels-api.herokuapp.com/remove_request?id=%d'.replace("%d", rid),
@@ -256,11 +273,18 @@ export default class AdministratorScreen extends React.Component {
 
         this.sendRequest();
     }
-
+    
+    /**
+    * Sets state to stop showing before and after images and return back to the requests list
+    */
     returnToRequest = async () => {
         this.setState({showImage: false})
     }
 
+    /**
+    * Show pictures of a corner before and after it was shoveled
+    * @param  {Number} rid ID of the request 
+    */
     async showPictures(rid) {
         let response = await fetch(
       'https://snowangels-api.herokuapp.com/corner_pictures?request_id=' + rid
@@ -270,7 +294,10 @@ export default class AdministratorScreen extends React.Component {
     }
 
 
-
+    /**
+    * Display header of Requests component
+    * @return  {Object} view of header
+    */
     renderHeader() {
         if(this.state.showImage){
 
