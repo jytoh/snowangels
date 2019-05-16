@@ -10,12 +10,7 @@ import {
 } from 'react-native';
 import {SecureStore} from 'expo';
 import {Camera, Permissions} from 'expo';
-import MenuButton from '../components/MenuButton'
-import {ImagePicker} from 'expo';
-import {Feather} from '@expo/vector-icons';
 import shorthash from 'shorthash';
-import {FileSystem} from 'expo';
-import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'

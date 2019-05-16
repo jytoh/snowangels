@@ -1,16 +1,14 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import {StyleSheet, View, AsyncStorage } from 'react-native';
 import MenuButton from '../components/MenuButton';
 import MarkerOverlay from '../components/MarkerOverlay';
 import UsersMap from '../components/UsersMap';
 import {AppLoading, Font} from 'expo';
-import { withNavigation } from "react-navigation";
-
-
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
 
 export default class HomeScreen extends React.Component {
+
 	constructor(props) {
 		super(props)
 		this.setModalVisibility = this.setModalVisibility.bind(this);
@@ -29,6 +27,13 @@ export default class HomeScreen extends React.Component {
 		}
 	}
 
+	/**
+	 * Called as soon as HomeScreen is mounted
+	 * 
+	 * Loads all the fonts again and fetches the last user state. 
+	 * Also, adds a focus listener, which is used to re-render the
+	 * markers every time a request is made
+	 */
 	async componentDidMount() {
 		await Font.loadAsync({
 		  'Cabin-Regular': require('../assets/fonts/Cabin-Regular.ttf'),
@@ -37,10 +42,8 @@ export default class HomeScreen extends React.Component {
 		this.setState({fontLoaded : true});
 		await this.fetch_state();
 		this.focusListener = this.props.navigation.addListener("didFocus", () => {
-			console.log('focused home screen!')
 			this.render()
 		});
-		console.log('is it making it here??')
 	}
 
 	/**

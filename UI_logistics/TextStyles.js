@@ -1,6 +1,4 @@
 import {scale} from './ScaleRatios'
-import {StyleSheet} from 'react-native';
-
 
 const txt = {
         small: scale(20),

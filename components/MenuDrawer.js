@@ -1,12 +1,7 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, Platform, Dimensions, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native'
-
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native'
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
-import {SecureStore} from "expo";
-
-const WIDTH = Dimensions.get('window').width
-const HEIGHT = Dimensions.get('window').height
 
 export default class MenuDrawer extends React.Component {
     navLink(nav, text) {
