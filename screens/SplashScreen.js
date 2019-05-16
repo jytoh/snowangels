@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import App from '../App.js'
 
+/*
+* Not Used
+*/
 class SplashScreen extends React.Component {
   performTimeConsumingTask = async() => {
     return new Promise((resolve) =>

@@ -27,7 +27,7 @@ export default class RequestScreen extends React.Component {
     }
 
     /**
-    * Updtes state of tab in component and updates requests that show up based on tab clicked
+    * Updates state of tab in component and updates requests that show up based on tab clicked
     */
     change_tab(tab) {
         this.setState({tab: tab});

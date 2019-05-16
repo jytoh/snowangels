@@ -132,7 +132,7 @@ const MarkerOverlay = (props) => {
 
     
    async function sendRequest() {
-       /**
+    /**
      * Checks if the user is signed in and close enough to the corner and requests the corner. 
      * Changes the state of the corner to be requested, and navigates to the camera screen 
      * so the user can take a picture of the corner.
@@ -164,12 +164,11 @@ const MarkerOverlay = (props) => {
             }
     }
 
-
-    function al() {
     /**
      * Displays popup that the user is trying to shovel a corner that has not been requested.
      * @return {void}
      */
+    function al() {
         Alert.alert(
             'Invalid Corner',
             "You can't validate a shoveling for this corner, likely because" +
@@ -184,14 +183,13 @@ const MarkerOverlay = (props) => {
         );
     }
 
+    /**
+    * Checks if the user is signed in and close enough to the corner and  shovels the corner. 
+    * Changes the state of the corner to be shoveled, and navigates to the camera screen 
+    * so the user can take a picture of the corner.
+    * @return {void}
+    */
     async function sendShovel() {
-          /**
-     * Checks if the user is signed in and close enough to the corner and  shovels the corner. 
-     * Changes the state of the corner to be shoveled, and navigates to the camera screen 
-     * so the user can take a picture of the corner.
-     * @return {void}
-     */
-        
         if (await signedIn) { 
             try {
                 var user_id = await SecureStore.getItemAsync('id');

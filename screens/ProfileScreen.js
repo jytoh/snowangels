@@ -10,7 +10,6 @@ import txt from '../UI_logistics/TextStyles'
 import Loader from '../components/Loader';
 
 const HEIGHT = Dimensions.get('window').height;
-const WIDTH = Dimensions.get('window').width;
 export default class ProfileScreen extends React.Component {
 
   /*

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Button, Modal, Text, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Text, AsyncStorage } from 'react-native';
 import MapView from 'react-native-maps';
 import { AppLoading } from 'expo';
 import LocationMarkerPicture from '../assets/LocationMarkerPicture.png'

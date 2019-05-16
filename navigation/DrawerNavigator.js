@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dimensions } from 'react-native';
 import { createDrawerNavigator, createAppContainer } from 'react-navigation';
-
 import HomeScreen from '../screens/HomeScreen';
 import ShovelScreen from '../screens/ShovelScreen';
 import CameraScreen from '../screens/CameraScreen';
@@ -37,6 +36,7 @@ const DrawerConfig = {
         return (<MenuDrawer navigation={navigation} />)
     },
 }
+
 const DrawerNavigator = createDrawerNavigator(
     {
         Profile: {
