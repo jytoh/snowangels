@@ -245,7 +245,7 @@ export default class RequestScreen extends React.Component {
     async sendRequest() {
 
         // var user_id = 2;
-        this.setState({loading: true})
+        this.state.loading = true;
 
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;

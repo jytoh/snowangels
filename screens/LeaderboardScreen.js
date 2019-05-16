@@ -109,7 +109,8 @@ export default class LeaderboardScreen extends React.Component {
     }
 
     async refreshData() {
-        this.setState({loading: true})
+        // await this.setState({loading: true});
+        this.state.loading = true;
 
          /**
          * Refreshes data on the leaderboard from database by setting the user, profs and rank fields of the 
