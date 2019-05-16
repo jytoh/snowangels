@@ -20,16 +20,15 @@ POSTGRES = {
     'port': int(os.environ.get("PORT", 5000)),
     # the port 5000 option gave problems when testing locally
 }
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
-# using this to test locally
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+main_db_uri = 'postgres://iynghviiztghzc:66104fb16d27663cc06087163df3abe8f2c928d0de885c18dcbda3e2381d5707@ec2-184-73-153-64.compute-1.amazonaws.com:5432/dbldmkaclmemd5'
 
-# added this to not keep restarting
-# app.config['DEBUG'] = False
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# initialize the database connection
+test_db_uri = 'postgres://ptuqmqgqvldhlv' \
+ ':1952b799a7f89cb4dfad05f377f81f2080961f7986c3355f4494bbdf8227f910@ec2-54-225-106-93.compute-1.amazonaws.com:5432/d79e0862ntn3s'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = main_db_uri
+
+
 db = SQLAlchemy(app)
 
 
@@ -184,6 +183,19 @@ def index():
     print(Shoveling.query.all())
     print(User.query.all())
     return 'works'
+
+@app.route('/switch_database', methods=['GET'])
+def switch_db():
+    which_db = request.values.get('db')
+    if which_db == "main":
+        app.config['SQLALCHEMY_DATABASE_URI'] = main_db_uri
+        return "switched to main database"
+    elif which_db == "test":
+        app.config['SQLALCHEMY_DATABASE_URI'] = test_db_uri
+        return "switched to test db"
+    else:
+        return "invalid database"
+
 
 
 @app.route("/register_user", methods=['POST'])
