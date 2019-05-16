@@ -184,24 +184,6 @@ def index():
     print(User.query.all())
     return 'works'
 
-@app.route('/switch_database', methods=['GET'])
-def switch_db():
-    which_db = request.values.get('db')
-    if which_db == "main":
-        app.config['SQLALCHEMY_DATABASE_URI'] = main_db_uri
-    elif which_db == "test":
-        app.config['SQLALCHEMY_DATABASE_URI'] = test_db_uri
-    else:
-        return "invalid database"
-
-    db = SQLAlchemy(app)
-    db.reflect()
-    db.create_all()
-    db.session.commit()
-    migrate = Migrate(app, db)
-    return "switched database to %s" % which_db
-
-
 
 @app.route("/register_user", methods=['POST'])
 def register_user():
