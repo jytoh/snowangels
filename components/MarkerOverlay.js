@@ -88,7 +88,7 @@ const MarkerOverlay = (props) => {
      * TODO
      */
 
-        return reqs.some(req => (req.state > 0))
+        return reqs.some(req => (req.state == 1))
     }
 
     /**

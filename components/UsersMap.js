@@ -2,12 +2,11 @@ import React from 'react';
 import { View, StyleSheet, Button, Modal, Text, AsyncStorage } from 'react-native';
 import MapView from 'react-native-maps';
 import { AppLoading } from 'expo';
-import MarkerOverlay from '../components/MarkerOverlay';
 import LocationMarkerPicture from '../assets/LocationMarkerPicture.png'
-import { withNavigation } from "react-navigation";
-//var RNFS = require('react-native-fs');
+
 
 export default class UsersMap extends React.Component {
+  
   constructor(props) {
     super(props)
     this.state = {
@@ -36,8 +35,8 @@ export default class UsersMap extends React.Component {
       // circle around user location marker
       userLocationCircle: null,
 
-      loading: false
-    }
+      loading: false,
+      }
     // this.getAllCorners()
     // this.getAllStates()
     // this.getUserLocationHandler()
@@ -49,30 +48,44 @@ export default class UsersMap extends React.Component {
     }*/
   }
 
+  /**
+   * Invoked immedately after UsersMap is mounted
+   * 
+   * Sets up the map by pulling all corners and adding 
+   * the focusListener, which refreshes the screen every time
+   * the screen is loaded
+   */
   async componentDidMount() {
     await this.getAllCorners()
     await this.getAllStates()
     this.getUserLocationHandler()
     await this.innerJoin(this.state.markers, this.state.corner_states)
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      console.log('focused users map!')
       this.refreshScreen()
 		});
   }
 
-  async refreshScreen(){
+  /**
+   * Reloads all markers on the screen 
+   * 
+   * This function is called in componentDidMount every time the screen comes 
+   * into focus. It pulls data from the server and reloads all markers onto
+   * the map, which updates any changes to state. 
+   */
+  async refreshScreen() {
     await this.setState({loading: true})
-    console.log('refreshing users map screen')
     await this.getAllCorners()
     await this.getAllStates()
     this.getUserLocationHandler()
     await this.innerJoin(this.state.markers, this.state.corner_states)
     this.displayMarkers()
     await this.setState({loading: false})
-    console.log('refreshed users map screen')
-
+    this.state.setModalVisibility(false)
   }
 
+  /**
+   * @deprecated 
+   */
   getFakeCornerDataIfNoCornersAreRetrieved() {
     return [
         {
@@ -96,9 +109,10 @@ export default class UsersMap extends React.Component {
 
   /**
    * Fetches the json for the corners in the database
+   * 
    * The database returns an array with elements of the format {id, lat, lon, street1, street2}
    * Saves an array with elements of the format {key, coordinate, title, description}
-   * with help of formatGetAllCorners() to state.markers
+   * to state.markers
    */
   async getAllCorners() {
     AsyncStorage.setItem('pulledFromMarkersOnce', "true")
@@ -120,11 +134,15 @@ export default class UsersMap extends React.Component {
       await this.setState({
         markers: corner_data
       })
-
-      //console.log(this.state.markers)
     }
   }
 
+  /**
+   * Fetches the json for the corners and their respective states in the database
+   * 
+   * The database returns an array with elements of the format {cid, state}
+   * Saves an array with elements of the format {key, state} to state.markers
+   */
   async getAllStates() {
     AsyncStorage.setItem('pulledFromMarkersOnce', "true")
     if (await AsyncStorage.getItem('pulledFromMarkersOnce') == "true") {
@@ -142,10 +160,18 @@ export default class UsersMap extends React.Component {
     }
   }
 
-  async innerJoin(x,y) {
+  /**
+   * Inner join arrays of corners and states
+   * 
+   * Stores the results, a list of corners with their
+   * respective states added, to state.joined_list
+   * @param {JSON[]} corners
+   * @param {JSON[]} states
+   */
+  async innerJoin(corners,states) {
     joined_list = [];
-    x.map((marker,idx) => {
-      y.map((m2,idx2) => {
+    corners.map((marker) => {
+      states.map((m2) => {
         if (marker.key == m2.cid) {
           joined_list.push({...marker, ...m2})
         }
@@ -155,8 +181,9 @@ export default class UsersMap extends React.Component {
       joined_list: joined_list
     });
   }
+
   /**
-   * changes the region for this components state and the state of HomeScreen
+   * Changes the region for this components state and the state of HomeScreen
    * @param  {region} region (object with latitude, longitude, latitudeDelta, and longitudeDelta)
    */
   onRegionChange(region) {
@@ -165,11 +192,19 @@ export default class UsersMap extends React.Component {
     })
   }
 
+  /**
+   * Opens the pop-up for that particular marker
+   * @param  {marker} marker
+   */
   markerOnPress(marker) {
     this.state.setModalMetaData(marker)
     this.state.setModalVisibility(true)
   }
 
+  /**
+   * Initializes the user's current location and sets the blue radius circle
+   * The sensitivity radius is hard-coded in this function, under radius={}
+   */
   getUserLocationHandler() {
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
@@ -227,13 +262,20 @@ export default class UsersMap extends React.Component {
     return corner_state
   }
 
+  /**
+   * Renders all markers onto the map 
+   * 
+   * Displays all markers at their GPS coordinates. 
+   * Marker colors are as follows:
+   * Black: Default. Either no request exists or it has been shoveled
+   * Red: Pending request
+   */
   displayMarkers() {
     if (this.state.markers){
       if (this.state.markers.length == 0) {
         return <Text> </Text>
       } else {
         return marker_list = this.state.joined_list.map((marker, index) => {
-          // this.getMarkerState(marker)
           return (
             <MapView.Marker
               key={index}
@@ -244,7 +286,7 @@ export default class UsersMap extends React.Component {
               }}
               onPress = {() => {this.markerOnPress(marker)}
               }
-              pinColor = {(marker.state == 1) ? 'blue' : ((marker.state == 2) ? 'red' : 'black')}
+              pinColor = {(marker.state == 1) ? 'red' : ((marker.state == 2) ? 'gold' : 'black')}
             />
           );
         })
@@ -252,9 +294,13 @@ export default class UsersMap extends React.Component {
     }
   }
 
+  /*
+  * Renders the page. Returns a loading screen if not all components
+  * are completely loaded or mounted. Otherwise, renders the map centered
+  * on Ithaca and displays the markers, current user location, and radius graphic
+  */
   render() {
     if (this.state.loading == true){
-      console.log('loading users map!!')
       return (
         <AppLoading />
       )

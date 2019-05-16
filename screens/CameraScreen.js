@@ -2,20 +2,22 @@ import React from 'react';
 import {
     Image,
     TouchableOpacity,
-    SafeAreaView,
-    Button,
     StyleSheet,
     Text,
     View,
     Dimensions
 } from 'react-native';
+
 import MenuButton from '../components/MenuButton'
 import {SecureStore} from 'expo';
+
 import {Camera, Permissions} from 'expo';
 import shorthash from 'shorthash';
 import firebase from "../utils/firebase.js";
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import Loader from '../components/Loader';
+
 
 export default class CameraScreen extends React.Component {
 
@@ -23,6 +25,9 @@ export default class CameraScreen extends React.Component {
         hasPermission: null,
         imageUri: null,
         type: Camera.Constants.Type.back,
+        b64: null,
+        loading: false
+
     }
 
     async componentDidMount() {
@@ -58,8 +63,9 @@ export default class CameraScreen extends React.Component {
     async uploadPicture(cid, user_id) {
         console.log('from upload picture', user_id);
 
-        //Add the photo to the Firebase cloud as a binary lorge object
+
         try {
+            this.setState({loading: true})
             const blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
@@ -95,18 +101,19 @@ export default class CameraScreen extends React.Component {
             formBody.push(encodedKey + "=" + encodedValue);
         }
 
-        //POST call for new request  
-        formBody = formBody.join("&");
-        await fetch('https://snowangels-api.herokuapp.com/new_request', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: formBody,
-        }).catch((error) => {
-            console.error(error);
-        });
-        this.props.navigation.navigate('Home')
+            formBody = formBody.join("&");
+            await fetch('https://snowangels-api.herokuapp.com/new_request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formBody,
+            }).catch((error) => {
+                console.error(error);
+            });
+            await this.setState({loading: false})
+            this.props.navigation.navigate('Home')
+
     }
 
     /**
@@ -146,6 +153,7 @@ export default class CameraScreen extends React.Component {
             if (this.state.imageUri) {
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                         <Image style={styles.image}
                                source={{uri: this.state.imageUri}}/>
                         <View style={styles.bottombar}>
@@ -153,6 +161,7 @@ export default class CameraScreen extends React.Component {
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
                                     this.uploadPicture(cornerId, uid);
+                                    this.setState({imageUri: null});
                                 }}>
                                 <Text
                                     style={styles.takephoto}>
@@ -174,6 +183,7 @@ export default class CameraScreen extends React.Component {
             } else {
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                          <TouchableOpacity
                                 style={styles.backButton}
                                 onPress={() => {

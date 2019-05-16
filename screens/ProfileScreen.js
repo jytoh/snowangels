@@ -4,15 +4,27 @@ import { SecureStore } from 'expo';
 import {AsyncStorage} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 import MenuButton from '../components/MenuButton'
-import { MailComposer } from 'expo';
+import { MailComposer, Updates } from 'expo';
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import Loader from '../components/Loader';
 
 const HEIGHT = Dimensions.get('window').height;
-
 const WIDTH = Dimensions.get('window').width;
 export default class ProfileScreen extends React.Component {
 
+  /*
+  * The state maintains user information. Updated mainly with fetch_state()
+  * bool signedIn: whether or not the user was signed in 
+  *   when they last had the app open. Determines whether
+  *   the login screen or the profile screen is displayed
+  * int uid: user ID. Used to pull from backend
+  * string name: Name
+  * string photoUrl: Profile picture
+  * string token: login/access token
+  * bool loaded: Whether or not the sign-in was successful
+  * int num_requests, num_shovels, points: Score/history data
+  */
   state = {
         signedIn: false,
         uid: 0,
@@ -23,16 +35,33 @@ export default class ProfileScreen extends React.Component {
         num_requests: 0,
         num_shovels: 0,
         points: 0,
+        loading: false
     };
 
+
+  /**
+  * Invoked immedately after ProfileScreen is mounted
+  * and calls fetch_state() to retrieve profile information 
+  */
   async componentDidMount() {
     await this.fetch_state();
   };
   
   /**
-  * Refreshes profile screen to update the number of requests, shovels, and points
+
+   * Function linked to press of refresh button
+   * 
+   * When refresh button is pressed, this function pulls the 
+   * number of user's requests, shovels, and points from the backend. 
+   * It stores this information in the state for fast retrieval
+   * in the future. 
+
+
+   Refreshes profile screen to update the number of requests, shovels, and points
   */
+
   async refresh() {
+    await this.setState({loading: true})
     let response_request = await fetch(
       'https://snowangels-api.herokuapp.com/num_requests?uid=' + this.state.uid
     );
@@ -53,9 +82,18 @@ export default class ProfileScreen extends React.Component {
       points: response3Json.points,
     });
     await this.store_state(this.state);
+    await this.setState({loading: false})
   };
 
   /**
+   * Function linked to press of Give Feedback button
+   * 
+   * Directs the user to an email draft prompting the user to 
+   * write their feedback. Currently, the address the email is 
+   * being sent to is hard-coded here under 'recipients' and 
+   * is intended to be the email of a designated administrator. 
+
+
   * Uses the Expo MailComposer to send email to app administrator
   */
   async give_feedback(){
@@ -67,9 +105,21 @@ export default class ProfileScreen extends React.Component {
   }
 
   /**
+
+   * Prompts the user to sign in with Google account
+   *
+   * If the user signs in successfully, this function 
+   * stores their name, Google profile photo, Google ID,
+   * and access token in state. It also stores 'signedIn' and
+   * 'loaded' as true, which is used in other functions
+   * to determine whether or not the screen can be rendered and 
+   * whether to render the default sign-in screen or attempt
+   * to render the user's profile.
+
   * Signs user in. Adds a new user entry in the database if this is the user's first time logging in 
   * @return {String} access token received from result of Fetch call
   */
+
   async signInWithGoogleAsync() {
       try {
         //Use Expo function to log in user on app
@@ -89,7 +139,7 @@ export default class ProfileScreen extends React.Component {
             token: result.accessToken,
             loaded: true,
           })
-
+          
           await this.store_state(this.state);
 
           var details = {
@@ -161,6 +211,7 @@ export default class ProfileScreen extends React.Component {
           await this.store_state(this.state);
           this.refresh();
           SecureStore.setItemAsync('id', responseJson_for_uid.uid.toString()) //user_id instead of google_id
+          Updates.reload();
           return result.accessToken;
         } else {
           return {cancelled: true};
@@ -171,22 +222,40 @@ export default class ProfileScreen extends React.Component {
   };
   
   /**
+   * Stores the state in AsyncStorage
+   * 
+   * The current state, including all the user's
+   * information (default values is the user is not signed in) and
+   * whether or not the user is signed in and the information
+   * is properly loaded is stored via AsyncStorage
+   * @param {state} state 
+
   * Update state of the component
   * @param  {Number} state state of component
   */
+
   async store_state(state) {
     const json_state = JSON.stringify(state);
     try {
       await AsyncStorage.setItem('lastState', json_state)
     }
     catch (error){
-      console.log('State could not be stored.')
     }
   };
 
   /**
+   * Retrieves the state from AsyncStorage
+   * 
+   * This is called when profile screen is loaded to see whether
+   * the user was already logged in and, if so, what that user's
+   * information is. AsyncStorage is used to maintain a persistent
+   * user state. If there is no last state, it sets the state 
+   * to be default values, which will be overwritten once the
+   * user logs in. 
+
   * Fetch current state of component
   */
+
   async fetch_state() {
     try {
       const lastStateJSON = await AsyncStorage.getItem('lastState');
@@ -205,7 +274,6 @@ export default class ProfileScreen extends React.Component {
       });
     }
     catch (error) {
-      console.log('No last state to fetch');
       this.setState({
         signedIn: false,
         uid : 0,
@@ -222,6 +290,10 @@ export default class ProfileScreen extends React.Component {
   };
 
   /**
+   * Function linked to press of logout button
+   * 
+   * Logs the user out by resetting all values to default
+   * values and setting signedIn to false.
   * Log user out of account 
   */
   async logout() {
@@ -238,9 +310,17 @@ export default class ProfileScreen extends React.Component {
       points:0
     });
     await this.store_state(this.state);
+    Updates.reload();
   };
 
   /**
+   * Renders the header of the screen, which contains the user's namee
+   * and profile image
+   * 
+   * @TODO
+   * @param {String} name 
+   * @param {String} uri 
+
   * Display name and header of user in their profile header
   * @param  {String} name User's name 
   * @param  {String} uri URI of user's photo icon on Google
@@ -258,11 +338,18 @@ export default class ProfileScreen extends React.Component {
     )
   };
 
+  /*
+  * Renders the page. Returns a blank screen if not all components
+  * are completely loaded or mounted. Otherwise, renders the profile
+  * screen. If a user was not previously logged, renders the screen
+  * prompting the user to sign in with google. 
+  */
   render() {
     if (this.state.loaded == true) {
       if (this.state.signedIn == true) {
         return (
         <View style={styles.container}>
+            <Loader loading={this.state.loading} />
             {this.renderHeader(this.state.name, this.state.photoUrl)}
             <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} 
             num_requests={this.state.num_requests} num_shovels={this.state.num_shovels} points = {this.state.points} 
@@ -288,6 +375,13 @@ export default class ProfileScreen extends React.Component {
   }
 };
 
+/*
+* This screen is rendered when fetch_state() returns that
+* the user was not logged in last time they used the 
+* app (or logged themselves out). This screen has the
+* SnowAngels logo and a button for the user to sign in with
+* their Google account
+*/
 const LoginPage = props => {
   return (
     <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
@@ -307,6 +401,14 @@ const LoginPage = props => {
   )
 }
 
+/*
+* This screen is rendered when fetch_state() returns that
+* the user was logged in last time they used the app. The 
+* screen contains the user's profile picture and name, 
+* data about number of points, shovels, and reports,
+* and options to give feedback to the administrators 
+* or to log out.
+*/
 const LoggedInPage = props => {
   return ( 
     <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} > 
@@ -316,7 +418,6 @@ const LoggedInPage = props => {
         <Text style= {styles.text}> {"Total Points: " + props.points}</Text>
         <Text style= {styles.text}> {"Total Shovels: " + props.num_shovels}</Text>
         <Text style= {styles.text}> {"Total Reports: " + props.num_requests}</Text>
-        {/*<Text style={styles.text}> {"Rank: 3/120"}</Text>*/}
       </View>
       <View style={styles.buttonContainer}>
         <Button title="Send Report or Feedback" size='30' onPress={() => props.give_feedback()}/>

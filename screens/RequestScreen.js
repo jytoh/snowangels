@@ -10,18 +10,19 @@ import {
     Alert,
     TouchableOpacity
 } from 'react-native';
-import {List, ListItem} from 'react-native-elements';
+import {ListItem} from 'react-native-elements';
 import MenuButton from '../components/MenuButton'
 import TouchableScale from 'react-native-touchable-scale';
 import {SecureStore} from "expo";
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import Loader from '../components/Loader';
 
 
 export default class RequestScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {reqs: [], tab: 0};
+        this.state = {reqs: [], tab: 0, loading: false};
         this.sendRequest();
     }
 
@@ -115,6 +116,7 @@ export default class RequestScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Loader loading={this.state.loading} />
                 {this.renderHeader()}
                 <MenuButton navigation={this.props.navigation}/>
                 <FlatList
@@ -192,7 +194,7 @@ export default class RequestScreen extends React.Component {
                     fontSize: txt.header,
                     fontFamily: txt.bold,
                     color: 'white',
-                }}>My Requests</Text>
+                }}>My Request History</Text>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -200,15 +202,15 @@ export default class RequestScreen extends React.Component {
                     marginBottom: 15,
                     marginTop: 20
                 }}>
-                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(1)}>
+                    <TouchableOpacity style = {(this.state.tab ==1) ? styles.onTab : styles.offTab} onPress={() => this.change_tab(1)}>
                         <Text style={styles.h1}>Unshoveled</Text>
                     </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
-                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(2)}>
+                    <TouchableOpacity style = {(this.state.tab ==2) ? styles.onTab : styles.offTab} onPress={() => this.change_tab(2)}>
                         <Text style={styles.h1}>Shoveled</Text>
                     </TouchableOpacity>
                     <Text style={styles.h1}> | </Text>
-                    <TouchableOpacity style = {{flex: 1}} onPress={() => this.change_tab(0)}>
+                    <TouchableOpacity style = {(this.state.tab == 0) ? styles.onTab : styles.offTab} onPress={() => this.change_tab(0)}>
                         <Text style={styles.h1}>Validated</Text>
                     </TouchableOpacity>
                 </View>
@@ -233,7 +235,7 @@ export default class RequestScreen extends React.Component {
         let response = await fetch(
       'https://snowangels-api.herokuapp.com/corner_pictures?request_id=' + rid
     );
-        pics = await response.json()
+        var pics = await response.json();
         this.setState({before_pic: pics.before_pic, after_pic: pics.after_pic, showImage: true})
     }
 
@@ -241,6 +243,10 @@ export default class RequestScreen extends React.Component {
     * Updates state to reflect requests that fall under the tab that was clicked
     */
     async sendRequest() {
+
+        // var user_id = 2;
+        this.setState({loading: true})
+
         var user_id = await SecureStore.getItemAsync('id');
         var st = this.state.tab;
         var re = await fetch('https://snowangels-api.herokuapp.com/get_requests_filter_state?uid=%d1&state=%d2'.replace("%d1", user_id).replace("%d2", st),
@@ -255,7 +261,8 @@ export default class RequestScreen extends React.Component {
 
             }).catch((error) => {
                 // handle your errors here
-        })
+        });
+        await this.setState({loading: false})
     }
 
     /**
@@ -319,6 +326,13 @@ const styles = StyleSheet.create({
     text: {
         fontSize: txt.header,
         fontFamily: txt.reg
+    },
+    onTab: {
+        flex: 1,
+        backgroundColor: '#B0C4DE80',
+    },
+    offTab: {
+        flex: 1,
     },
     header: {
         backgroundColor: '#76A1EF',

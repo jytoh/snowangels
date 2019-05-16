@@ -2,17 +2,16 @@ import React from 'react';
 import {
     Image,
     TouchableOpacity,
-    SafeAreaView,
-    Button,
     StyleSheet,
     Text,
     View,
     Dimensions,
     Alert
 } from 'react-native';
-import MenuButton from '../components/MenuButton'
 import {SecureStore} from 'expo';
-import {Camera, Permissions, ImagePicker} from 'expo';
+import {Camera, Permissions} from 'expo';
+import MenuButton from '../components/MenuButton'
+import {ImagePicker} from 'expo';
 import {Feather} from '@expo/vector-icons';
 import shorthash from 'shorthash';
 import {FileSystem} from 'expo';
@@ -20,6 +19,8 @@ import Environment from "../config/environment";
 import firebase from "../utils/firebase.js";
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import Loader from '../components/Loader';
+
 
 export default class ShovelCameraScreen extends React.Component {
 
@@ -27,6 +28,9 @@ export default class ShovelCameraScreen extends React.Component {
         hasPermission: null,
         imageUri: null,
         type: Camera.Constants.Type.back,
+        b64: null,
+        loading: false
+
     };
 
     async componentDidMount() {
@@ -65,6 +69,7 @@ export default class ShovelCameraScreen extends React.Component {
 
         //Add the photo to the Firebase cloud as a binary lorge object
         try {
+            this.setState({loading: true})
             const blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
@@ -86,6 +91,15 @@ export default class ShovelCameraScreen extends React.Component {
             const remoteUri = await snapshot.ref.getDownloadURL();
             // We're done with the blob, close and release it
             blob.close();
+
+
+            console.log(this.state.hash);
+            var user_id = await SecureStore.getItemAsync('id')//user_id instead of google_id
+            console.log(user_id)
+            console.log(cid)
+            console.log(remoteUri)
+
+            console.log(remoteUri.toString())
 
             var user_id = await SecureStore.getItemAsync('id')
 
@@ -127,6 +141,7 @@ export default class ShovelCameraScreen extends React.Component {
             {cancelable: false},
         );
         });
+        await this.setState({loading: false})
         this.props.navigation.navigate('Home');
     }
 
@@ -167,6 +182,7 @@ export default class ShovelCameraScreen extends React.Component {
                 console.log(this.state.imageUri);
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                         <Image style={styles.image}
                                source={{uri: this.state.imageUri}}/>
                         <View style={styles.bottombar}>
@@ -174,6 +190,7 @@ export default class ShovelCameraScreen extends React.Component {
                                 style={styles.uploadphototouchable}
                                 onPress={() => {
                                     this.uploadPicture(cornerId, uid);
+                                    this.setState({imageUri: null});
                                 }}>
                                 <Text
                                     style={styles.takephoto}>
@@ -195,6 +212,7 @@ export default class ShovelCameraScreen extends React.Component {
             } else {
                 return (
                     <View style={styles.container}>
+                        <Loader loading={this.state.loading} />
                         <TouchableOpacity
                                 style={styles.backButton}
                                 onPress={() => {

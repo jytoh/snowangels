@@ -36,13 +36,13 @@ export default class MenuDrawer extends React.Component {
                     </View>
                 </View>
                 <ScrollView style={styles.scroller}>
-                {(this.props.uid == 9) ? (
+                {(this.props.uid == 1) ? (
                     <View style = {styles.bottomLinks}>
                         {this.navLink('Home', 'Map')}
                         {this.navLink('Profile', 'Profile')}
                         {this.navLink('Leaderboard', 'Leaderboard')}
-                        {this.navLink('Shovel', 'History')}
-                        {this.navLink('Requests','Requests')}
+                        {this.navLink('Shovel', 'Shovel History')}
+                        {this.navLink('Requests','Request History')}
                         {this.navLink('Administrator','Administrator')}
                     </View>) : 
                     (
@@ -50,8 +50,8 @@ export default class MenuDrawer extends React.Component {
                         {this.navLink('Home', 'Map')}
                         {this.navLink('Profile', 'Profile')}
                         {this.navLink('Leaderboard', 'Leaderboard')}
-                        {this.navLink('Shovel', 'History')}
-                        {this.navLink('Requests','Requests')}
+                        {this.navLink('Shovel', 'Shovel History')}
+                        {this.navLink('Requests','Request History')}
                     </View>
                     )
                 }

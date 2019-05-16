@@ -1,11 +1,12 @@
 import React from 'react';
 import Leaderboard from 'react-native-leaderboard';
-import {ButtonGroup} from 'react-native-elements';
 import MenuButton from '../components/MenuButton';
 import {Text, View, Image} from 'react-native';
 import {SecureStore} from "expo";
 import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
+import { Ionicons } from '@expo/vector-icons'
+import Loader from '../components/Loader';
 
 //SOURCES:https://github.com/JoeRoddy/react-native-leaderboard/blob/master/examples/AvatarAndClickable.js
 //https://github.com/JoeRoddy/react-native-leaderboard/blob/master/examples/CustomExample.js
@@ -17,8 +18,8 @@ export default class LeaderboardScreen extends React.Component {
         this.state = {
             profs: [],
             user: {},
-            rank: 0
-
+            rank: 0,
+            loading: false
         };
         this.refreshData();
     }
@@ -108,6 +109,8 @@ export default class LeaderboardScreen extends React.Component {
     }
 
     async refreshData() {
+        this.setState({loading: true})
+
          /**
          * Refreshes data on the leaderboard from database by setting the user, profs and rank fields of the 
          * state of the leaderboard to include users, user data, and sorted users respectively.
@@ -136,6 +139,10 @@ export default class LeaderboardScreen extends React.Component {
         this.setState({
             rank: this.sortedProfs()
         });
+
+        await this.setState({loading: false})
+        // console.log(this.state);
+
     }
 
     render() {
@@ -157,7 +164,15 @@ export default class LeaderboardScreen extends React.Component {
         return (
             <View style={{flex: 1, backgroundColor: 'white',}}>
                 {this.renderHeader()}
+                <Loader loading={this.state.loading} />
                 <Leaderboard {...props} />
+                <Ionicons name = "md-refresh" color = "#000000" size = {32} style = {{
+                    zIndex: 9,
+                    position: "absolute",
+                    top: 40,
+                    right: 20,
+                }}
+                onPress={() => this.refreshData()}/>
                 <MenuButton navigation={this.props.navigation}/>
             </View>
         )
