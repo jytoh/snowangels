@@ -230,7 +230,7 @@ export default class UsersMap extends React.Component {
   displayMarkers() {
     if (this.state.markers){
       if (this.state.markers.length == 0) {
-        return <Text> </Text>
+        return null
       } else {
         return marker_list = this.state.joined_list.map((marker, index) => {
           // this.getMarkerState(marker)
