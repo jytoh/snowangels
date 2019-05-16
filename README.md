@@ -29,4 +29,4 @@ npm install --save react-native-elements
 Pull from android branch or change line 233 from return <Text> </Text> to return null in components/UsersMap.js
 
 ## License
-TODO
+All Copyright is transferred to the City of Ithaca from the authors. 
