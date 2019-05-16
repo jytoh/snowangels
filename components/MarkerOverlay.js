@@ -148,7 +148,6 @@ const MarkerOverlay = (props) => {
                     return jsonData;
                 }).catch((error) => {
                 });
-c
             if( a == false ){
                 outsideRadius();
             }
