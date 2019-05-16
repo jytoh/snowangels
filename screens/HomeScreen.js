@@ -84,19 +84,10 @@ export default class HomeScreen extends React.Component {
 		this.state.highlightedCornerState = marker.state
 	}
 
-	getUserLocationHandler() {
-		navigator.geolocation.getCurrentPosition(position => {
-			this.setState({
-				userLocation: {
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude,
-					latitudeDelta: 0.0622,
-					longitudeDelta: 0.0421,
-				}
-			})
-		}, err => console.log(err));
-	}
-
+	/**
+	 * Gets the state of the user
+	 * For more info on state go to ProfileScreen.js
+	 */
 	async fetch_state() {
         try {
           const lastStateJSON = await AsyncStorage.getItem('lastState');
