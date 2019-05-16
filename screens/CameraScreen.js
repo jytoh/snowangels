@@ -40,6 +40,7 @@ export default class CameraScreen extends React.Component {
     */
     async capturePicture() {
         if (this.camera) {
+            this.setState({loading: true})
             let pic = await this.camera.takePictureAsync({base64: true})
                 .then(pic => this.setState({
                         imageUri: pic.uri,
@@ -50,6 +51,7 @@ export default class CameraScreen extends React.Component {
                     throw err;
                 });
             console.log('took a picture!');
+            this.setState({loading: false})
         } else {
             console.log('doesnt enter')
         }
