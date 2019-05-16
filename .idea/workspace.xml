@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="" />
+    <list default="true" id="3951878c-6085-40a9-ab0b-00000792d80f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -10,6 +12,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/snowangels_cs5150$pytest_in_server_tests_py.coverage" NAME="pytest in server_tests.py Coverage Results" MODIFIED="1557977724008" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/tests" />
+    <SUITE FILE_PATH="coverage/snowangels_cs5150$pytest_in_test_app_py.coverage" NAME="pytest in test_app.py Coverage Results" MODIFIED="1558039905092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
   </component>
   <component name="FavoritesManager">
     <favorites_list name="snowangels-cs5150" />
@@ -19,8 +22,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/backend/requeststests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="23" column="74" lean-forward="true" selection-start-line="18" selection-start-column="1" selection-end-line="23" selection-end-column="74" />
+            <state relative-caret-position="133">
+              <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/components/UsersMap.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="715">
+              <caret line="288" column="84" selection-start-line="288" selection-start-column="84" selection-end-line="288" selection-end-column="84" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -28,8 +43,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backend/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="98">
-              <caret line="243" column="23" selection-start-line="243" selection-start-column="23" selection-end-line="243" selection-end-column="23" />
+            <state relative-caret-position="1127">
+              <caret line="307" column="23" selection-start-line="307" selection-start-column="13" selection-end-line="307" selection-end-column="23" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -40,17 +55,68 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/backend/test_app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+            <state relative-caret-position="42">
+              <caret line="9" column="33" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/backend/filereading.py">
+        <entry file="file://$PROJECT_DIR$/screens/ShovelScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="74">
-              <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+            <state relative-caret-position="128">
+              <caret line="39" column="34" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1545">
+              <caret line="103" column="26" lean-forward="true" selection-start-line="103" selection-start-column="26" selection-end-line="103" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/screens/ShovelCameraScreen.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1161">
+              <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="128">
+              <caret line="76" column="21" selection-start-line="76" selection-start-column="19" selection-end-line="76" selection-end-column="21" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/screens/ConfirmScreen.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4">
+              <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -67,11 +133,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_user_history</find>
-      <find>toDate</find>
-      <find>history</find>
-      <find>props</find>
-      <find>validate</find>
       <find>screenpro</find>
       <find>showPic</find>
       <find>send</find>
@@ -97,6 +158,11 @@
       <find>sources</find>
       <find>uri</find>
       <find>migrate</find>
+      <find>ne</find>
+      <find>new_sh</find>
+      <find>new_</find>
+      <find>new</find>
+      <find>new_shovel</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -144,14 +210,14 @@
         <option value="$PROJECT_DIR$/components/MenuDrawer.js" />
         <option value="$PROJECT_DIR$/components/UsersMap.js" />
         <option value="$PROJECT_DIR$/screens/LeaderboardScreen.js" />
-        <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
         <option value="$PROJECT_DIR$/screens/ConfirmScreen.js" />
         <option value="$PROJECT_DIR$/tests/server_tests.py" />
         <option value="$PROJECT_DIR$/backend/tests/server_tests.py" />
         <option value="$PROJECT_DIR$/backend/server_tests.py" />
+        <option value="$PROJECT_DIR$/backend/app.py" />
+        <option value="$PROJECT_DIR$/backend/app.py" />
+        <option value="$PROJECT_DIR$/screens/RequestScreen.js" />
         <option value="$PROJECT_DIR$/backend/test_app.py" />
-        <option value="$PROJECT_DIR$/backend/app.py" />
-        <option value="$PROJECT_DIR$/backend/app.py" />
       </list>
     </option>
   </component>
@@ -227,7 +293,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in server_tests.py">
+  <component name="RunManager" selected="Python tests.pytest in test_app.py">
     <configuration name="app (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="snowangels-cs5150" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -310,8 +376,25 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_app.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="snowangels-cs5150" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/backend/test_app.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in test_app.py" />
         <item itemvalue="Python tests.pytest in server_tests.py" />
       </list>
     </recent_temporary>
@@ -359,21 +442,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pytest_in_server_tests_py - 2019.05.15 at 23h 30m 14s.xml">
-      <configuration name="pytest in server_tests.py" configurationId="tests" />
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 09h 32m 31s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="pytest_in_server_tests_py - 2019.05.15 at 23h 30m 25s.xml">
-      <configuration name="pytest in server_tests.py" configurationId="tests" />
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 09h 41m 02s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="pytest_in_server_tests_py - 2019.05.15 at 23h 33m 13s.xml">
-      <configuration name="pytest in server_tests.py" configurationId="tests" />
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 09h 42m 03s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="pytest_in_server_tests_py - 2019.05.15 at 23h 35m 26s.xml">
-      <configuration name="pytest in server_tests.py" configurationId="tests" />
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 09h 42m 11s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 15h 59m 45s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 15h 59m 52s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 16h 00m 03s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 16h 48m 55s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 16h 49m 48s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_test_app_py - 2019.05.16 at 16h 51m 46s.xml">
+      <configuration name="pytest in test_app.py" configurationId="tests" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="188194000" />
+    <option name="totallyTimeSpent" value="192615000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -386,10 +487,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="721" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4902386" visible="true" weight="0.38772213" />
-      <window_info id="Structure" order="1" sideWeight="0.5069767" side_tool="true" weight="0.3263328" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4902386" visible="true" weight="0.38772213" />
+      <window_info id="Structure" order="1" sideWeight="0.5097614" side_tool="true" weight="0.38772213" />
       <window_info id="Favorites" order="2" sideWeight="0.5097614" side_tool="true" weight="0.38772213" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Image Layers" order="4" />
@@ -405,7 +505,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.26709062" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.26709062" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="bottom" id="Bucklescript" order="13" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -543,26 +643,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/ShovelCameraScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="19" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/RequestScreen2.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-573">
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2701">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
         </state>
       </provider>
     </entry>
@@ -641,16 +727,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/ShovelScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
@@ -681,16 +757,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/ConfirmScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="20" column="52" selection-start-line="20" selection-start-column="52" selection-end-line="20" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/tests/server_tests.py" />
     <entry file="file://$PROJECT_DIR$/components/MenuDrawer.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -698,36 +764,6 @@
           <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/components/UsersMap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-110">
-          <caret line="288" column="84" selection-start-line="288" selection-start-column="84" selection-end-line="288" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1843">
-          <caret line="280" column="40" selection-start-line="280" selection-start-column="37" selection-end-line="280" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-22">
-          <caret line="235" column="25" selection-start-line="235" selection-start-column="25" selection-end-line="235" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -751,29 +787,99 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/filereading.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
+        <state relative-caret-position="-96">
           <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/requeststests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="23" column="74" lean-forward="true" selection-start-line="18" selection-start-column="1" selection-end-line="23" selection-end-column="74" />
+        <state relative-caret-position="133">
+          <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/ConfirmScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4">
+          <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/MarkerOverlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="76" column="21" selection-start-line="76" selection-start-column="19" selection-end-line="76" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/UsersMap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="715">
+          <caret line="288" column="84" selection-start-line="288" selection-start-column="84" selection-end-line="288" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/CameraScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1545">
+          <caret line="103" column="26" lean-forward="true" selection-start-line="103" selection-start-column="26" selection-end-line="103" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/RequestScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="56" column="29" selection-start-line="56" selection-start-column="29" selection-end-line="56" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/ShovelCameraScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1161">
+          <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/ShovelScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="39" column="34" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/test_app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="42">
+          <caret line="9" column="33" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="243" column="23" selection-start-line="243" selection-start-column="23" selection-end-line="243" selection-end-column="23" />
+        <state relative-caret-position="1127">
+          <caret line="307" column="23" selection-start-line="307" selection-start-column="13" selection-end-line="307" selection-end-column="23" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
