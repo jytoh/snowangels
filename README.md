@@ -1,6 +1,7 @@
 # Snow Angels 
 
-Snow Angels is a CS 5150 project intended to promote prosocial behavior in the City of Ithaca through gamification, and was inspired by the Bike Angels for Citi Bike.
+Snow Angels is a CS 5150 project intended to promote prosocial behavior in the City of Ithaca through gamification, and was inspired by the Bike Angels for Citi Bike. This app awards points for clearing sidewalk corners as quickly as possible after a storm and keeping them clear.
+
 
 ## Installation
 
@@ -45,17 +46,17 @@ npm install ts-react-json-table
 ```
 
 ## Android 
+Pull from android branch or change line 233  to "return null" in components/UsersMap.js
 
-Pull from android branch or change line 276 to "return null" in components/UsersMap.js
-
-Known issue: Some buttons, such as validate shovel may have different behavior/appearance depending on if a device or emulator is used, which may impact usability.
 
 ## Authors
-Members of the SnowAngels team of CS 5150 - Spring 2019: Avinash Thangali, Brendan Fox, Ivana Terziyska, Jeen Yan Toh, Cathy Li, Martin Eizayaga, Mishcat Ibrahim, Quadri Bada
+Members of the SnowAngels team of CS 5150 - Spring 2019: 
+Avinash Thangali, Brendan Fox, Ivana Terziyska, Jeen Yan Toh, Cathy Li, Martin Eizayaga, Mishcat Ibrahim, Quadri Bada
 
 
 ## License
 All Copyright is transferred to the City of Ithaca from the authors.
+
 
 ## Acknowledgments
 * Professor William Arms for his guidance and support
