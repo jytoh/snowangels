@@ -5,7 +5,7 @@ Snow Angels is a CS 5150 project intended to promote prosocial behavior in the C
 
 ## Installation
 
-###Required: 
+### Required: 
 
 [React Native](https://facebook.github.io/react-native/docs/getting-started) version > 0.59 
 
