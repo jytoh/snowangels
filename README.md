@@ -48,6 +48,8 @@ npm install ts-react-json-table
 
 Pull from android branch or change line 276 to "return null" in components/UsersMap.js
 
+Known issue: Some buttons, such as validate shovel may have different behavior/appearance depending on if a device or emulator is used, which may impact usability.
+
 ## Authors
 Members of the SnowAngels team of CS 5150 - Spring 2019: Avinash Thangali, Brendan Fox, Ivana Terziyska, Jeen Yan Toh, Cathy Li, Martin Eizayaga, Mishcat Ibrahim, Quadri Bada
 
