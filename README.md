@@ -46,7 +46,7 @@ npm install ts-react-json-table
 
 ## Android 
 
-Pull from android branch or change line 233 from return <Text> </Text> to return null in components/UsersMap.js
+Pull from android branch or change line 233 from "return <Text> </Text>" to "return null" in components/UsersMap.js
 
 ## License
 All Copyright is transferred to the City of Ithaca from the authors. 
