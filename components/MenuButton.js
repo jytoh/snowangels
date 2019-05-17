@@ -4,14 +4,21 @@ import { Ionicons } from '@expo/vector-icons'
 import { scale } from '../UI_logistics/ScaleRatios'
 
 export default class MenuButton extends React.Component {
-    render(){
-        return(
+
+    /**
+      * This renders the menu icon and allows user to click on the menu to show side
+      * navigation bar
+      *
+      * @return navigation bar
+      */
+    render() {
+        return (
             <Ionicons
-            name = "md-menu"
-            color = "#000000"
-            size = {32}
-            style = {styles.menuIcon}
-            onPress={() => this.props.navigation.toggleDrawer()}
+                name="md-menu"
+                color="#000000"
+                size={32}
+                style={styles.menuIcon}
+                onPress={() => this.props.navigation.toggleDrawer()}
             />
         )
     }

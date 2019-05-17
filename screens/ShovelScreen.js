@@ -10,7 +10,11 @@ import { scale } from '../UI_logistics/ScaleRatios'
 
 
 export default class ShovelScreen extends React.Component {
-
+  /**
+   * This renders the header which has the title of this page
+   *
+   * @return a view with a title
+   */
   renderHeader() {
     return (
       <View colors={[, '#DDE8FC', '#76A1EF']}
@@ -19,23 +23,9 @@ export default class ShovelScreen extends React.Component {
       </View>
     )
   }
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: "80%",
-          backgroundColor: "#CED0CE",
-          marginLeft: "20%"
-        }}
-      />
-    );
-  };
+
 
   render() {
-    const allShoves = false;
-    const favShoves = true;
-    let curr = allShoves;
     return (
       <View style={styles.container}>
         {this.renderHeader()}
