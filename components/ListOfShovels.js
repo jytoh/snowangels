@@ -80,8 +80,9 @@ export default class ListOfShovels extends React.Component {
     return jsDateTime.toLocaleTimeString('en-US')
   }
 
- /** TODO: Do any of these require documentation?*/
- 
+  /*
+   * Function passed into FlatList to render individual items
+   */
   renderItem = ({ item }) => (
     <ListItem
       title={this.getHumanReadableDate(item)}
@@ -107,6 +108,9 @@ export default class ListOfShovels extends React.Component {
     />
   )
 
+  /*
+  * Renders the seperator between list objects
+  */
   renderSeparator = () => {
     return (
       <View

@@ -1,11 +1,8 @@
 import React from 'react'
 import {
-    Dimensions,
     StyleSheet,
     View,
     Text,
-    Button,
-    Modal,
     Alert,
     TouchableOpacity
 } from 'react-native'
@@ -26,12 +23,9 @@ const MarkerOverlay = (props) => {
      * visible: visibility of the marker
      */
     const {
-        title, visible, setModalVisibility,
-        userLocation, markerPosition, navigation, signedIn, uid, cornerId,
+        title, visible, setModalVisibility, markerPosition, navigation, signedIn, uid, cornerId,
         cornerState
     } = props;
-
-    var isNearCorner = null;
 
     state = {
         refreshValue: 1
@@ -51,6 +45,7 @@ const MarkerOverlay = (props) => {
      * @return {boolean}
      */
     async function userIsNearCorner() {
+
         /**
          * Checks to see if the user position is near the maxMetersAwayFromCorner
          * threshold
@@ -83,10 +78,13 @@ const MarkerOverlay = (props) => {
         return isNearThreshold(userPosition, markerPosition)
     }
 
-    function any_recs_not_compl(reqs){
-        /**
-     * TODO
+    /**
+     * Returns whether or not there is an unshoveled
+     * request at the corner
+     * 
+     * @param {*} reqs The corner object
      */
+    function any_recs_not_compl(reqs){
 
         return reqs.some(req => (req.state == 1))
     }
@@ -131,13 +129,13 @@ const MarkerOverlay = (props) => {
     }
 
     
-   async function sendRequest() {
     /**
-     * Checks if the user is signed in and close enough to the corner and requests the corner. 
-     * Changes the state of the corner to be requested, and navigates to the camera screen 
-     * so the user can take a picture of the corner.
-     * @return {void}
-     */
+    * Checks if the user is signed in and close enough to the corner and requests the corner. 
+    * Changes the state of the corner to be requested, and navigates to the camera screen 
+    * so the user can take a picture of the corner.
+    * @return {void}
+    */
+   async function sendRequest() {
         const a = await userIsNearCorner();
             var user_id = await SecureStore.getItemAsync('id');
             var re = await fetch('https://snowangels-api.herokuapp.com/get_corners_requests?cid=%d1'.replace("%d1", cornerId),
@@ -219,7 +217,10 @@ const MarkerOverlay = (props) => {
         }
     }
 
-    /* TODO*/ 
+    /*
+    * Renders diffent popup depending on whether or not there
+    * is a request
+    */
     if (cornerState != 1) {
         return (
             <View style={styles.overlayContainer}>

@@ -4,6 +4,13 @@ import { scale } from '../UI_logistics/ScaleRatios'
 import txt from '../UI_logistics/TextStyles'
 
 export default class MenuDrawer extends React.Component {
+
+    /**
+     * Links the screen navigation to a particular option
+     * on the menu
+     * @param {*} nav The screen you want to navigate to
+     * @param {*} text The name you want displayed for the screen in the drawer
+     */
     navLink(nav, text) {
         return(
             <TouchableOpacity style = {{height: scale(60)}} onPress = {() => this.props.navigation.navigate(nav)}>
@@ -12,6 +19,9 @@ export default class MenuDrawer extends React.Component {
         )
     }
 
+    /*
+    * Renders the menu drawer
+    */
     render() {
         return(
             <ImageBackground style={styles.img} source={require('../assets/b-w-gradient.png')} >

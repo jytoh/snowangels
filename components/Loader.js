@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Modal, ActivityIndicator  } from 'react-native';
 
+/*
+* This is the loading animaion
+*/
 const Loader = props => {
   const {
     loading,
     ...attributes
   } = props;
+  
 return (
     <Modal
     transparent={true}

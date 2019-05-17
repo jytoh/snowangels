@@ -506,8 +506,6 @@ const styles = StyleSheet.create({
     width: "90%", 
     backgroundColor: "#76A1EF",
     marginTop: scale(100)
-    // position: 'absolute',
-    // bottom: HEIGHT*0.4
   },
   signintext: {
     marginBottom: 20,

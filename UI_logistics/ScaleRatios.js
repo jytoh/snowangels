@@ -10,6 +10,11 @@ const scaleHeight = height/xrHeight;
 
 const scaleToUse = Math.min(scaleWidth, scaleHeight);
 
+
+/*
+* Use with every numerical sizing/positioning to make sure
+* that components are standardized across all phone sizes
+*/
 export function scale(size) {
     return Math.ceil((size * scaleToUse))
 }

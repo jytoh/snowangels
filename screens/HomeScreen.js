@@ -105,7 +105,6 @@ export default class HomeScreen extends React.Component {
       };
 
 	render() {
-		console.log('render :)')
 		if( !this.state.fontLoaded ) {
 			return (<AppLoading/>
 			);
