@@ -10,6 +10,8 @@ Required:
 
 [Node](https://nodejs.org/en/download/) version 10+ 
 
+[Expo](https://docs.expo.io/versions/latest/introduction/installation/) -- download Expo app for phone or emulator 
+
 Use the package manager [npm](https://pip.pypa.io/en/stable/) to install the following packages: 
 
 
