@@ -46,7 +46,7 @@ npm install ts-react-json-table
 
 ## Android 
 
-Pull from android branch or change line 233  to "return null" in components/UsersMap.js
+Pull from android branch or change line 276 to "return null" in components/UsersMap.js
 
 ## Authors
 Members of the SnowAngels team of CS 5150 - Spring 2019: Avinash Thangali, Brendan Fox, Ivana Terziyska, Jeen Yan Toh, Cathy Li, Martin Eizayaga, Mishcat Ibrahim, Quadri Bada
