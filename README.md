@@ -5,6 +5,7 @@ Snow Angels is a CS 5150 project intended to promote prosocial behavior in the C
 ## Installation
 
 Required: 
+
 [react native](https://facebook.github.io/react-native/docs/getting-started) version > 0.59 
 
 [Node](https://nodejs.org/en/download/) version 10+ 
@@ -21,7 +22,6 @@ npm install shorthash
 npm install FileSystem 
 npm install react-navigation 
 npm install react-native-maps 
-npm install --save react-native-elements
 npm install base-64
 npm install base64-js
 npm install expo
