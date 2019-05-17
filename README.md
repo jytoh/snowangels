@@ -22,6 +22,24 @@ npm install FileSystem
 npm install react-navigation 
 npm install react-native-maps 
 npm install --save react-native-elements
+npm install base-64
+npm install base64-js
+npm install expo
+npm install filesystem
+npm install firebase
+npm install geolib
+npm install pickle
+npm install react
+npm install react-json-to-table
+npm install react-native
+npm install react-native-elements
+npm install react-native-leaderboard
+npm install react-native-maps
+npm install react-native-touchable-scale
+npm install react-native-vector-icons
+npm install react-navigation
+npm install shorthash
+npm install ts-react-json-table
 ```
 
 ## Android 
